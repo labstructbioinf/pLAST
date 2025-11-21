@@ -1,0 +1,12 @@
+channels:
+  - bioconda
+  - anaconda
+  - conda-forge
+
+dependencies:
+  - hmmer>=3.4
+  - mmseqs2>=17.b804f
+  - prodigal>=2.6.3
+  - python==3.12.0
+  - pip:
+      - .

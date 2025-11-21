@@ -1,0 +1,15 @@
+__pycache__/
+data/
+tmp/
+hpc_submit/logs/
+log/
+plast.egg-info/
+pLAST.egg-info/
+tests/
+example_search/
+old/
+plast/web_interface/queries/
+pLAST/web_interface/queries/
+build/
+.env
+.vscode/
