@@ -13,4 +13,4 @@ pLAST/web_interface/queries/
 /build/
 .env
 .vscode/
-docs/build/doctrees/
+docs/.doctrees/
