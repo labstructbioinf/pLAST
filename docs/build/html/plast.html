@@ -1,0 +1,479 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>plast module &mdash; pLAST  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="utils module" href="utils.html" />
+    <link rel="prev" title="parsers module" href="parsers.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pLAST
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">MODULES - API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="alignment.html">alignment module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">data module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exceptions.html">exceptions module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model.html">model module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parsers.html">parsers module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">plast module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#plast.plast.PLAST"><code class="docutils literal notranslate"><span class="pre">PLAST</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#plast.plast.PLAST.copy"><code class="docutils literal notranslate"><span class="pre">PLAST.copy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plast.plast.PLAST.to_dict"><code class="docutils literal notranslate"><span class="pre">PLAST.to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plast.plast.PLAST.from_dict"><code class="docutils literal notranslate"><span class="pre">PLAST.from_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plast.plast.PLAST.to_json"><code class="docutils literal notranslate"><span class="pre">PLAST.to_json()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plast.plast.PLAST.from_json"><code class="docutils literal notranslate"><span class="pre">PLAST.from_json()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plast.plast.PLAST.log"><code class="docutils literal notranslate"><span class="pre">PLAST.log()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plast.plast.PLAST.error"><code class="docutils literal notranslate"><span class="pre">PLAST.error()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plast.plast.PLAST.debug"><code class="docutils literal notranslate"><span class="pre">PLAST.debug()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plast.plast.PLAST.get_by_accession"><code class="docutils literal notranslate"><span class="pre">PLAST.get_by_accession()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plast.plast.PLAST.load_gbff"><code class="docutils literal notranslate"><span class="pre">PLAST.load_gbff()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plast.plast.PLAST.load_nt_fasta"><code class="docutils literal notranslate"><span class="pre">PLAST.load_nt_fasta()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plast.plast.PLAST.assign_mmseqs_clusters"><code class="docutils literal notranslate"><span class="pre">PLAST.assign_mmseqs_clusters()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plast.plast.PLAST.assign_eggnog_annot"><code class="docutils literal notranslate"><span class="pre">PLAST.assign_eggnog_annot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plast.plast.PLAST.encode"><code class="docutils literal notranslate"><span class="pre">PLAST.encode()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plast.plast.PLAST.get_most_similar"><code class="docutils literal notranslate"><span class="pre">PLAST.get_most_similar()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plast.plast.PLAST.draw_network"><code class="docutils literal notranslate"><span class="pre">PLAST.draw_network()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">utils module</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">TUTORIALS</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/index.html">Notebooks</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pLAST</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">plast module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/plast.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-plast.plast">
+<span id="plast-module"></span><h1>plast module<a class="headerlink" href="#module-plast.plast" title="Link to this heading"></a></h1>
+<p>This module implements the core classes and methods for the PLAST (Plasmid Search Tool)</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="plast.plast.PLAST">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">plast.plast.</span></span><span class="sig-name descname"><span class="pre">PLAST</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plast.plast.PLAST" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class representing a plasmid query for pLAST.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<a class="reference internal" href="data.html#plast.data.PLASTData" title="plast.data.PLASTData"><em>PLASTData</em></a>) – Reference PLASTData object.</p></li>
+<li><p><strong>model</strong> (<em>str</em><em> or </em><em>None</em>) – Model name to use.</p></li>
+<li><p><strong>logger</strong> (<em>Any</em><em>, </em><em>optional</em>) – Optional logger instance.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="plast.plast.PLAST.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plast.plast.PLAST.copy" title="Link to this definition"></a></dt>
+<dd><p>Create a copy of the PLAST object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A copy of the PLAST object.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#plast.plast.PLAST" title="plast.plast.PLAST">PLAST</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="plast.plast.PLAST.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#plast.plast.PLAST.to_dict" title="Link to this definition"></a></dt>
+<dd><p>Return the query as a dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dictionary representation of the PLAST object.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="plast.plast.PLAST.from_dict">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plast_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plast.plast.PLAST.from_dict" title="Link to this definition"></a></dt>
+<dd><p>Load the query from a dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>dict</em>) – Dictionary containing PLAST data.</p></li>
+<li><p><strong>plast_data</strong> (<a class="reference internal" href="data.html#plast.data.PLASTData" title="plast.data.PLASTData"><em>PLASTData</em></a>) – Reference PLASTData object.</p></li>
+<li><p><strong>logger</strong> (<em>Any</em><em>, </em><em>optional</em>) – Optional logger instance.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Loaded PLAST object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#plast.plast.PLAST" title="plast.plast.PLAST">PLAST</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="plast.plast.PLAST.to_json">
+<span class="sig-name descname"><span class="pre">to_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plast.plast.PLAST.to_json" title="Link to this definition"></a></dt>
+<dd><p>Return the query as a JSON object or write to file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em><em> or </em><em>None</em>) – Optional filename to write JSON.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>JSON string if filename is None, else None.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str or None</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Exception</strong> – On file write error.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="plast.plast.PLAST.from_json">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plast.plast.PLAST.from_json" title="Link to this definition"></a></dt>
+<dd><p>Load the query from a JSON string or Path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>json_data</strong> (<em>str</em><em> or </em><em>pathlib.Path</em>) – JSON string or Path to JSON file.</p></li>
+<li><p><strong>data</strong> (<a class="reference internal" href="data.html#plast.data.PLASTData" title="plast.data.PLASTData"><em>PLASTData</em></a>) – Reference PLASTData object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Loaded PLAST object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#plast.plast.PLAST" title="plast.plast.PLAST">PLAST</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If input is not valid.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="plast.plast.PLAST.log">
+<span class="sig-name descname"><span class="pre">log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'info'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plast.plast.PLAST.log" title="Link to this definition"></a></dt>
+<dd><p>Log a message via self.logger if available, else stdout.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<em>str</em>) – Message to log.</p></li>
+<li><p><strong>level</strong> (<em>str</em>) – Logging level.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="plast.plast.PLAST.error">
+<span class="sig-name descname"><span class="pre">error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plast.plast.PLAST.error" title="Link to this definition"></a></dt>
+<dd><p>Log an error message.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>message</strong> (<em>str</em>) – Error message.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="plast.plast.PLAST.debug">
+<span class="sig-name descname"><span class="pre">debug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plast.plast.PLAST.debug" title="Link to this definition"></a></dt>
+<dd><p>Log a debug message.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>message</strong> (<em>str</em>) – Debug message.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="plast.plast.PLAST.get_by_accession">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_by_accession</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plast_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plast.plast.PLAST.get_by_accession" title="Link to this definition"></a></dt>
+<dd><p>Get a PLAST object by its accession ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>plast_id</strong> (<em>str</em>) – Accession ID.</p></li>
+<li><p><strong>data</strong> (<a class="reference internal" href="data.html#plast.data.PLASTData" title="plast.data.PLASTData"><em>PLASTData</em></a>) – Reference PLASTData object.</p></li>
+<li><p><strong>model</strong> (<em>str</em>) – Model name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>PLAST object for the accession.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#plast.plast.PLAST" title="plast.plast.PLAST">PLAST</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="exceptions.html#plast.exceptions.NotFoundError" title="plast.exceptions.NotFoundError"><strong>NotFoundError</strong></a> – If accession not found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="plast.plast.PLAST.load_gbff">
+<span class="sig-name descname"><span class="pre">load_gbff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_or_stream</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plast.plast.PLAST.load_gbff" title="Link to this definition"></a></dt>
+<dd><p>Load a GBFF file or stream and populate parsed, name, and length.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path_or_stream</strong> (<em>pathlib.Path</em><em> or </em><em>file-like</em>) – Path to GBFF file or stream.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Self.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#plast.plast.PLAST" title="plast.plast.PLAST">PLAST</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>OSError</strong> – On file read error.</p></li>
+<li><p><strong>ValueError</strong> – On parsing error.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="plast.plast.PLAST.load_nt_fasta">
+<span class="sig-name descname"><span class="pre">load_nt_fasta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_fasta</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plast.plast.PLAST.load_nt_fasta" title="Link to this definition"></a></dt>
+<dd><p>Load a nucleotide FASTA, run Prodigal to predict ORFs, and store results in self.parsed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_fasta</strong> (<em>str</em><em> or </em><em>file-like</em>) – FASTA file path or string.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Self.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#plast.plast.PLAST" title="plast.plast.PLAST">PLAST</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>OSError</strong> – On file read error.</p></li>
+<li><p><strong>ValueError</strong> – On parsing error.</p></li>
+<li><p><strong>UnicodeDecodeError</strong> – On encoding error.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="plast.plast.PLAST.assign_mmseqs_clusters">
+<span class="sig-name descname"><span class="pre">assign_mmseqs_clusters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gpu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plast.plast.PLAST.assign_mmseqs_clusters" title="Link to this definition"></a></dt>
+<dd><p>Assign clusters using MMseqs2.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>threads</strong> (<em>int</em>) – Number of threads to use.</p></li>
+<li><p><strong>use_gpu</strong> (<em>bool</em>) – Whether to use GPU if available.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Self.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#plast.plast.PLAST" title="plast.plast.PLAST">PLAST</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Exception</strong> – On MMseqs2 failure.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="plast.plast.PLAST.assign_eggnog_annot">
+<span class="sig-name descname"><span class="pre">assign_eggnog_annot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">processes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plast.plast.PLAST.assign_eggnog_annot" title="Link to this definition"></a></dt>
+<dd><p>Assign HMMscan annotations to the query plasmid by running multiple hmmscan
+processes in parallel (each using one CPU core) on subsets of the CDS translations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>processes</strong> (<em>int</em>) – Number of parallel processes.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Self.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#plast.plast.PLAST" title="plast.plast.PLAST">PLAST</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="plast.plast.PLAST.encode">
+<span class="sig-name descname"><span class="pre">encode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plast.plast.PLAST.encode" title="Link to this definition"></a></dt>
+<dd><p>Encode the plasmid query into an embedding vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>normalize</strong> (<em>bool</em>) – Whether to normalize the embedding vector.</p></li>
+<li><p><strong>transform</strong> (<em>bool</em>) – Whether to apply weighting transformation.</p></li>
+<li><p><strong>inplace</strong> (<em>bool</em>) – If True, store the embedding in the object and return self.</p></li>
+<li><p><strong>return_mask</strong> (<em>bool</em>) – If True, also return a mask of missing vectors.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If inplace is True, returns self. Otherwise, returns the embedding vector
+(and mask if return_mask is True).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#plast.plast.PLAST" title="plast.plast.PLAST">PLAST</a> or numpy.ndarray or tuple[numpy.ndarray, numpy.ndarray]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If return_mask is True and inplace is True.</p></li>
+<li><p><strong>KeyError</strong> – On encoding failure.</p></li>
+<li><p><strong>AttributeError</strong> – On encoding failure.</p></li>
+<li><p><strong>ValueError</strong> – On encoding failure.</p></li>
+<li><p><strong>TypeError</strong> – On encoding failure.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="plast.plast.PLAST.get_most_similar">
+<span class="sig-name descname"><span class="pre">get_most_similar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maxret</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cosine'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plast.plast.PLAST.get_most_similar" title="Link to this definition"></a></dt>
+<dd><p>Compute most similar plasmids to the current embedding.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>maxret</strong> (<em>int</em>) – Maximum number of results to return.</p></li>
+<li><p><strong>metric</strong> (<em>str</em>) – Similarity metric (‘cosine’ or ‘euclidean’).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary of most similar plasmids and their metadata.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If unknown metric is provided.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="plast.plast.PLAST.draw_network">
+<span class="sig-name descname"><span class="pre">draw_network</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">closest_num</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plast.plast.PLAST.draw_network" title="Link to this definition"></a></dt>
+<dd><p>Compute network coordinates for the query and closest_num results.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>closest_num</strong> (<em>int</em>) – Number of closest results to include.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary with network coordinates and labels.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="parsers.html" class="btn btn-neutral float-left" title="parsers module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="utils.html" class="btn btn-neutral float-right" title="utils module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Kamil Krakowski, Stanisław Dunin-Horkawicz.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -10,6 +10,7 @@ example_search/
 old/
 plast/web_interface/queries/
 pLAST/web_interface/queries/
-build/
+/build/
 .env
 .vscode/
+docs/build/doctrees/

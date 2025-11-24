@@ -1,0 +1,1534 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Basic pLAST usage &mdash; pLAST  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            pLAST
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">MODULES - API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../alignment.html">alignment module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data.html">data module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exceptions.html">exceptions module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../model.html">model module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../parsers.html">parsers module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../plast.html">plast module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utils.html">utils module</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">TUTORIALS</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Notebooks</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Basic pLAST usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Imports-and-configuration">Imports and configuration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Load-configuration-to-PLASTData-object">Load configuration to PLASTData object</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Set-logger-to-%22warning%22-to-not-print-too-much-informations">Set logger to “warning” to not print too much informations</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Analyze-sequence-using-MMseqs2-model">Analyze sequence using MMseqs2 model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Initialize-PLAST-object---load-config,-choose-model-and-add-logger">Initialize PLAST object - load config, choose model and add logger</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Load-example-plasmid-sequence-from-.fasta-file-and-annotate-with-prodigal">Load example plasmid sequence from .fasta file and annotate with prodigal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Assign-cluster-identifiers-to-the-plasmid-proteins">Assign cluster identifiers to the plasmid proteins</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Pass-data-through-pLAST-model-and-receive-embeddings">Pass data through pLAST model and receive embeddings</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Find-similar-plasmids-in-the-database">Find similar plasmids in the database</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Analyze-sequence-using-eggNOG-model">Analyze sequence using eggNOG model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Initialize PLAST object - load config, choose model and add logger</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Load-example-plasmid-sequence-and-GenBank-annotation-from-.gb-file">Load example plasmid sequence and GenBank annotation from .gb file</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">Assign cluster identifiers to the plasmid proteins</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">Pass data through pLAST model and receive embeddings</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">Find similar plasmids in the database</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pLAST</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Notebooks</a></li>
+      <li class="breadcrumb-item active">Basic pLAST usage</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notebooks/usage.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Basic-pLAST-usage">
+<h1>Basic pLAST usage<a class="headerlink" href="#Basic-pLAST-usage" title="Link to this heading"></a></h1>
+<section id="Imports-and-configuration">
+<h2>Imports and configuration<a class="headerlink" href="#Imports-and-configuration" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">plast.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">PLASTData</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">plast.plast</span><span class="w"> </span><span class="kn">import</span> <span class="n">PLAST</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">examples.configuration</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+</pre></div>
+</div>
+</div>
+<section id="Load-configuration-to-PLASTData-object">
+<h3>Load configuration to PLASTData object<a class="headerlink" href="#Load-configuration-to-PLASTData-object" title="Link to this heading"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pl_data</span> <span class="o">=</span> <span class="n">PLASTData</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Loading pLAST data...
+</pre></div></div>
+</div>
+</section>
+<section id="Set-logger-to-%22warning%22-to-not-print-too-much-informations">
+<h3>Set logger to “warning” to not print too much informations<a class="headerlink" href="#Set-logger-to-%22warning%22-to-not-print-too-much-informations" title="Link to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;plast&quot;</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="Analyze-sequence-using-MMseqs2-model">
+<h2>Analyze sequence using MMseqs2 model<a class="headerlink" href="#Analyze-sequence-using-MMseqs2-model" title="Link to this heading"></a></h2>
+<section id="Initialize-PLAST-object---load-config,-choose-model-and-add-logger">
+<h3>Initialize PLAST object - load config, choose model and add logger<a class="headerlink" href="#Initialize-PLAST-object---load-config,-choose-model-and-add-logger" title="Link to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plast</span> <span class="o">=</span> <span class="n">PLAST</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">pl_data</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;mmseqs2_model&quot;</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Load-example-plasmid-sequence-from-.fasta-file-and-annotate-with-prodigal">
+<h3>Load example plasmid sequence from .fasta file and annotate with prodigal<a class="headerlink" href="#Load-example-plasmid-sequence-from-.fasta-file-and-annotate-with-prodigal" title="Link to this heading"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plast</span> <span class="o">=</span> <span class="n">plast</span><span class="o">.</span><span class="n">load_nt_fasta</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;examples/NZ_AP018444.1.fasta&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Plasmid of langth&quot;</span><span class="p">,</span> <span class="n">plast</span><span class="o">.</span><span class="n">length</span><span class="p">,</span> <span class="s2">&quot;has the following annotation:&quot;</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">plast</span><span class="o">.</span><span class="n">parsed</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Plasmid of langth 181607 has the following annotation:
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>locus_tag</th>
+      <th>start</th>
+      <th>end</th>
+      <th>strand</th>
+      <th>type</th>
+      <th>gene</th>
+      <th>product</th>
+      <th>translation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>NZ_AP018444.1_1</td>
+      <td>3</td>
+      <td>410</td>
+      <td>1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>FLIGTLLLFGLAACDSIKSVASDVTVGKVIEEFKAAGLEAEQPSDL...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>NZ_AP018444.1_2</td>
+      <td>561</td>
+      <td>776</td>
+      <td>-1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MKNKRDRLAILPAIDSFINFISITLTINARNNGINSTMASLIAMSF...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>NZ_AP018444.1_3</td>
+      <td>848</td>
+      <td>937</td>
+      <td>-1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MLQKEEKVMGKTLFIAEKLKVANEIIKSL*</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>NZ_AP018444.1_4</td>
+      <td>1127</td>
+      <td>1765</td>
+      <td>-1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MEVLIFELILIAVLIPLNSVVKKHVPKWKGKAGEKLVKRMLSKLDP...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>NZ_AP018444.1_5</td>
+      <td>1782</td>
+      <td>2015</td>
+      <td>-1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MGTVKNVEKRLPTWANFGVIEKPVNRRVTRPFQFRGGLLVSLALGF...</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>187</th>
+      <td>NZ_AP018444.1_188</td>
+      <td>175616</td>
+      <td>176212</td>
+      <td>-1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MSACSSSAQTKNDSRPAQAVQNGIQQHVEGKDIVDIPEAYKRKLKG...</td>
+    </tr>
+    <tr>
+      <th>188</th>
+      <td>NZ_AP018444.1_189</td>
+      <td>176689</td>
+      <td>179352</td>
+      <td>-1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MGKTLFIAEKPKVANEIMKSPRFRHSQKYIGSKPYYGYYENDHYIV...</td>
+    </tr>
+    <tr>
+      <th>189</th>
+      <td>NZ_AP018444.1_190</td>
+      <td>179919</td>
+      <td>180323</td>
+      <td>-1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MQQCLKYNCGTIQLEDLQGISKEQAFLKNWTYFDLQEKIKNQANQY...</td>
+    </tr>
+    <tr>
+      <th>190</th>
+      <td>NZ_AP018444.1_191</td>
+      <td>180464</td>
+      <td>181204</td>
+      <td>-1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MKYIYVHFHYHFRTIGNRTIQKLWEYDNQSLKHFKDTGQYPSAQQL...</td>
+    </tr>
+    <tr>
+      <th>191</th>
+      <td>NZ_AP018444.1_192</td>
+      <td>181546</td>
+      <td>181605</td>
+      <td>1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MISKDLSTVGGTHKYVKKII</td>
+    </tr>
+  </tbody>
+</table>
+<p>192 rows × 8 columns</p>
+</div></div>
+</div>
+</section>
+<section id="Assign-cluster-identifiers-to-the-plasmid-proteins">
+<h3>Assign cluster identifiers to the plasmid proteins<a class="headerlink" href="#Assign-cluster-identifiers-to-the-plasmid-proteins" title="Link to this heading"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plast</span> <span class="o">=</span> <span class="n">plast</span><span class="o">.</span><span class="n">assign_mmseqs_clusters</span><span class="p">(</span><span class="n">use_gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">threads</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of assigned clusters:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">plast</span><span class="o">.</span><span class="n">vector</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Assigned clusters:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">plast</span><span class="o">.</span><span class="n">vector</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Number of assigned clusters: 192
+Assigned clusters:
+[&#39;158139&#39;, None, None, &#39;111227&#39;, None, &#39;363037&#39;, &#39;180971&#39;, &#39;367331&#39;, &#39;332882&#39;, &#39;22817&#39;, &#39;170621&#39;, &#39;57630&#39;, &#39;199461&#39;, &#39;59114&#39;, &#39;9057&#39;, &#39;150228&#39;, &#39;27549&#39;, &#39;177933&#39;, &#39;256276&#39;, &#39;171502&#39;, &#39;222120&#39;, &#39;131075&#39;, &#39;279450&#39;, None, &#39;292502&#39;, &#39;372101&#39;, None, &#39;349723&#39;, None, None, &#39;219413&#39;, &#39;268273&#39;, &#39;348017&#39;, &#39;239222&#39;, &#39;195393&#39;, None, &#39;29918&#39;, None, &#39;29918&#39;, &#39;357007&#39;, &#39;252631&#39;, &#39;379137&#39;, &#39;63194&#39;, &#39;281371&#39;, &#39;271498&#39;, &#39;14424&#39;, None, &#39;62528&#39;, &#39;159682&#39;, None, &#39;95717&#39;, &#39;14424&#39;, &#39;14424&#39;, &#39;372574&#39;, &#39;77937&#39;, &#39;248555&#39;, &#39;370932&#39;, &#39;116939&#39;, &#39;348722&#39;, &#39;116631&#39;, &#39;288608&#39;, &#39;62545&#39;, &#39;181715&#39;, None, &#39;260525&#39;, &#39;127064&#39;, &#39;65352&#39;, &#39;354243&#39;, &#39;13&#39;, &#39;307598&#39;, &#39;293539&#39;, &#39;330390&#39;, &#39;79368&#39;, &#39;331546&#39;, &#39;357602&#39;, &#39;128987&#39;, &#39;261376&#39;, None, &#39;366603&#39;, &#39;366603&#39;, &#39;189155&#39;, &#39;297412&#39;, &#39;283545&#39;, &#39;52421&#39;, None, &#39;160853&#39;, &#39;373949&#39;, &#39;280027&#39;, &#39;95716&#39;, &#39;113193&#39;, &#39;129570&#39;, &#39;368936&#39;, &#39;38910&#39;, &#39;366768&#39;, &#39;294849&#39;, &#39;254013&#39;, None, &#39;6994&#39;, &#39;366724&#39;, &#39;136722&#39;, &#39;8135&#39;, None, &#39;244957&#39;, &#39;210862&#39;, &#39;81929&#39;, None, None, &#39;8645&#39;, &#39;245020&#39;, None, &#39;68864&#39;, &#39;386183&#39;, None, None, &#39;330287&#39;, &#39;60086&#39;, None, &#39;335942&#39;, &#39;227142&#39;, &#39;123577&#39;, &#39;122666&#39;, &#39;106646&#39;, &#39;60005&#39;, &#39;73409&#39;, &#39;263758&#39;, &#39;308699&#39;, &#39;180655&#39;, &#39;71936&#39;, None, &#39;275472&#39;, None, None, None, None, None, &#39;53569&#39;, &#39;305343&#39;, &#39;37746&#39;, &#39;146411&#39;, None, &#39;204716&#39;, &#39;34535&#39;, &#39;271497&#39;, &#39;90426&#39;, &#39;58700&#39;, &#39;227877&#39;, &#39;273403&#39;, &#39;320114&#39;, None, &#39;156029&#39;, None, None, None, &#39;246224&#39;, None, None, &#39;364912&#39;, &#39;344084&#39;, &#39;240006&#39;, None, &#39;271473&#39;, &#39;91528&#39;, &#39;91993&#39;, &#39;176191&#39;, None, &#39;116489&#39;, &#39;234981&#39;, &#39;374753&#39;, &#39;56767&#39;, &#39;106646&#39;, &#39;122666&#39;, &#39;19209&#39;, &#39;19209&#39;, &#39;122666&#39;, &#39;330484&#39;, &#39;14956&#39;, &#39;146511&#39;, &#39;220332&#39;, &#39;274341&#39;, &#39;303134&#39;, &#39;280768&#39;, &#39;3116&#39;, &#39;126570&#39;, &#39;71819&#39;, &#39;156029&#39;, &#39;76830&#39;, &#39;333634&#39;, &#39;8703&#39;, &#39;116829&#39;, None, None, None]
+</pre></div></div>
+</div>
+</section>
+<section id="Pass-data-through-pLAST-model-and-receive-embeddings">
+<h3>Pass data through pLAST model and receive embeddings<a class="headerlink" href="#Pass-data-through-pLAST-model-and-receive-embeddings" title="Link to this heading"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plast</span> <span class="o">=</span> <span class="n">plast</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Plasmid embedding:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">plast</span><span class="o">.</span><span class="n">embedding</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Plasmid embedding:
+[ 0.16074932  0.07090153 -0.05637924  0.01270099 -0.13037615  0.23649618
+ -0.09985632  0.18405771 -0.12629367  0.08232442 -0.03229282 -0.30928066
+  0.03496516 -0.15260804 -0.01811741 -0.00062386 -0.05955299  0.04845381
+ -0.15461048  0.09944806 -0.07227306  0.07942476 -0.04140659 -0.01181537
+  0.09717287  0.08005133  0.08573128 -0.12106762  0.00138966  0.22787371
+ -0.24396281  0.13145718 -0.06370046 -0.06037332  0.26901937 -0.19918399
+ -0.06123837  0.02366692  0.09150934 -0.13937949 -0.10196497  0.01230744
+  0.05456771  0.08498187 -0.01927721 -0.13616739 -0.02521401  0.06099558
+  0.0216114   0.02579266  0.17739704  0.06502925  0.03666644 -0.07709105
+ -0.16628736 -0.07768066 -0.01253821 -0.31088704  0.03946643  0.05838454
+  0.01965593  0.20820118  0.1418348   0.21397436]
+</pre></div></div>
+</div>
+</section>
+<section id="Find-similar-plasmids-in-the-database">
+<h3>Find similar plasmids in the database<a class="headerlink" href="#Find-similar-plasmids-in-the-database" title="Link to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results</span> <span class="o">=</span> <span class="n">plast</span><span class="o">.</span><span class="n">get_most_similar</span><span class="p">(</span><span class="n">maxret</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;pLAST_distance&quot;</span><span class="p">,</span> <span class="s2">&quot;gc&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+
+<span class="n">preferred</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;pLAST_distance&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;length&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;gc&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;taxid&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;organism&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;definition&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;taxonomy&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;rep_type(s)&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;AMR&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;relaxase_type(s)&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mpf_type&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;orit_type(s)&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;predicted_mobility&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">preferred</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span>
+    <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">preferred</span>
+<span class="p">]</span>
+<span class="n">display</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">cols</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>pLAST_distance</th>
+      <th>length</th>
+      <th>gc</th>
+      <th>taxid</th>
+      <th>organism</th>
+      <th>definition</th>
+      <th>taxonomy</th>
+      <th>rep_type(s)</th>
+      <th>AMR</th>
+      <th>relaxase_type(s)</th>
+      <th>mpf_type</th>
+      <th>orit_type(s)</th>
+      <th>predicted_mobility</th>
+      <th>primary_cluster_id</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>NZ_CP147792</th>
+      <td>0.994295</td>
+      <td>181634</td>
+      <td>0.325292</td>
+      <td>1392</td>
+      <td>Bacillus anthracis</td>
+      <td>Bacillus anthracis strain Sterne-CLR1-12 plasm...</td>
+      <td>Bacteria;Bacillota;Bacilli;Bacillales;Bacillac...</td>
+      <td>rc125</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>MPF_T</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>AA800</td>
+    </tr>
+    <tr>
+      <th>NZ_CP076202</th>
+      <td>0.994227</td>
+      <td>184456</td>
+      <td>0.325503</td>
+      <td>1392</td>
+      <td>Bacillus anthracis</td>
+      <td>Bacillus anthracis strain A3783 plasmid pXO1, ...</td>
+      <td>Bacteria;Bacillota;Bacilli;Bacillales;Bacillac...</td>
+      <td>rc125</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>MPF_T</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>AA800</td>
+    </tr>
+    <tr>
+      <th>NZ_CP022045</th>
+      <td>0.994065</td>
+      <td>181634</td>
+      <td>0.325292</td>
+      <td>1392</td>
+      <td>Bacillus anthracis</td>
+      <td>Bacillus anthracis strain FDAARGOS_341 plasmid...</td>
+      <td>Bacteria;Bacillota;Bacilli;Bacillales;Bacillac...</td>
+      <td>rc125</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>MPF_T</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>AA800</td>
+    </tr>
+    <tr>
+      <th>NZ_CP147790</th>
+      <td>0.994065</td>
+      <td>181634</td>
+      <td>0.325292</td>
+      <td>1392</td>
+      <td>Bacillus anthracis</td>
+      <td>Bacillus anthracis strain Sterne-CLR1-2 plasmi...</td>
+      <td>Bacteria;Bacillota;Bacilli;Bacillales;Bacillac...</td>
+      <td>rc125</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>MPF_T</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>AA800</td>
+    </tr>
+    <tr>
+      <th>NZ_CP065741</th>
+      <td>0.993964</td>
+      <td>190859</td>
+      <td>0.326330</td>
+      <td>2026188</td>
+      <td>Bacillus tropicus</td>
+      <td>Bacillus tropicus strain FDAARGOS_897 plasmid ...</td>
+      <td>Bacteria;Bacillota;Bacilli;Bacillales;Bacillac...</td>
+      <td>rc125</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>MPF_T</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>AA800</td>
+    </tr>
+    <tr>
+      <th>NC_010934</th>
+      <td>0.993878</td>
+      <td>190861</td>
+      <td>0.326339</td>
+      <td>1396</td>
+      <td>Bacillus cereus</td>
+      <td>Bacillus cereus plasmid pBCXO1, complete sequence</td>
+      <td>Bacteria;Bacillota;Bacilli;Bacillales;Bacillac...</td>
+      <td>rc125</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>MPF_T</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>AA800</td>
+    </tr>
+    <tr>
+      <th>NZ_CP167925</th>
+      <td>0.993756</td>
+      <td>181637</td>
+      <td>0.325292</td>
+      <td>1392</td>
+      <td>Bacillus anthracis</td>
+      <td>Bacillus anthracis strain CWH_147 plasmid pXO1...</td>
+      <td>Bacteria;Bacillota;Bacilli;Bacillales;Bacillac...</td>
+      <td>rc125</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>MPF_T</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>AA800</td>
+    </tr>
+    <tr>
+      <th>NZ_CP140727</th>
+      <td>0.993629</td>
+      <td>181719</td>
+      <td>0.325194</td>
+      <td>1392</td>
+      <td>Bacillus anthracis</td>
+      <td>Bacillus anthracis strain MH-PR plasmid pXO1, ...</td>
+      <td>Bacteria;Bacillota;Bacilli;Bacillales;Bacillac...</td>
+      <td>rc125</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>MPF_T</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>AA800</td>
+    </tr>
+    <tr>
+      <th>NZ_CP047132</th>
+      <td>0.993583</td>
+      <td>181933</td>
+      <td>0.325389</td>
+      <td>1213182</td>
+      <td>Bacillus anthracis str. BF1</td>
+      <td>Bacillus anthracis str. BF1 plasmid pXO1, comp...</td>
+      <td>Bacteria;Bacillota;Bacilli;Bacillales;Bacillac...</td>
+      <td>rc125</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>MPF_T</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>AA800</td>
+    </tr>
+    <tr>
+      <th>NZ_CP060195</th>
+      <td>0.993508</td>
+      <td>181677</td>
+      <td>0.325303</td>
+      <td>1392</td>
+      <td>Bacillus anthracis</td>
+      <td>Bacillus anthracis strain Kanchipuram plasmid ...</td>
+      <td>Bacteria;Bacillota;Bacilli;Bacillales;Bacillac...</td>
+      <td>rc125</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>MPF_T</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>AA800</td>
+    </tr>
+    <tr>
+      <th>NZ_CP140725</th>
+      <td>0.993500</td>
+      <td>180367</td>
+      <td>0.325173</td>
+      <td>1392</td>
+      <td>Bacillus anthracis</td>
+      <td>Bacillus anthracis strain MH-JJ plasmid pXO1, ...</td>
+      <td>Bacteria;Bacillota;Bacilli;Bacillales;Bacillac...</td>
+      <td>rc125</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>MPF_T</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>AA800</td>
+    </tr>
+    <tr>
+      <th>NZ_CP147782</th>
+      <td>0.993409</td>
+      <td>181634</td>
+      <td>0.325292</td>
+      <td>1392</td>
+      <td>Bacillus anthracis</td>
+      <td>Bacillus anthracis strain Sterne-CLR2-46 plasm...</td>
+      <td>Bacteria;Bacillota;Bacilli;Bacillales;Bacillac...</td>
+      <td>rc125</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>MPF_T</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>AA800</td>
+    </tr>
+    <tr>
+      <th>NZ_CP140730</th>
+      <td>0.993280</td>
+      <td>181707</td>
+      <td>0.325210</td>
+      <td>1392</td>
+      <td>Bacillus anthracis</td>
+      <td>Bacillus anthracis strain MH-MFM plasmid pXO1,...</td>
+      <td>Bacteria;Bacillota;Bacilli;Bacillales;Bacillac...</td>
+      <td>rc125</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>MPF_T</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>AA800</td>
+    </tr>
+    <tr>
+      <th>NZ_CP140721</th>
+      <td>0.993245</td>
+      <td>181736</td>
+      <td>0.325197</td>
+      <td>1392</td>
+      <td>Bacillus anthracis</td>
+      <td>Bacillus anthracis strain MH-VW plasmid pXO1, ...</td>
+      <td>Bacteria;Bacillota;Bacilli;Bacillales;Bacillac...</td>
+      <td>rc125</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>MPF_T</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>AA800</td>
+    </tr>
+    <tr>
+      <th>NZ_CP009463</th>
+      <td>0.993232</td>
+      <td>180693</td>
+      <td>0.325475</td>
+      <td>1392</td>
+      <td>Bacillus anthracis</td>
+      <td>Bacillus anthracis strain SK-102 plasmid pXO1,...</td>
+      <td>Bacteria;Bacillota;Bacilli;Bacillales;Bacillac...</td>
+      <td>rc125</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>MPF_T</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>AA800</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+</section>
+<section id="Analyze-sequence-using-eggNOG-model">
+<h2>Analyze sequence using eggNOG model<a class="headerlink" href="#Analyze-sequence-using-eggNOG-model" title="Link to this heading"></a></h2>
+<section id="id1">
+<h3>Initialize PLAST object - load config, choose model and add logger<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plast</span> <span class="o">=</span> <span class="n">PLAST</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">pl_data</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;eggnog_model&quot;</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Load-example-plasmid-sequence-and-GenBank-annotation-from-.gb-file">
+<h3>Load example plasmid sequence and GenBank annotation from .gb file<a class="headerlink" href="#Load-example-plasmid-sequence-and-GenBank-annotation-from-.gb-file" title="Link to this heading"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plast</span> <span class="o">=</span> <span class="n">plast</span><span class="o">.</span><span class="n">load_gbff</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;examples/NZ_AP018444.1.gb&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Plasmid of langth&quot;</span><span class="p">,</span> <span class="n">plast</span><span class="o">.</span><span class="n">length</span><span class="p">,</span> <span class="s2">&quot;has the following annotation:&quot;</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">plast</span><span class="o">.</span><span class="n">parsed</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Plasmid of langth 181607 has the following annotation:
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>start</th>
+      <th>end</th>
+      <th>strand</th>
+      <th>partial</th>
+      <th>type</th>
+      <th>coordinates</th>
+      <th>locus_tag</th>
+      <th>old_locus_tag</th>
+      <th>inference</th>
+      <th>note</th>
+      <th>...</th>
+      <th>product</th>
+      <th>protein_id</th>
+      <th>translation</th>
+      <th>GO_function</th>
+      <th>pseudo</th>
+      <th>gene</th>
+      <th>EC_number</th>
+      <th>GO_process</th>
+      <th>GO_component</th>
+      <th>gene_synonym</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>598</td>
+      <td>807</td>
+      <td>1</td>
+      <td>0</td>
+      <td>CDS</td>
+      <td>598..807</td>
+      <td>BAZ_RS27670</td>
+      <td>NaN</td>
+      <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
+      <td>Derived by automated computational analysis us...</td>
+      <td>...</td>
+      <td>hypothetical protein</td>
+      <td>WP_003171438.1</td>
+      <td>MYIIINFEPLSPVMNDIAIKLAMVLFIPLFLALIVKVILMKFMKES...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1127</td>
+      <td>1765</td>
+      <td>-1</td>
+      <td>0</td>
+      <td>CDS</td>
+      <td>complement(1127..1765)</td>
+      <td>BAZ_RS27675</td>
+      <td>BAZ_pXO1_00003</td>
+      <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
+      <td>Derived by automated computational analysis us...</td>
+      <td>...</td>
+      <td>nuclease-related domain-containing protein</td>
+      <td>WP_000453400.1</td>
+      <td>MEVLIFELILIAVLIPLNSVVKKHVPKWKGKAGEKLVKRMLSKLDP...</td>
+      <td>GO:0003677 - DNA binding [Evidence IEA];GO:000...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1782</td>
+      <td>2165</td>
+      <td>-1</td>
+      <td>0</td>
+      <td>CDS</td>
+      <td>complement(1782..2165)</td>
+      <td>BAZ_RS27680</td>
+      <td>BAZ_pXO1_00004</td>
+      <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
+      <td>Derived by automated computational analysis us...</td>
+      <td>...</td>
+      <td>hypothetical protein</td>
+      <td>WP_003159741.1</td>
+      <td>MNRNREYIALRNSISIGWLLTCIVIGLSIYFSSVVYLLIGCFILSL...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2291</td>
+      <td>2875</td>
+      <td>1</td>
+      <td>0</td>
+      <td>CDS</td>
+      <td>2291..2875</td>
+      <td>BAZ_RS27685</td>
+      <td>BAZ_pXO1_00005</td>
+      <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
+      <td>Derived by automated computational analysis us...</td>
+      <td>...</td>
+      <td>hypothetical protein</td>
+      <td>WP_000916417.1</td>
+      <td>MLKLVVNNTGTEPEGDSAFSNYFTCKDCVYYLSKSDSCSLQLAADS...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>2895</td>
+      <td>3473</td>
+      <td>1</td>
+      <td>0</td>
+      <td>CDS</td>
+      <td>2895..3473</td>
+      <td>BAZ_RS27690</td>
+      <td>BAZ_pXO1_00006</td>
+      <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
+      <td>Derived by automated computational analysis us...</td>
+      <td>...</td>
+      <td>hypothetical protein</td>
+      <td>WP_002194483.1</td>
+      <td>MLEHTILFSLVQLVPLIVSTGIIYILLELTDTEWKTWFSYEGIFAI...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>161</th>
+      <td>175000</td>
+      <td>175287</td>
+      <td>-1</td>
+      <td>0</td>
+      <td>CDS</td>
+      <td>complement(175000..175287)</td>
+      <td>BAZ_RS28520</td>
+      <td>BAZ_pXO1_00191</td>
+      <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
+      <td>Derived by automated computational analysis us...</td>
+      <td>...</td>
+      <td>hypothetical protein</td>
+      <td>WP_000084556.1</td>
+      <td>MSQVPGFLKFVLAKERRYVYLAVAEKKNKRILTHIVYRFGPLEKAL...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>162</th>
+      <td>175364</td>
+      <td>175564</td>
+      <td>-1</td>
+      <td>0</td>
+      <td>CDS</td>
+      <td>complement(175364..175564)</td>
+      <td>BAZ_RS28525</td>
+      <td>BAZ_pXO1_00192</td>
+      <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
+      <td>Derived by automated computational analysis us...</td>
+      <td>...</td>
+      <td>hypothetical protein</td>
+      <td>WP_000344165.1</td>
+      <td>MDENKRNMLLSFIISILFIFTSLLPFSNNEYVYVISKIGAAAGVIN...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>163</th>
+      <td>175616</td>
+      <td>176260</td>
+      <td>-1</td>
+      <td>0</td>
+      <td>CDS</td>
+      <td>complement(175616..176260)</td>
+      <td>BAZ_RS28530</td>
+      <td>BAZ_pXO1_00193</td>
+      <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
+      <td>Derived by automated computational analysis us...</td>
+      <td>...</td>
+      <td>thermonuclease family protein</td>
+      <td>WP_000708136.1</td>
+      <td>MKIWIKAICITSFVIQMSACSSSAQTKNDSRPAQAVQNGIQQHVEG...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>164</th>
+      <td>176689</td>
+      <td>179352</td>
+      <td>-1</td>
+      <td>0</td>
+      <td>CDS</td>
+      <td>complement(176689..179352)</td>
+      <td>BAZ_RS28540</td>
+      <td>BAZ_pXO1_00195</td>
+      <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
+      <td>Derived by automated computational analysis us...</td>
+      <td>...</td>
+      <td>type IA DNA topoisomerase</td>
+      <td>WP_000520727.1</td>
+      <td>MGKTLFIAEKPKVANEIMKSPRFRHSQKYIGSKPYYGYYENDHYIV...</td>
+      <td>GO:0003677 - DNA binding [Evidence IEA];GO:000...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>5.6.2.1</td>
+      <td>GO:0006265 - DNA topological change [EvidenceIEA]</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>181589</td>
+      <td>181607</td>
+      <td>1</td>
+      <td>0</td>
+      <td>CDS</td>
+      <td>join(181589..181607,1..410)</td>
+      <td>BAZ_RS27665</td>
+      <td>BAZ_pXO1_00001</td>
+      <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
+      <td>Derived by automated computational analysis us...</td>
+      <td>...</td>
+      <td>hypothetical protein</td>
+      <td>WP_000914414.1</td>
+      <td>MLKKLSVFLIGTLLLFGLAACDSIKSVASDVTVGKVIEEFKAAGLE...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+<p>136 rows × 22 columns</p>
+</div></div>
+</div>
+</section>
+<section id="id2">
+<h3>Assign cluster identifiers to the plasmid proteins<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plast</span> <span class="o">=</span> <span class="n">plast</span><span class="o">.</span><span class="n">assign_eggnog_annot</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of assigned clusters:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">plast</span><span class="o">.</span><span class="n">vector</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Assigned clusters:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">plast</span><span class="o">.</span><span class="n">vector</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Number of assigned clusters: 136
+Assigned clusters:
+[None, &#39;31K0D&#39;, None, &#39;30DG3&#39;, None, &#39;32907&#39;, None, None, &#39;COG3344&#39;, &#39;COG0553&#39;, None, &#39;COG0827&#39;, None, &#39;2ZFG1&#39;, None, &#39;2Z9QM&#39;, &#39;2Z9QM&#39;, &#39;30AUC&#39;, &#39;32EU5&#39;, &#39;33QRF&#39;, &#39;COG4973&#39;, &#39;COG0675&#39;, &#39;COG2250&#39;, &#39;COG3344&#39;, &#39;COG1708&#39;, None, None, None, &#39;COG3950&#39;, &#39;COG2865&#39;, &#39;2ZWMK&#39;, &#39;COG0539&#39;, &#39;30VTJ&#39;, &#39;COG1309.used_alg.fa&#39;, None, &#39;COG4823&#39;, &#39;COG0454&#39;, &#39;COG3385&#39;, &#39;COG3385&#39;, None, &#39;COG1476&#39;, &#39;33G6F&#39;, &#39;308XQ&#39;, &#39;COG3505&#39;, None, &#39;30DRN&#39;, &#39;349HH&#39;, &#39;2ZM2H&#39;, &#39;30JG6&#39;, None, &#39;33PUD&#39;, &#39;32AWE&#39;, &#39;COG4963&#39;, None, None, &#39;COG2866&#39;, None, None, None, &#39;COG3745&#39;, &#39;COG4963&#39;, &#39;COG4962&#39;, &#39;COG4965&#39;, &#39;3294H&#39;, &#39;3294H&#39;, &#39;30JM3&#39;, &#39;COG4072&#39;, &#39;COG4960&#39;, None, &#39;COG5464&#39;, &#39;30EMT&#39;, None, &#39;30D9P&#39;, &#39;30EJP&#39;, &#39;336S4&#39;, &#39;COG3451&#39;, None, None, &#39;33KVR&#39;, &#39;33F95&#39;, &#39;COG1266&#39;, &#39;COG2311&#39;, &#39;307WB&#39;, &#39;COG5386&#39;, None, &#39;345N2&#39;, &#39;COG2866&#39;, &#39;COG0671&#39;, None, &#39;COG1210&#39;, &#39;2Z8KQ&#39;, &#39;33354&#39;, None, None, None, &#39;2ZJNR&#39;, &#39;COG3711&#39;, None, None, None, &#39;COG4644&#39;, &#39;COG1961&#39;, &#39;2ZAZ1&#39;, None, &#39;2ZA3G&#39;, None, None, &#39;32ZBI&#39;, &#39;COG0640&#39;, &#39;30AH4&#39;, None, None, &#39;COG4973&#39;, None, &#39;33Y12&#39;, None, None, &#39;33ZVC&#39;, &#39;32U5N&#39;, &#39;332Y6&#39;, &#39;COG3443&#39;, &#39;COG2357&#39;, &#39;COG4973&#39;, &#39;COG3410&#39;, None, &#39;319NK&#39;, &#39;33JGE&#39;, None, None, &#39;COG1923&#39;, &#39;COG0640&#39;, &#39;30EJD&#39;, None, &#39;COG1525&#39;, &#39;COG0550&#39;, &#39;331IF&#39;]
+</pre></div></div>
+</div>
+</section>
+<section id="id3">
+<h3>Pass data through pLAST model and receive embeddings<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plast</span> <span class="o">=</span> <span class="n">plast</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Plasmid embedding:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">plast</span><span class="o">.</span><span class="n">embedding</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Plasmid embedding:
+[ 0.0589677   0.05433606 -0.1876128   0.03643819  0.24761888  0.06717072
+  0.03598635 -0.2240049   0.14677612  0.08280926 -0.08353736 -0.06939356
+  0.07016669  0.08643539 -0.05044083 -0.09069608 -0.10310914  0.16306525
+  0.23802327  0.20261437  0.08285122  0.04954447 -0.25138718 -0.05838021
+  0.04297755 -0.03393299  0.02068523 -0.1865046  -0.17108573  0.07016291
+  0.01318081 -0.03065709  0.00491979 -0.10776813 -0.09607697 -0.03169782
+ -0.06032306  0.05970465 -0.22047132 -0.2629159   0.15037817  0.04737961
+ -0.06956949  0.0237163   0.00524222  0.05974862  0.2203716   0.32091218
+ -0.08670954 -0.12627028  0.09016269  0.06958341  0.19005509 -0.05200532
+ -0.09510881  0.01440437  0.10063916 -0.13191333 -0.00934572 -0.00705839
+ -0.0150359   0.06664705 -0.1576495   0.13453296]
+</pre></div></div>
+</div>
+</section>
+<section id="id4">
+<h3>Find similar plasmids in the database<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results</span> <span class="o">=</span> <span class="n">plast</span><span class="o">.</span><span class="n">get_most_similar</span><span class="p">(</span><span class="n">maxret</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;pLAST_distance&quot;</span><span class="p">,</span> <span class="s2">&quot;gc&quot;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+
+<span class="n">preferred</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;pLAST_distance&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;length&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;gc&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;taxid&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;organism&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;definition&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;taxonomy&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;rep_type(s)&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;AMR&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;relaxase_type(s)&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mpf_type&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;orit_type(s)&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;predicted_mobility&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">preferred</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span>
+    <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">preferred</span>
+<span class="p">]</span>
+<span class="n">display</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">cols</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>pLAST_distance</th>
+      <th>length</th>
+      <th>gc</th>
+      <th>taxid</th>
+      <th>organism</th>
+      <th>definition</th>
+      <th>taxonomy</th>
+      <th>rep_type(s)</th>
+      <th>AMR</th>
+      <th>relaxase_type(s)</th>
+      <th>mpf_type</th>
+      <th>orit_type(s)</th>
+      <th>predicted_mobility</th>
+      <th>primary_cluster_id</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>NZ_CP010321</th>
+      <td>0.972325</td>
+      <td>181741</td>
+      <td>0.325353</td>
+      <td>1392</td>
+      <td>Bacillus anthracis</td>
+      <td>Bacillus anthracis strain Canadian Bison isola...</td>
+      <td>Bacteria;Bacillota;Bacilli;Bacillales;Bacillac...</td>
+      <td>rc125</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>MPF_T</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>AA800</td>
+    </tr>
+    <tr>
+      <th>NZ_CP091763</th>
+      <td>0.971691</td>
+      <td>181764</td>
+      <td>0.325312</td>
+      <td>1392</td>
+      <td>Bacillus anthracis</td>
+      <td>Bacillus anthracis strain PNO2 plasmid pXO1, c...</td>
+      <td>Bacteria;Bacillota;Bacilli;Bacillales;Bacillac...</td>
+      <td>rc125</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>MPF_T</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>AA800</td>
+    </tr>
+    <tr>
+      <th>NZ_CP010853</th>
+      <td>0.970925</td>
+      <td>181663</td>
+      <td>0.325333</td>
+      <td>1392</td>
+      <td>Bacillus anthracis</td>
+      <td>Bacillus anthracis strain A1144 plasmid pXO1, ...</td>
+      <td>Bacteria;Bacillota;Bacilli;Bacillales;Bacillac...</td>
+      <td>rc125</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>MPF_T</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>AA800</td>
+    </tr>
+    <tr>
+      <th>NZ_CP115871</th>
+      <td>0.970012</td>
+      <td>181667</td>
+      <td>0.325243</td>
+      <td>1392</td>
+      <td>Bacillus anthracis</td>
+      <td>Bacillus anthracis strain IAL 52 plasmid pXO1,...</td>
+      <td>Bacteria;Bacillota;Bacilli;Bacillales;Bacillac...</td>
+      <td>rc125</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>MPF_T</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>AA800</td>
+    </tr>
+    <tr>
+      <th>NZ_CP009597</th>
+      <td>0.969928</td>
+      <td>181710</td>
+      <td>0.325194</td>
+      <td>1449979</td>
+      <td>Bacillus anthracis str. V770-NP-1R</td>
+      <td>Bacillus anthracis str. V770-NP-1R plasmid pXO...</td>
+      <td>Bacteria;Bacillota;Bacilli;Bacillales;Bacillac...</td>
+      <td>rc125</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>MPF_T</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>AA800</td>
+    </tr>
+    <tr>
+      <th>NZ_CP014177</th>
+      <td>0.969738</td>
+      <td>181677</td>
+      <td>0.325293</td>
+      <td>1392</td>
+      <td>Bacillus anthracis</td>
+      <td>Bacillus anthracis strain Stendal plasmid pXO1...</td>
+      <td>Bacteria;Bacillota;Bacilli;Bacillales;Bacillac...</td>
+      <td>rc125</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>MPF_T</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>AA800</td>
+    </tr>
+    <tr>
+      <th>NZ_CP015777</th>
+      <td>0.969738</td>
+      <td>181677</td>
+      <td>0.325297</td>
+      <td>1392</td>
+      <td>Bacillus anthracis</td>
+      <td>Bacillus anthracis strain Tangail-1 plasmid pX...</td>
+      <td>Bacteria;Bacillota;Bacilli;Bacillales;Bacillac...</td>
+      <td>rc125</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>MPF_T</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>AA800</td>
+    </tr>
+    <tr>
+      <th>NZ_CP076208</th>
+      <td>0.969727</td>
+      <td>181766</td>
+      <td>0.325292</td>
+      <td>1392</td>
+      <td>Bacillus anthracis</td>
+      <td>Bacillus anthracis strain Pollino 3734 plasmid...</td>
+      <td>Bacteria;Bacillota;Bacilli;Bacillales;Bacillac...</td>
+      <td>rc125</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>MPF_T</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>AA800</td>
+    </tr>
+    <tr>
+      <th>NZ_CP076193</th>
+      <td>0.969714</td>
+      <td>181763</td>
+      <td>0.325303</td>
+      <td>1392</td>
+      <td>Bacillus anthracis</td>
+      <td>Bacillus anthracis strain UR-1 plasmid pXO1, c...</td>
+      <td>Bacteria;Bacillota;Bacilli;Bacillales;Bacillac...</td>
+      <td>rc125</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>MPF_T</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>AA800</td>
+    </tr>
+    <tr>
+      <th>NZ_CP009980</th>
+      <td>0.969302</td>
+      <td>181674</td>
+      <td>0.325302</td>
+      <td>1392</td>
+      <td>Bacillus anthracis</td>
+      <td>Bacillus anthracis strain Ames isolate BACI008...</td>
+      <td>Bacteria;Bacillota;Bacilli;Bacillales;Bacillac...</td>
+      <td>rc125</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>MPF_T</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>AA800</td>
+    </tr>
+    <tr>
+      <th>NZ_CP012520</th>
+      <td>0.969289</td>
+      <td>181658</td>
+      <td>0.325331</td>
+      <td>1392</td>
+      <td>Bacillus anthracis</td>
+      <td>Bacillus anthracis strain Larissa plasmid pXO1...</td>
+      <td>Bacteria;Bacillota;Bacilli;Bacillales;Bacillac...</td>
+      <td>rc125</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>MPF_T</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>AA800</td>
+    </tr>
+    <tr>
+      <th>NZ_AP018444</th>
+      <td>0.968104</td>
+      <td>181607</td>
+      <td>0.325395</td>
+      <td>1392</td>
+      <td>Bacillus anthracis</td>
+      <td>Bacillus anthracis strain CZC5 plasmid pXO1, c...</td>
+      <td>Bacteria;Bacillota;Bacilli;Bacillales;Bacillac...</td>
+      <td>rc125</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>MPF_T</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>AA800</td>
+    </tr>
+    <tr>
+      <th>NZ_CP009696</th>
+      <td>0.967697</td>
+      <td>181920</td>
+      <td>0.325390</td>
+      <td>1392</td>
+      <td>Bacillus anthracis</td>
+      <td>Bacillus anthracis strain RA3 plasmid pXO1, co...</td>
+      <td>Bacteria;Bacillota;Bacilli;Bacillales;Bacillac...</td>
+      <td>rc125</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>MPF_T</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>AA800</td>
+    </tr>
+    <tr>
+      <th>NZ_CP147784</th>
+      <td>0.967578</td>
+      <td>181634</td>
+      <td>0.325292</td>
+      <td>1392</td>
+      <td>Bacillus anthracis</td>
+      <td>Bacillus anthracis strain Sterne-CLR2-13 plasm...</td>
+      <td>Bacteria;Bacillota;Bacilli;Bacillales;Bacillac...</td>
+      <td>rc125</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>MPF_T</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>AA800</td>
+    </tr>
+    <tr>
+      <th>NZ_CP008847</th>
+      <td>0.967434</td>
+      <td>181894</td>
+      <td>0.325354</td>
+      <td>1392</td>
+      <td>Bacillus anthracis</td>
+      <td>Bacillus anthracis strain HYU01 plasmid pX01, ...</td>
+      <td>Bacteria;Bacillota;Bacilli;Bacillales;Bacillac...</td>
+      <td>rc125</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>MPF_T</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>AA800</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Kamil Krakowski, Stanisław Dunin-Horkawicz.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
