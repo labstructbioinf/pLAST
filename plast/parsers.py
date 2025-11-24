@@ -5,19 +5,24 @@ eggNOG-mapper hits, hmmscan domtblout outputs, and to write FASTA files from pan
 """
 
 import io
-from typing import Union
+from typing import Union, Dict, Any, Tuple
 import pandas as pd
 
 
-def read_fasta(fasta: Union[str, io.BufferedReader]):
+def read_fasta(fasta: Union[str, io.BufferedReader]) -> Dict[str, str]:
     """
     Parse a FASTA file handler or string into a dictionary.
+
+    :param fasta: FASTA file content as string or file handler.
+    :type fasta: str or io.BufferedReader
+    :returns: Dictionary mapping sequence IDs to sequences.
+    :rtype: dict[str, str]
     """
     if isinstance(fasta, str):
         fasta = fasta.split("\n")
-    seqs = {}
-    current_id = None
-    current_seq = ""
+    seqs: Dict[str, str] = {}
+    current_id: Union[str, None] = None
+    current_seq: str = ""
     for line in fasta:
         if line.startswith(">"):
             if current_id:
@@ -31,10 +36,16 @@ def read_fasta(fasta: Union[str, io.BufferedReader]):
     return seqs
 
 
-def read_m8(m8_filename: str, res_per_query: int = 1):
+def read_m8(m8_filename: str, res_per_query: int = 1) -> pd.DataFrame:
     """
     Parse MMseqs easy-search output file.
+
     :param m8_filename: Path to the m8 file.
+    :type m8_filename: str
+    :param res_per_query: Number of results per query (default: 1).
+    :type res_per_query: int
+    :returns: DataFrame indexed by query_id.
+    :rtype: pandas.DataFrame
     """
     results = pd.read_csv(
         m8_filename,
@@ -58,14 +69,19 @@ def read_m8(m8_filename: str, res_per_query: int = 1):
     if res_per_query == 1:
         results = results.loc[
             results.groupby("query_id")["evalue"].idxmin()
-        ]  # get results with the best e-value
+        ]
     return results.set_index("query_id")
 
 
-def read_gbff(stream: io.BufferedReader):
+def read_gbff(stream: io.BufferedReader) -> Tuple[pd.DataFrame, str, int]:
     """
     Parse a GenBank flat file (GBFF) from a file handler into a DataFrame
     containing CDS features and their attributes.
+
+    :param stream: File handler for GBFF file.
+    :type stream: io.BufferedReader
+    :returns: Tuple of (DataFrame of CDS features, accession, length).
+    :rtype: tuple[pandas.DataFrame, str, int]
     """
     all_elements = []
     line = stream.readline().decode()
@@ -79,14 +95,14 @@ def read_gbff(stream: io.BufferedReader):
 
     for line in stream:
         line = line.decode()
-        element = {}
+        element: Dict[str, Any] = {}
         if line.startswith("     CDS"):
             typ, coords = line.strip().split()
             element["type"] = typ
             element["coordinates"] = coords
             line = stream.readline().decode()
-            current_attr = None
-            current_val = None
+            current_attr: Union[str, None] = None
+            current_val: Union[str, None] = None
             while line.startswith("                     "):
                 line = line.strip()
                 if line.startswith("/"):
@@ -147,9 +163,16 @@ def read_gbff(stream: io.BufferedReader):
     return dataframe.sort_values("start"), accession, length
 
 
-def read_emapper_hits(emapper_hits_file: str, res_per_query: int = 1):
+def read_emapper_hits(emapper_hits_file: str, res_per_query: int = 1) -> pd.DataFrame:
     """
     Parse eggnog-mapper output file into a DataFrame.
+
+    :param emapper_hits_file: Path to eggnog-mapper output file.
+    :type emapper_hits_file: str
+    :param res_per_query: Number of results per query (default: 1).
+    :type res_per_query: int
+    :returns: DataFrame indexed by query_name.
+    :rtype: pandas.DataFrame
     """
     results = pd.read_csv(
         emapper_hits_file,
@@ -176,6 +199,11 @@ def read_emapper_hits(emapper_hits_file: str, res_per_query: int = 1):
 def read_hmmscan_output(input_file_path: str) -> pd.DataFrame:
     """
     Parse hmmscan domtblout file into a DataFrame similar to eggnog-mapper output.
+
+    :param input_file_path: Path to hmmscan domtblout file.
+    :type input_file_path: str
+    :returns: DataFrame with best hits per query.
+    :rtype: pandas.DataFrame
     """
     header = (
         "target_name\ttarget_acc\ttarget_len\tquery_name\tquery_acc\tquery_len\t"

@@ -1,6 +1,7 @@
 """
 Utility functions for PLAST, including GPU check, distance calculations, and OS page cache warming.
 """
+
 import subprocess
 import os
 import hashlib
@@ -9,16 +10,17 @@ import ctypes
 import math
 import fcntl
 from pathlib import Path
-from typing import List, Union, Optional
+from typing import Any, List, Union, Optional
 import numpy as np
 import numba
 
 
-def is_gpu_available():
+def is_gpu_available() -> bool:
     """
     Check if a GPU is available on the system.
-    Returns:
-        bool: True if a GPU is available, False otherwise.
+
+    :returns: True if a GPU is available, False otherwise.
+    :rtype: bool
     """
     try:
         subprocess.check_output("nvidia-smi")
@@ -28,9 +30,16 @@ def is_gpu_available():
 
 
 @numba.njit(fastmath=True)
-def euclidean(x, y):
+def euclidean(x: np.ndarray, y: np.ndarray) -> float:
     """
     Compute the Euclidean distance between two vectors.
+
+    :param x: First vector.
+    :type x: np.ndarray
+    :param y: Second vector.
+    :type y: np.ndarray
+    :returns: Euclidean distance.
+    :rtype: float
     """
     result = 0.0
     for i in range(x.shape[0]):
@@ -40,19 +49,19 @@ def euclidean(x, y):
 
 
 @numba.jit(nopython=True)
-def cosine_similarity_numba(u: np.ndarray, v: np.ndarray):
+def cosine_similarity_numba(u: np.ndarray, v: np.ndarray) -> float:
     """
     copied from https://github.com/pranaychandekar/numba_cosine
     """
     assert u.shape[0] == v.shape[0]
-    uv = 0
-    uu = 0
-    vv = 0
+    uv = 0.0
+    uu = 0.0
+    vv = 0.0
     for i in range(u.shape[0]):
         uv += u[i] * v[i]
         uu += u[i] * u[i]
         vv += v[i] * v[i]
-    cos_theta = 1
+    cos_theta = 1.0
     if uu != 0 and vv != 0:
         cos_theta = uv / np.sqrt(uu * vv)
     return cos_theta
@@ -62,15 +71,20 @@ def warm_page_cache(
     files: List[Union[str, Path]],
     threshold: float = 0.9,
     state_dir: Optional[Union[str, Path]] = None,
-    logger=None,
+    logger: Optional[Any] = None,
 ) -> None:
     """
     Warm OS page cache for given files only if not sufficiently cached.
 
-    - files: list of file paths (str/Path). Non-existent files are ignored.
-    - threshold: target cached fraction in [0,1] before skipping warm.
-    - state_dir: directory to place lock/sentinel files (default: $XDG_RUNTIME_DIR or /tmp).
-    - logger: optional logger with .debug().
+    :param files: List of file paths (str or Path). Non-existent files are ignored.
+    :type files: list[str or Path]
+    :param threshold: Target cached fraction in [0,1] before skipping warm.
+    :type threshold: float
+    :param state_dir: Directory to place lock/sentinel files (default: $XDG_RUNTIME_DIR or /tmp).
+    :type state_dir: str or Path, optional
+    :param logger: Optional logger with .debug().
+    :type logger: Any, optional
+    :returns: None
     """
     paths = [Path(p) for p in files if p is not None]
     paths = [p for p in paths if p.exists() and p.is_file()]
@@ -114,7 +128,7 @@ def warm_page_cache(
         except (OSError, ValueError):
             return 0.0
 
-    def _db_cached_fraction(_paths: list[Path]) -> float:
+    def _db_cached_fraction(_paths: List[Path]) -> float:
         total = 0
         acc = 0.0
         for p in _paths:
@@ -130,14 +144,27 @@ def warm_page_cache(
         return (acc / total) if total > 0 else 1.0
 
     def _posix_prefetch(fd: int) -> None:
-        # Best-effort posix_fadvise(WILLNEED). Not fatal if unavailable.
+        """
+        Best-effort posix_fadvise(WILLNEED). Not fatal if unavailable.
+
+        :param fd: File descriptor.
+        :type fd: int
+        :returns: None
+        """
         try:
             if hasattr(os, "posix_fadvise") and hasattr(os, "POSIX_FADV_WILLNEED"):
                 os.posix_fadvise(fd, 0, 0, os.POSIX_FADV_WILLNEED)
         except OSError:
             pass
 
-    def _warm(_paths: list[Path]) -> None:
+    def _warm(_paths: List[Path]) -> None:
+        """
+        Read files in chunks to warm the OS page cache.
+
+        :param _paths: List of file paths.
+        :type _paths: list[Path]
+        :returns: None
+        """
         chunk = 8 * 1024 * 1024  # 8MB
         for p in _paths:
             try:
@@ -148,7 +175,6 @@ def warm_page_cache(
             except (OSError, ValueError):
                 continue
 
-    # Compute a signature so we don’t re-warm if files changed
     parts = []
     for p in paths:
         try:
@@ -160,7 +186,6 @@ def warm_page_cache(
         hashlib.sha1("|".join(parts).encode("utf-8")).hexdigest() if parts else "nosig"
     )
 
-    # Where to store lock/sentinel
     if state_dir is None:
         state_dir = Path(os.environ.get("XDG_RUNTIME_DIR") or "/tmp")
     else:
@@ -168,30 +193,24 @@ def warm_page_cache(
     try:
         state_dir.mkdir(parents=True, exist_ok=True)
     except OSError:
-        # If cannot create, proceed without lock/sentinel
         pass
 
     sentinel = state_dir / f".warm_cache_done.{sig}"
     if sentinel.exists():
-        # Optional: still skip only if cache looks good
         frac = _db_cached_fraction(paths)
         _log_debug(f"warm_cache: sentinel exists; cached ~{frac * 100:.1f}%")
         if frac >= threshold:
             return
 
-    # Inter-process lock to avoid duplicated warming
     lock_path = state_dir / ".warm_cache.lock"
 
     try:
-        # Specify encoding to satisfy Pylint when opening in text mode
         with open(lock_path, "w", encoding="utf-8") as lockf:
             try:
                 fcntl.flock(lockf, fcntl.LOCK_EX | fcntl.LOCK_NB)
             except BlockingIOError:
-                # Another process is warming; let it handle
                 return
 
-            # Re-check after acquiring lock
             frac2 = _db_cached_fraction(paths)
             _log_debug(f"warm_cache: cached (post-lock) ~{frac2 * 100:.1f}%")
             if frac2 < threshold:
@@ -207,7 +226,6 @@ def warm_page_cache(
             except OSError:
                 pass
     except OSError:
-        # If locking fails, do a best-effort local check/warm
         frac3 = _db_cached_fraction(paths)
         if frac3 < threshold:
             _warm(paths)
