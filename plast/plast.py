@@ -246,6 +246,11 @@ class PLAST:
         """
         self.log(message, level="debug")
 
+    def tmp_dir(self) -> Path:
+        tmp_dir = Path(self.data.config.get("tmp_dir", "tmp"))
+        tmp_dir.mkdir(parents=True, exist_ok=True)
+        return tmp_dir
+
     @staticmethod
     def get_by_accession(plast_id: str, data: PLASTData, model: str) -> "PLAST":
         """
@@ -357,7 +362,7 @@ class PLAST:
         with tempfile.NamedTemporaryFile(
             prefix="prodigal_in_",
             suffix=".fasta",
-            dir=self.data.config["tmp_dir"],
+            dir=self.tmp_dir(),
             mode="w+",
         ) as input_file:
             try:
@@ -374,7 +379,7 @@ class PLAST:
             with tempfile.NamedTemporaryFile(
                 prefix="prodigal_out_",
                 suffix=".faa",
-                dir=self.data.config["tmp_dir"],
+                dir=self.tmp_dir(),
                 mode="w+",
             ) as output_file:
 
@@ -469,16 +474,16 @@ class PLAST:
             f"(threads={threads}, gpu={use_gpu and is_gpu_available()})"
         )
         with tempfile.NamedTemporaryFile(
-            mode="w", dir=self.data.config["tmp_dir"], prefix="mmseqs_search_"
+            mode="w", dir=self.tmp_dir(), prefix="mmseqs_search_"
         ) as faa_input:
             for locus, sequence in analysis_df.iterrows():
                 faa_input.write(f">{locus}\n{sequence['translation']}\n")
             faa_input.flush()
             with tempfile.NamedTemporaryFile(
-                mode="w", dir=self.data.config["tmp_dir"], prefix="mmseqs_output_"
+                mode="w", dir=self.tmp_dir(), prefix="mmseqs_output_"
             ) as mmseqs_output:
                 with tempfile.TemporaryDirectory(
-                    dir=self.data.config["tmp_dir"]
+                    dir=self.tmp_dir()
                 ) as temp_dir:
                     cmd = [
                         "mmseqs",
@@ -580,7 +585,7 @@ class PLAST:
         warm_page_cache(
             files,
             threshold=0.9,
-            state_dir=self.data.config.get("tmp_dir"),
+            state_dir=self.tmp_dir(),
             logger=self.logger,
         )
 
@@ -606,7 +611,7 @@ class PLAST:
             analysis_df.iloc[bounds[i] : bounds[i + 1]] for i in range(processes)
         ]
 
-        with tempfile.TemporaryDirectory(dir=self.data.config["tmp_dir"]) as temp_main:
+        with tempfile.TemporaryDirectory(dir=self.tmp_dir()) as temp_main:
             hmmscan_processes = []
             output_files = []
             for i, subset in enumerate(subsets):

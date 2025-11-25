@@ -60,6 +60,7 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Notebooks</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#conda-/-mamba-environment">conda / mamba environment</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pip">pip</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#Data-download">Data download</a></li>
 </ul>
@@ -67,6 +68,13 @@
 <li class="toctree-l2"><a class="reference internal" href="usage.html">Basic pLAST usage</a></li>
 </ul>
 </li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">LINKS</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/labstructbioinf/pLAST">GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://plast.lbs.cent.uw.edu.pl">pLAST-interface</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://doi.org/10.6084/m9.figshare.30530819.v2">figshare</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://lbs.cent.uw.edu.pl">LBS</a></li>
 </ul>
 
         </div>
@@ -95,11 +103,40 @@
            <div itemprop="articleBody">
              
   <div class="admonition note">
-    <p><a href="notebooks/installation.ipynb" download>
+    <p><a href="../notebooks/installation.ipynb" download>
     📥 Download notebook (.ipynb)
     </a></p>
 </div><section id="Installation">
 <h1>Installation<a class="headerlink" href="#Installation" title="Link to this heading"></a></h1>
+<section id="conda-/-mamba-environment">
+<h2>conda / mamba environment<a class="headerlink" href="#conda-/-mamba-environment" title="Link to this heading"></a></h2>
+<div class="line-block">
+<div class="line">First, install the <strong>mamba</strong> environment using the <code class="docutils literal notranslate"><span class="pre">core-env.yml</span></code> file from the main pLAST repository:</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">mamba</span> <span class="pre">env</span> <span class="pre">create</span> <span class="pre">-n</span> <span class="pre">plast</span> <span class="pre">-f</span> <span class="pre">core-env.yml</span></code></div>
+</div>
+<div class="line-block">
+<div class="line">You can also use <strong>conda</strong>:</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">env</span> <span class="pre">create</span> <span class="pre">-n</span> <span class="pre">plast</span> <span class="pre">-f</span> <span class="pre">core-env.yml</span></code></div>
+</div>
+<p>Alternatively, install the following dependencies manually:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">hmmer</span> <span class="pre">&gt;=</span> <span class="pre">3.4</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mmseqs2</span> <span class="pre">&gt;=</span> <span class="pre">17.b804f</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">prodigal</span> <span class="pre">&gt;=</span> <span class="pre">2.6.3</span></code></p></li>
+</ul>
+<div class="line-block">
+<div class="line">Once all required packages are installed, activate the environment:</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">mamba</span> <span class="pre">activate</span> <span class="pre">plast</span></code></div>
+<div class="line">or</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">activate</span> <span class="pre">plast</span></code></div>
+</div>
+<div class="line-block">
+<div class="line">If you plan to use Jupyter notebooks, install the <code class="docutils literal notranslate"><span class="pre">ipykernel</span></code> package as well:</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">mamba</span> <span class="pre">install</span> <span class="pre">ipykernel</span></code></div>
+<div class="line">or</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">ipykernel</span></code></div>
+</div>
+</section>
 <section id="pip">
 <h2>pip<a class="headerlink" href="#pip" title="Link to this heading"></a></h2>
 <div class="nbinput nblast docutils container">
@@ -113,8 +150,9 @@
 </section>
 <section id="Data-download">
 <h2>Data download<a class="headerlink" href="#Data-download" title="Link to this heading"></a></h2>
+<p>Download models and metadata:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>mkdir<span class="w"> </span>-p<span class="w"> </span>data
@@ -122,10 +160,10 @@
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>wget<span class="w"> </span>-P<span class="w"> </span>data<span class="w"> </span>https://figshare.com/ndownloader/articles/30530819
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>wget<span class="w"> </span>-O<span class="w"> </span>data/59837579.tar.gz<span class="w"> </span>https://figshare.com/ndownloader/files/59837579<span class="w"> </span>--user-agent<span class="o">=</span><span class="s2">&quot;Mozilla/5.0&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -134,13 +172,37 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
---2025-11-24 12:51:55--  https://figshare.com/ndownloader/articles/30530819?private_link=f3e2dfee325b35fdb7d9
-Resolving figshare.com (figshare.com)... 54.72.82.141, 34.246.58.166, 54.220.91.93, ...
-Connecting to figshare.com (figshare.com)|54.72.82.141|:443... connected.
-HTTP request sent, awaiting response... 403 Forbidden
-2025-11-24 12:51:55 ERROR 403: Forbidden.
+--2025-11-25 19:01:50--  https://figshare.com/ndownloader/files/59837579
+Resolving figshare.com (figshare.com)... 34.249.53.233, 54.77.166.26, 52.51.16.113, ...
+Connecting to figshare.com (figshare.com)|34.249.53.233|:443... connected.
+HTTP request sent, awaiting response... 302 Found
+Location: https://s3-eu-west-1.amazonaws.com/pfigshare-u-files/59837579/data.tar.gz?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIAIYCQYOYV5JSSROOA/20251125/eu-west-1/s3/aws4_request&amp;X-Amz-Date=20251125T180150Z&amp;X-Amz-Expires=10&amp;X-Amz-SignedHeaders=host&amp;X-Amz-Signature=9afdb9a18aba85f5248143557d23d556ccc37082e6e5ca8c1ed475f06b6901d2 [following]
+--2025-11-25 19:01:50--  https://s3-eu-west-1.amazonaws.com/pfigshare-u-files/59837579/data.tar.gz?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIAIYCQYOYV5JSSROOA/20251125/eu-west-1/s3/aws4_request&amp;X-Amz-Date=20251125T180150Z&amp;X-Amz-Expires=10&amp;X-Amz-SignedHeaders=host&amp;X-Amz-Signature=9afdb9a18aba85f5248143557d23d556ccc37082e6e5ca8c1ed475f06b6901d2
+Resolving s3-eu-west-1.amazonaws.com (s3-eu-west-1.amazonaws.com)... 3.5.66.135, 52.92.3.160, 3.5.71.39, ...
+Connecting to s3-eu-west-1.amazonaws.com (s3-eu-west-1.amazonaws.com)|3.5.66.135|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 903680033 (862M) [application/gzip]
+Saving to: ‘data/59837579.tar.gz’
+
+data/59837579.tar.g 100%[===================&gt;] 861.82M  6.35MB/s    in 2m 20s
+
+2025-11-25 19:04:10 (6.14 MB/s) - ‘data/59837579.tar.gz’ saved [903680033/903680033]
 
 </pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>tar<span class="w"> </span>-xzf<span class="w"> </span>data/59837579.tar.gz<span class="w">  </span><span class="o">&amp;&amp;</span><span class="w"> </span>rm<span class="w"> </span>data/59837579.tar.gz
+</pre></div>
+</div>
+</div>
+<p>Download .hmm eggNOG database for eggnog models:</p>
+<p>Download example data from github.com</p>
+<div class="line-block">
+<div class="line">If you don’t clone pLAST repository, you can still download only example folder using this link:</div>
+<div class="line"><a class="reference external" href="https://download-directory.github.io?url=https://github.com/labstructbioinf/pLAST/tree/main/notebooks/examples&amp;filename=example.zip">https://download-directory.github.io?url=https://github.com/labstructbioinf/pLAST/tree/main/notebooks/examples&amp;filename=example.zip</a></div>
 </div>
 </section>
 </section>

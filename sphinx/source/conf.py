@@ -30,10 +30,6 @@ exclude_patterns = []
 
 html_theme = "sphinx_rtd_theme"
 
-html_theme_options = {
-    "repository_url": "https://github.com/labstructbioinf/pLAST",
-    "use_repository_button": True,
-}
 
 html_context = {
     "display_github": True,
@@ -49,7 +45,7 @@ nbsphinx_prolog = r"""
 .. raw:: html
 
     <div class="admonition note">
-        <p><a href="{{ env.doc2path(env.docname, base=None) }}" download>
+        <p><a href="../notebooks/{{ env.docname.split('/')[-1] }}.ipynb" download>
         📥 Download notebook (.ipynb)
         </a></p>
     </div>

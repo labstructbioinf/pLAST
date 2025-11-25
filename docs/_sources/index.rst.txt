@@ -29,4 +29,7 @@ pLAST documentation
    :caption: LINKS
 
    GitHub <https://github.com/labstructbioinf/pLAST>
+   pLAST-interface <https://plast.lbs.cent.uw.edu.pl>
+   figshare <https://doi.org/10.6084/m9.figshare.30530819.v2>
+   LBS <https://lbs.cent.uw.edu.pl>
 
