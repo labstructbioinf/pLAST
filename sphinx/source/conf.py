@@ -6,9 +6,9 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'pLAST'
-copyright = '2025, Kamil Krakowski, Stanisław Dunin-Horkawicz'
-author = 'Kamil Krakowski, Stanisław Dunin-Horkawicz'
+project = "pLAST"
+copyright = "2025, Kamil Krakowski, Stanisław Dunin-Horkawicz"
+author = "Kamil Krakowski, Stanisław Dunin-Horkawicz"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -21,9 +21,8 @@ extensions = [
     "sphinx.ext.mathjax",
 ]
 
-templates_path = ['_templates']
+templates_path = ["_templates"]
 exclude_patterns = []
-
 
 
 # -- Options for HTML output -------------------------------------------------
@@ -44,7 +43,7 @@ html_context = {
     "conf_py_path": "/sphinx/source/",
 }
 
-html_static_path = ['_static']
+html_static_path = ["_static"]
 
 nbsphinx_prolog = r"""
 .. raw:: html
@@ -59,4 +58,5 @@ nbsphinx_prolog = r"""
 
 import os
 import sys
+
 sys.path.insert(0, os.path.abspath("../../"))

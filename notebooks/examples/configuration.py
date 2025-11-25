@@ -9,7 +9,6 @@ config = {
             "embeddings": "data/mmseqs2i03c08_mc2_ep30_vs64_w4_sg0_neg15.emb",
             "mean_embedding": "data/mmseqs2i03c08_mc2_ep30_vs64_w4_sg0_neg15.mean_emb.pkl",
             "idf": "data/mmseqs2i03c08_mc2_ep30_vs64_w4_sg0_neg15.idf.pkl",
-            "umap_mapper": "data/mmseqs2i03c08_mc2_ep30_vs64_w4_sg0_neg15.umap_emb",
         },
         "eggnog_model": {
             "type": "eggnog",
@@ -17,7 +16,6 @@ config = {
             "embeddings": "data/hits_mc2_ep30_vs64_w4_sg0_neg15.emb",
             "mean_embedding": "data/hits_mc2_ep30_vs64_w4_sg0_neg15.mean_emb.pkl",
             "idf": "data/hits_mc2_ep30_vs64_w4_sg0_neg15.idf.pkl",
-            "umap_mapper": "data/hits_mc2_ep30_vs64_w4_sg0_neg15.umap_emb",
         },
     },
     # Metadata
