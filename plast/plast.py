@@ -486,7 +486,7 @@ class PLAST:
                         faa_input.name,
                         (
                             self.data.config["mmseqs_db_padded"]
-                            if is_gpu_available()
+                            if use_gpu and is_gpu_available()
                             else self.data.config["mmseqs_db"]
                         ),
                         mmseqs_output.name,
