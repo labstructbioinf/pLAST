@@ -30,9 +30,31 @@ exclude_patterns = []
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = "sphinx_rtd_theme"
+
+html_theme_options = {
+    "repository_url": "https://github.com/labstructbioinf/pLAST",
+    "use_repository_button": True,
+}
+
+html_context = {
+    "display_github": True,
+    "github_user": "labstructbioinf",
+    "github_repo": "pLAST",
+    "github_version": "main",
+    "conf_py_path": "/sphinx/source/",
+}
+
 html_static_path = ['_static']
 
+nbsphinx_prolog = r"""
+.. raw:: html
 
+    <div class="admonition note">
+        <p><a href="{{ env.doc2path(env.docname, base=None) }}" download>
+        📥 Download notebook (.ipynb)
+        </a></p>
+    </div>
+"""
 
 
 import os

@@ -23,6 +23,10 @@ pLAST documentation
    :caption: TUTORIALS
 
    notebooks/index
-   
-   
+
+.. toctree::
+   :maxdepth: 1
+   :caption: LINKS
+
+   GitHub <https://github.com/labstructbioinf/pLAST>
 
