@@ -25,5 +25,5 @@ config = {
     "mmseqs_db": "data/circular_plasmids_proteins_representatives",
     "mmseqs_db_padded": "data/circular_plasmids_proteins_representatives_padded",
     # eggNOG HMM database for Bacteria
-    "hmmscan_db": "data/Bacteria.hmm",
+    "hmmscan_db": "data/hmm_db/Bacteria.hmm",
 }

@@ -46,6 +46,15 @@ Detailed installation instructions, including **dependencies**, **environment se
 
 ---
 
+# 🧪 Usage Examples
+
+A collection of usage examples demonstrating how to run pLAST, perform searches, and analyze results is available at the following link:  
+👉 [Usage Examples](https://labstructbioinf.github.io/pLAST/notebooks/usage.html)
+
+These examples provide step-by-step instructions and practical workflows to help you get started quickly.
+
+---
+
 # 📊 Data Availability
 
 All datasets used in the project are publicly available on Figshare:  

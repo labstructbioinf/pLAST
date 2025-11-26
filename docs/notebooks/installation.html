@@ -62,7 +62,12 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Installation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#conda-/-mamba-environment">conda / mamba environment</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pip">pip</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Data-download">Data download</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Data-download">Data download</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Download-models-and-metadata:">Download models and metadata:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Download-.hmm-eggNOG-database-for-eggnog-models:">Download .hmm eggNOG database for eggnog models:</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Download-examples-from-github.com">Download examples from github.com</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="usage.html">Basic pLAST usage</a></li>
@@ -150,7 +155,8 @@
 </section>
 <section id="Data-download">
 <h2>Data download<a class="headerlink" href="#Data-download" title="Link to this heading"></a></h2>
-<p>Download models and metadata:</p>
+<section id="Download-models-and-metadata:">
+<h3>Download models and metadata:<a class="headerlink" href="#Download-models-and-metadata:" title="Link to this heading"></a></h3>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
@@ -198,8 +204,52 @@ data/59837579.tar.g 100%[===================&gt;] 861.82M  6.35MB/s    in 2m 20s
 </pre></div>
 </div>
 </div>
-<p>Download .hmm eggNOG database for eggnog models:</p>
-<p>Download example data from github.com</p>
+</section>
+<section id="Download-.hmm-eggNOG-database-for-eggnog-models:">
+<h3>Download .hmm eggNOG database for eggnog models:<a class="headerlink" href="#Download-.hmm-eggNOG-database-for-eggnog-models:" title="Link to this heading"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>wget<span class="w"> </span>-O<span class="w"> </span>data/59861090.tar.gz<span class="w"> </span>https://figshare.com/ndownloader/files/59861090<span class="w"> </span>--user-agent<span class="o">=</span><span class="s2">&quot;Mozilla/5.0&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+--2025-11-26 15:39:53--  https://figshare.com/ndownloader/files/59861090
+Resolving figshare.com (figshare.com)... 34.246.58.166, 54.72.82.141, 54.220.91.93, ...
+Connecting to figshare.com (figshare.com)|34.246.58.166|:443... connected.
+HTTP request sent, awaiting response... 302 Found
+Location: https://s3-eu-west-1.amazonaws.com/pfigshare-u-files/59861090/hmm_db.tar.gz?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIAIYCQYOYV5JSSROOA/20251126/eu-west-1/s3/aws4_request&amp;X-Amz-Date=20251126T143953Z&amp;X-Amz-Expires=10&amp;X-Amz-SignedHeaders=host&amp;X-Amz-Signature=824b7a1cd58049e8d6d9a7f659960cd11fcd3a6e87716f39889d0b23398089d0 [following]
+--2025-11-26 15:39:53--  https://s3-eu-west-1.amazonaws.com/pfigshare-u-files/59861090/hmm_db.tar.gz?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=AKIAIYCQYOYV5JSSROOA/20251126/eu-west-1/s3/aws4_request&amp;X-Amz-Date=20251126T143953Z&amp;X-Amz-Expires=10&amp;X-Amz-SignedHeaders=host&amp;X-Amz-Signature=824b7a1cd58049e8d6d9a7f659960cd11fcd3a6e87716f39889d0b23398089d0
+Resolving s3-eu-west-1.amazonaws.com (s3-eu-west-1.amazonaws.com)... 52.92.20.208, 3.5.66.27, 3.5.64.179, ...
+Connecting to s3-eu-west-1.amazonaws.com (s3-eu-west-1.amazonaws.com)|52.92.20.208|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 8971867607 (8.4G) [application/gzip]
+Saving to: ‘data/59861090.tar.gz’
+
+data/59861090.tar.g 100%[===================&gt;]   8.36G  6.23MB/s    in 23m 19s
+
+2025-11-26 16:03:12 (6.12 MB/s) - ‘data/59861090.tar.gz’ saved [8971867607/8971867607]
+
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>tar<span class="w"> </span>-xzf<span class="w"> </span>data/59861090.tar.gz<span class="w"> </span>-C<span class="w"> </span>data<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>rm<span class="w"> </span>data/59861090.tar.gz
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="Download-examples-from-github.com">
+<h2>Download examples from github.com<a class="headerlink" href="#Download-examples-from-github.com" title="Link to this heading"></a></h2>
 <div class="line-block">
 <div class="line">If you don’t clone pLAST repository, you can still download only example folder using this link:</div>
 <div class="line"><a class="reference external" href="https://download-directory.github.io?url=https://github.com/labstructbioinf/pLAST/tree/main/notebooks/examples&amp;filename=example.zip">https://download-directory.github.io?url=https://github.com/labstructbioinf/pLAST/tree/main/notebooks/examples&amp;filename=example.zip</a></div>
