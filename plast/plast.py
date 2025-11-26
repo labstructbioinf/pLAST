@@ -388,7 +388,7 @@ class PLAST:
                     f" -a {output_file.name}"
                     f" -g 11 -q"
                 )
-                if self.length < 100000:
+                if self.length < 200000:
                     cmd += " -p meta"
                 self.debug(f"Running Prodigal: {cmd}")
                 try:
