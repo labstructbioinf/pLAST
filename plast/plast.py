@@ -386,7 +386,7 @@ class PLAST:
                 cmd = (
                     f"{prodigal} -i {input_file.name}"
                     f" -a {output_file.name}"
-                    f" -g 11 -p multi -q"
+                    f" -g 11 -q"
                 )
                 if self.length < 100000:
                     cmd += " -p meta"
