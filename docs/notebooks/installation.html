@@ -60,6 +60,7 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Notebooks</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Clone-git-repository">Clone git repository</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#conda-/-mamba-environment">conda / mamba environment</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pip">pip</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#Data-download">Data download</a><ul>
@@ -67,7 +68,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#Download-.hmm-eggNOG-database-for-eggnog-models:">Download .hmm eggNOG database for eggnog models:</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#Download-examples-from-github.com">Download examples from github.com</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="usage.html">Basic pLAST usage</a></li>
@@ -113,6 +113,18 @@
     </a></p>
 </div><section id="Installation">
 <h1>Installation<a class="headerlink" href="#Installation" title="Link to this heading"></a></h1>
+<section id="Clone-git-repository">
+<h2>Clone git repository<a class="headerlink" href="#Clone-git-repository" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">labstructbioinf</span><span class="o">/</span><span class="n">pLAST</span><span class="o">.</span><span class="n">git</span>
+<span class="n">cd</span> <span class="n">pLAST</span>
+</pre></div>
+</div>
+</div>
+</section>
 <section id="conda-/-mamba-environment">
 <h2>conda / mamba environment<a class="headerlink" href="#conda-/-mamba-environment" title="Link to this heading"></a></h2>
 <div class="line-block">
@@ -148,7 +160,7 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>https://github.com/labstructbioinf/pLAST
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">labstructbioinf</span><span class="o">/</span><span class="n">pLAST</span>
 </pre></div>
 </div>
 </div>
@@ -157,19 +169,20 @@
 <h2>Data download<a class="headerlink" href="#Data-download" title="Link to this heading"></a></h2>
 <section id="Download-models-and-metadata:">
 <h3>Download models and metadata:<a class="headerlink" href="#Download-models-and-metadata:" title="Link to this heading"></a></h3>
+<p>In notebooks directory create data dir.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>mkdir<span class="w"> </span>-p<span class="w"> </span>data
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="n">data</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>wget<span class="w"> </span>-O<span class="w"> </span>data/59837579.tar.gz<span class="w"> </span>https://figshare.com/ndownloader/files/59837579<span class="w"> </span>--user-agent<span class="o">=</span><span class="s2">&quot;Mozilla/5.0&quot;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="o">-</span><span class="n">O</span> <span class="n">data</span><span class="o">/</span><span class="mf">59837579.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">figshare</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">ndownloader</span><span class="o">/</span><span class="n">files</span><span class="o">/</span><span class="mi">59837579</span> <span class="o">--</span><span class="n">user</span><span class="o">-</span><span class="n">agent</span><span class="o">=</span><span class="s2">&quot;Mozilla/5.0&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -197,10 +210,10 @@ data/59837579.tar.g 100%[===================&gt;] 861.82M  6.35MB/s    in 2m 20s
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>tar<span class="w"> </span>-xzf<span class="w"> </span>data/59837579.tar.gz<span class="w">  </span><span class="o">&amp;&amp;</span><span class="w"> </span>rm<span class="w"> </span>data/59837579.tar.gz
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tar</span> <span class="o">-</span><span class="n">xzf</span> <span class="n">data</span><span class="o">/</span><span class="mf">59837579.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>  <span class="o">&amp;&amp;</span> <span class="n">rm</span> <span class="n">data</span><span class="o">/</span><span class="mf">59837579.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
 </pre></div>
 </div>
 </div>
@@ -208,10 +221,10 @@ data/59837579.tar.g 100%[===================&gt;] 861.82M  6.35MB/s    in 2m 20s
 <section id="Download-.hmm-eggNOG-database-for-eggnog-models:">
 <h3>Download .hmm eggNOG database for eggnog models:<a class="headerlink" href="#Download-.hmm-eggNOG-database-for-eggnog-models:" title="Link to this heading"></a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>wget<span class="w"> </span>-O<span class="w"> </span>data/59861090.tar.gz<span class="w"> </span>https://figshare.com/ndownloader/files/59861090<span class="w"> </span>--user-agent<span class="o">=</span><span class="s2">&quot;Mozilla/5.0&quot;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="o">-</span><span class="n">O</span> <span class="n">data</span><span class="o">/</span><span class="mf">59861090.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">figshare</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">ndownloader</span><span class="o">/</span><span class="n">files</span><span class="o">/</span><span class="mi">59861090</span> <span class="o">--</span><span class="n">user</span><span class="o">-</span><span class="n">agent</span><span class="o">=</span><span class="s2">&quot;Mozilla/5.0&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -242,18 +255,15 @@ data/59861090.tar.g 100%[===================&gt;]   8.36G  6.23MB/s    in 23m 19
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>tar<span class="w"> </span>-xzf<span class="w"> </span>data/59861090.tar.gz<span class="w"> </span>-C<span class="w"> </span>data<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>rm<span class="w"> </span>data/59861090.tar.gz
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tar</span> <span class="o">-</span><span class="n">xzf</span> <span class="n">data</span><span class="o">/</span><span class="mf">59861090.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span> <span class="o">-</span><span class="n">C</span> <span class="n">data</span> <span class="o">&amp;&amp;</span> <span class="n">rm</span> <span class="n">data</span><span class="o">/</span><span class="mf">59861090.</span><span class="n">tar</span><span class="o">.</span><span class="n">gz</span>
 </pre></div>
 </div>
 </div>
-</section>
-</section>
-<section id="Download-examples-from-github.com">
-<h2>Download examples from github.com<a class="headerlink" href="#Download-examples-from-github.com" title="Link to this heading"></a></h2>
 <div class="line-block">
-<div class="line">If you don’t clone pLAST repository, you can still download only example folder using this link:</div>
-<div class="line"><a class="reference external" href="https://download-directory.github.io?url=https://github.com/labstructbioinf/pLAST/tree/main/notebooks/examples&amp;filename=example.zip">https://download-directory.github.io?url=https://github.com/labstructbioinf/pLAST/tree/main/notebooks/examples&amp;filename=example.zip</a></div>
+<div class="line">Go to basic pLAST usage:</div>
+<div class="line"><a class="reference external" href="https://labstructbioinf.github.io/pLAST/notebooks/usage.html">https://labstructbioinf.github.io/pLAST/notebooks/usage.html</a></div>
 </div>
+</section>
 </section>
 </section>
 
