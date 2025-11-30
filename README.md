@@ -30,11 +30,10 @@ It provides a convenient graphical interface for running searches and visualizin
 # 🛠️ Installation
 
 ### Basic installation
-
-You can install pLAST directly via:
+pLAST requires Python version 3.9 to 3.12. You can install pLAST directly using:
 
 ```bash
-pip install https://github.com/labstructbioinf/pLAST
+pip install plast
 ```
 
 ---
