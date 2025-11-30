@@ -1,30 +1,34 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "pLAST"
 version = "1.0.0"
-description="plasmid Language Analysis and Search Tool"
-authors=[{name="Kamil Krakowski", email="k.krakowski@uw.edu.pl"},
-         {name="Stanislaw Dunin-Horkawicz", email="s.dunin-horkawicz@uw.edu.pl"}]
+description = "plasmid Language Analysis and Search Tool"
+authors = [
+    {name = "Kamil Krakowski", email = "k.krakowski@uw.edu.pl"},
+    {name = "Stanislaw Dunin-Horkawicz", email = "s.dunin-horkawicz@uw.edu.pl"}
+]
 readme = "README.md"
+license = { text = "MIT" }
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
 keywords = ["plasmid", "network", "language", "word2vec", "pLAST", "model"]
-requires-python = ">=3.9.0,<=3.13"
+requires-python = ">=3.9, <3.14"
 dependencies = [
     "gensim==4.3.3",
     "numba>=0.61.2",
     "numpy>=1.26.4",
     "pandas>=2.2.3",
-    "scikit-learn==1.5.2",
+    "scikit-learn==1.5.2"
 ]
 
 [project.urls]
-"Homepage"="https://plast.lbs.cent.uw.edu.pl/"
-
-[tool.setuptools]
-py-modules = ["__init__"]
+Homepage = "https://plast.lbs.cent.uw.edu.pl/"
 
 [tool.setuptools.packages]
 find = {}

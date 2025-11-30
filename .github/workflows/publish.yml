@@ -1,0 +1,32 @@
+name: Publish to PyPI
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install build tools
+        run: |
+          pip install --upgrade pip
+          pip install build twine
+
+      - name: Build the package
+        run: python -m build
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@v1.8.11
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
