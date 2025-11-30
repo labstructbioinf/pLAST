@@ -104,7 +104,7 @@
    },
    "outputs": [],
    "source": [
-    "pip install https://github.com/labstructbioinf/pLAST"
+    "pip install git+https://github.com/labstructbioinf/pLAST"
    ]
   },
   {
