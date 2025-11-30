@@ -137,6 +137,8 @@
 </div>
 <p>Alternatively, install the following dependencies manually:</p>
 <ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">&gt;=3.9,</span> <span class="pre">&lt;=3.12</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">&gt;=</span> <span class="pre">25.3</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">hmmer</span> <span class="pre">&gt;=</span> <span class="pre">3.4</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">mmseqs2</span> <span class="pre">&gt;=</span> <span class="pre">17.b804f</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">prodigal</span> <span class="pre">&gt;=</span> <span class="pre">2.6.3</span></code></p></li>
@@ -148,14 +150,25 @@
 <div class="line"><code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">activate</span> <span class="pre">plast</span></code></div>
 </div>
 <div class="line-block">
-<div class="line">If you plan to use Jupyter notebooks, install the <code class="docutils literal notranslate"><span class="pre">ipykernel</span></code> package as well:</div>
-<div class="line"><code class="docutils literal notranslate"><span class="pre">mamba</span> <span class="pre">install</span> <span class="pre">ipykernel</span></code></div>
+<div class="line">If you plan to use Jupyter notebooks, install the <code class="docutils literal notranslate"><span class="pre">jupyter</span></code> package as well:</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">mamba</span> <span class="pre">install</span> <span class="pre">jupyter</span></code></div>
+<div class="line">or</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">jupyter</span></code> If you use VS Code and only need notebook support through the Python extension, install just the <code class="docutils literal notranslate"><span class="pre">ipykernel</span></code> package: <code class="docutils literal notranslate"><span class="pre">mamba</span> <span class="pre">install</span> <span class="pre">ipykernel</span></code></div>
 <div class="line">or</div>
 <div class="line"><code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">ipykernel</span></code></div>
 </div>
 </section>
 <section id="pip">
 <h2>pip<a class="headerlink" href="#pip" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">plast</span>
+</pre></div>
+</div>
+</div>
+<p>or</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
