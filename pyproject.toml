@@ -1,9 +1,8 @@
 [project]
 name = "pLAST"
 version = "1.0.0"
-description="Plasmid Language Analysis and Search Tool"
+description="plasmid Language Analysis and Search Tool"
 authors=[{name="Kamil Krakowski", email="k.krakowski@uw.edu.pl"},
-         {name="Malgorzata Orlowska", email="m.orlowska19@uw.edu.pl"},
          {name="Stanislaw Dunin-Horkawicz", email="s.dunin-horkawicz@uw.edu.pl"}]
 readme = "README.md"
 classifiers = [
@@ -11,7 +10,7 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-keywords = ["plasmid", "network", "language", "word2vec", "pLAST"]
+keywords = ["plasmid", "network", "language", "word2vec", "pLAST", "model"]
 requires-python = ">=3.9.0,<=3.13"
 dependencies = [
     "gensim==4.3.3",
@@ -22,13 +21,10 @@ dependencies = [
 ]
 
 [project.urls]
-"Homepage"="https://lbs.cent.uw.edu.pl/"
+"Homepage"="https://plast.lbs.cent.uw.edu.pl/"
 
 [tool.setuptools]
 py-modules = ["__init__"]
 
 [tool.setuptools.packages]
 find = {}
-
-[project.scripts]
-plast-server = "bin.run_webserver:main"
