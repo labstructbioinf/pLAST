@@ -3,7 +3,7 @@
 [![Documentation](https://img.shields.io/badge/documentation-blue?logo=github&labelColor=gray)](https://labstructbioinf.github.io/pLAST)
 [![pLAST server](https://img.shields.io/badge/pLAST_server-gray?label=pLAST&labelColor=red)](https://plast.lbs.cent.uw.edu.pl/)
 [![Figshare data](https://img.shields.io/badge/data-figshare-orange?logo=figshare&labelColor=gray)](https://figshare.com/s/f3e2dfee325b35fdb7d9)
-![PyPI - Version](https://img.shields.io/pypi/v/plast?color=cyan&link=https%3A%2F%2Fpypi.org%2Fproject%2FpLAST%2F)
+[![PyPI - Version](https://img.shields.io/pypi/v/plast?color=cyan)](https://pypi.org/project/pLAST/)
 
 ---
 
