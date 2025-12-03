@@ -74,6 +74,6 @@ Complete project documentation, including **tutorials**, **examples**, and **API
 
 If you use **pLAST** in your research, please cite:
 
-**pLAST – a tool for rapid comparison and classification of plasmid sequences**  
-*Kamil Krakowski, Małgorzata Orłowska, Kamil Kamiński, Dariusz Bartosik, and Stanisław Dunin-Horkawicz*  
-*Publication in preparation.*
+**pLAST - a tool for rapid comparison and classification of bacterial plasmid sequences**
+*Kamil Krakowski, Malgorzata Orlowska, Kamil Kaminski, Dariusz Bartosik, Stanislaw Dunin-Horkawicz*
+*bioRxiv 2025.11.27.689987; doi: https://doi.org/10.1101/2025.11.27.689987*
