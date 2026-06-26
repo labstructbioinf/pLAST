@@ -13,4 +13,5 @@ pLAST/web_interface/queries/
 /build/
 .env
 .vscode/
+.ipynb_checkpoints/
 docs/.doctrees/

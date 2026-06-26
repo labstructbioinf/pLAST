@@ -48,6 +48,19 @@
 <li class="toctree-l1"><a class="reference internal" href="alignment.html">alignment module</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">data module</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#plast.data.PLASTData"><code class="docutils literal notranslate"><span class="pre">PLASTData</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#plast.data.PLASTData.get_metadata_index_name"><code class="docutils literal notranslate"><span class="pre">PLASTData.get_metadata_index_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plast.data.PLASTData.resolve_accession"><code class="docutils literal notranslate"><span class="pre">PLASTData.resolve_accession()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plast.data.PLASTData.accession_in_metadata_index"><code class="docutils literal notranslate"><span class="pre">PLASTData.accession_in_metadata_index()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plast.data.PLASTData.filter_ids_for_metadata_index"><code class="docutils literal notranslate"><span class="pre">PLASTData.filter_ids_for_metadata_index()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plast.data.PLASTData.candidate_accessions"><code class="docutils literal notranslate"><span class="pre">PLASTData.candidate_accessions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plast.data.PLASTData.get_metadata_row"><code class="docutils literal notranslate"><span class="pre">PLASTData.get_metadata_row()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plast.data.PLASTData.get_metadata_for_ids"><code class="docutils literal notranslate"><span class="pre">PLASTData.get_metadata_for_ids()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plast.data.PLASTData.get_search_index"><code class="docutils literal notranslate"><span class="pre">PLASTData.get_search_index()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plast.data.PLASTData.get_model_ids_and_umap_coords"><code class="docutils literal notranslate"><span class="pre">PLASTData.get_model_ids_and_umap_coords()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plast.data.PLASTData.warm_search_indexes"><code class="docutils literal notranslate"><span class="pre">PLASTData.warm_search_indexes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plast.data.PLASTData.get_cluster_mapping"><code class="docutils literal notranslate"><span class="pre">PLASTData.get_cluster_mapping()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plast.data.PLASTData.get_cluster_lookup"><code class="docutils literal notranslate"><span class="pre">PLASTData.get_cluster_lookup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plast.data.PLASTData.get_mmseqs_db"><code class="docutils literal notranslate"><span class="pre">PLASTData.get_mmseqs_db()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#plast.data.PLASTData.get_model"><code class="docutils literal notranslate"><span class="pre">PLASTData.get_model()</span></code></a></li>
 </ul>
 </li>
@@ -110,6 +123,154 @@ and GenBank features. Provides lazy loading for efficient resource usage.</p>
 <dd class="field-odd"><p><strong>config_dict</strong> (<em>dict</em><em> or </em><em>None</em>) – Configuration dictionary with file paths and model info.</p>
 </dd>
 </dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="plast.data.PLASTData.get_metadata_index_name">
+<span class="sig-name descname"><span class="pre">get_metadata_index_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plast.data.PLASTData.get_metadata_index_name" title="Link to this definition"></a></dt>
+<dd><p>Resolve the metadata index configured for a model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="plast.data.PLASTData.resolve_accession">
+<span class="sig-name descname"><span class="pre">resolve_accession</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">accession</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_fallbacks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plast.data.PLASTData.resolve_accession" title="Link to this definition"></a></dt>
+<dd><p>Resolve a model/browser accession to the row accession used in metadata.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="plast.data.PLASTData.accession_in_metadata_index">
+<span class="sig-name descname"><span class="pre">accession_in_metadata_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">accession</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plast.data.PLASTData.accession_in_metadata_index" title="Link to this definition"></a></dt>
+<dd><p>Return True only if the accession resolves in the requested metadata index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="plast.data.PLASTData.filter_ids_for_metadata_index">
+<span class="sig-name descname"><span class="pre">filter_ids_for_metadata_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plasmid_ids</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plast.data.PLASTData.filter_ids_for_metadata_index" title="Link to this definition"></a></dt>
+<dd><p>Keep only ids that belong to a model/browser metadata index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="plast.data.PLASTData.candidate_accessions">
+<span class="sig-name descname"><span class="pre">candidate_accessions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">accession</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plast.data.PLASTData.candidate_accessions" title="Link to this definition"></a></dt>
+<dd><p>Return likely accession aliases for metadata, gbfeatures, mappings and embeddings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="plast.data.PLASTData.get_metadata_row">
+<span class="sig-name descname"><span class="pre">get_metadata_row</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plasmid_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plast.data.PLASTData.get_metadata_row" title="Link to this definition"></a></dt>
+<dd><p>Return one metadata row resolved through the configured in-memory index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Series</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="plast.data.PLASTData.get_metadata_for_ids">
+<span class="sig-name descname"><span class="pre">get_metadata_for_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plasmid_ids</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plast.data.PLASTData.get_metadata_for_ids" title="Link to this definition"></a></dt>
+<dd><p>Return metadata rows for ids without copying the full metadata table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="plast.data.PLASTData.get_search_index">
+<span class="sig-name descname"><span class="pre">get_search_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plast.data.PLASTData.get_search_index" title="Link to this definition"></a></dt>
+<dd><p>Return a cached, model-specific in-memory search index.</p>
+<p>The index is filtered to the metadata scope configured for the model and
+stores NumPy matrices so each query can rank plasmids with vectorized
+operations instead of looping over all embeddings in Python.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="plast.data.PLASTData.get_model_ids_and_umap_coords">
+<span class="sig-name descname"><span class="pre">get_model_ids_and_umap_coords</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plast.data.PLASTData.get_model_ids_and_umap_coords" title="Link to this definition"></a></dt>
+<dd><p>Return cached plasmid ids and UMAP coordinates for a model metadata scope.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="plast.data.PLASTData.warm_search_indexes">
+<span class="sig-name descname"><span class="pre">warm_search_indexes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plast.data.PLASTData.warm_search_indexes" title="Link to this definition"></a></dt>
+<dd><p>Preload metadata, embeddings and vectorized search indexes into RAM.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="plast.data.PLASTData.get_cluster_mapping">
+<span class="sig-name descname"><span class="pre">get_cluster_mapping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plast.data.PLASTData.get_cluster_mapping" title="Link to this definition"></a></dt>
+<dd><p>Return the MMseqs cluster mapping for a specific model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="plast.data.PLASTData.get_cluster_lookup">
+<span class="sig-name descname"><span class="pre">get_cluster_lookup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plast.data.PLASTData.get_cluster_lookup" title="Link to this definition"></a></dt>
+<dd><p>Return a lightweight accession/protein -&gt; cluster lookup for MMseqs results.</p>
+<p>The lookup avoids pandas MultiIndex access in the request path, which removes
+lexsort warnings and reduces CPU/RAM overhead for repeated single-key lookups.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="plast.data.PLASTData.get_mmseqs_db">
+<span class="sig-name descname"><span class="pre">get_mmseqs_db</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padded</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plast.data.PLASTData.get_mmseqs_db" title="Link to this definition"></a></dt>
+<dd><p>Return the MMseqs database path configured for a model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="plast.data.PLASTData.get_model">
 <span class="sig-name descname"><span class="pre">get_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plast.data.PLASTData.get_model" title="Link to this definition"></a></dt>
