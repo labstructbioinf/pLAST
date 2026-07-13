@@ -59,8 +59,8 @@ These examples provide step-by-step instructions and practical workflows to help
 # 📊 Data Availability
 
 All datasets used in the project are publicly available on Figshare:
-👉 [https://doi.org/10.6084/m9.figshare.30530819](https://doi.org/10.6084/m9.figshare.30530819.v2)
-👉 [https://doi.org/10.6084/m9.figshare.30715637](https://doi.org/10.6084/m9.figshare.30715637.v1)
+👉 [https://doi.org/10.6084/m9.figshare.30530819](https://doi.org/10.6084/m9.figshare.30530819)
+👉 [https://doi.org/10.6084/m9.figshare.30715637](https://doi.org/10.6084/m9.figshare.30715637)
 
 ---
 
