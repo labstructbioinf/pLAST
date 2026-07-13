@@ -9,20 +9,20 @@
 
 # pLAST
 
-**pLAST** is a computational tool for rapid comparison and classification of plasmid sequences based on their **ORF composition**.  
+**pLAST** is a computational tool for rapid comparison and classification of plasmid sequences based on their **ORF composition**.
 
 It supports:
 
-- Similarity search against plasmid databases using a single query  
-- Clustering of large plasmid datasets  
-- Fast and scalable comparative analysis  
+- Similarity search against plasmid databases using a single query
+- Clustering of large plasmid datasets
+- Fast and scalable comparative analysis
 
 ---
 
 # 🌐 pLAST Web Interface
 
-The online pLAST server is available here:  
-👉 [https://plast.lbs.cent.uw.edu.pl/](https://plast.lbs.cent.uw.edu.pl/)  
+The online pLAST server is available here:
+👉 [https://plast.lbs.cent.uw.edu.pl/](https://plast.lbs.cent.uw.edu.pl/)
 
 It provides a convenient graphical interface for running searches and visualizing results without installing the software locally.
 
@@ -31,6 +31,7 @@ It provides a convenient graphical interface for running searches and visualizin
 # 🛠️ Installation
 
 ### Basic installation
+
 pLAST requires Python version 3.9 to 3.12. You can install pLAST directly using:
 
 ```bash
@@ -41,14 +42,14 @@ pip install plast
 
 # 🛠️ Full Installation Guide
 
-Detailed installation instructions, including **dependencies**, **environment setup**, and **optional components**, are available in the documentation:  
+Detailed installation instructions, including **dependencies**, **environment setup**, and **optional components**, are available in the documentation:
 👉 [Installation Documentation](https://labstructbioinf.github.io/pLAST/notebooks/installation.html)
 
 ---
 
 # 🧪 Usage Examples
 
-A collection of usage examples demonstrating how to run pLAST, perform searches, and analyze results is available at the following link:  
+A collection of usage examples demonstrating how to run pLAST, perform searches, and analyze results is available at the following link:
 👉 [Usage Examples](https://labstructbioinf.github.io/pLAST/notebooks/usage.html)
 
 These examples provide step-by-step instructions and practical workflows to help you get started quickly.
@@ -58,14 +59,14 @@ These examples provide step-by-step instructions and practical workflows to help
 # 📊 Data Availability
 
 All datasets used in the project are publicly available on Figshare:
-👉 [https://doi.org/10.6084/m9.figshare.30530819.v2](https://doi.org/10.6084/m9.figshare.30530819.v2)
-👉 [https://doi.org/10.6084/m9.figshare.30715637.v1](https://doi.org/10.6084/m9.figshare.30715637.v1)
+👉 [https://doi.org/10.6084/m9.figshare.30530819](https://doi.org/10.6084/m9.figshare.30530819.v2)
+👉 [https://doi.org/10.6084/m9.figshare.30715637](https://doi.org/10.6084/m9.figshare.30715637.v1)
 
 ---
 
 # 📚 Documentation
 
-Complete project documentation, including **tutorials**, **examples**, and **API reference**, is available at:  
+Complete project documentation, including **tutorials**, **examples**, and **API reference**, is available at:
 👉 [https://labstructbioinf.github.io/pLAST](https://labstructbioinf.github.io/pLAST)
 
 ---
