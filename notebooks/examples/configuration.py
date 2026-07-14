@@ -10,7 +10,7 @@ config = {
             "mean_embedding": "data/models/pscopemmseqs2i03c08_by-level_i03c08_mc2_ep30_vs64_w4_sg0_neg15.mean_emb.pkl",
             "idf": "data/models/pscope_mmseqs2_i03_c08_plasmid_archs_perm.idf.pkl",
             "cluster_mapping": "data/export/i03_c08_plasmid_protein_cluster_map.tsv.gz",
-            # MMseqs2 clustering data
+            "cluster_token_prefix": "i03c08:",
             "mmseqs_db": "data/mmseqs2/plasmid_protein_representatives",
             "mmseqs_db_padded": "data/mmseqs2/plasmid_protein_representatives_padded",
         },

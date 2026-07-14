@@ -62,7 +62,6 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Basic pLAST usage</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#Imports-and-configuration">Imports and configuration</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#Load-configuration-to-PLASTData-object">Load configuration to PLASTData object</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Set-logger-to-%22warning%22-to-not-print-too-much-informations">Set logger to “warning” to not print too much informations</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#Analyze-sequence-using-MMseqs2-model">Analyze sequence using MMseqs2 model</a><ul>
@@ -134,6 +133,7 @@
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">threadpoolctl</span><span class="w"> </span><span class="kn">import</span> <span class="n">threadpool_limits</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">plast.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">PLASTData</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">plast.plast</span><span class="w"> </span><span class="kn">import</span> <span class="n">PLAST</span>
@@ -160,28 +160,16 @@ Loading pLAST data...
 </pre></div></div>
 </div>
 </section>
-<section id="Set-logger-to-%22warning%22-to-not-print-too-much-informations">
-<h3>Set logger to “warning” to not print too much informations<a class="headerlink" href="#Set-logger-to-%22warning%22-to-not-print-too-much-informations" title="Link to this heading"></a></h3>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;plast&quot;</span><span class="p">)</span>
-<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</section>
 </section>
 <section id="Analyze-sequence-using-MMseqs2-model">
 <h2>Analyze sequence using MMseqs2 model<a class="headerlink" href="#Analyze-sequence-using-MMseqs2-model" title="Link to this heading"></a></h2>
 <section id="Initialize-PLAST-object---load-config,-choose-model-and-add-logger">
 <h3>Initialize PLAST object - load config, choose model and add logger<a class="headerlink" href="#Initialize-PLAST-object---load-config,-choose-model-and-add-logger" title="Link to this heading"></a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plast</span> <span class="o">=</span> <span class="n">PLAST</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">pl_data</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;mmseqs2_model&quot;</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plast</span> <span class="o">=</span> <span class="n">PLAST</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">pl_data</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;mmseqs2_model&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -189,10 +177,10 @@ Loading pLAST data...
 <section id="Load-example-plasmid-sequence-from-.fasta-file-and-annotate-with-prodigal">
 <h3>Load example plasmid sequence from .fasta file and annotate with prodigal<a class="headerlink" href="#Load-example-plasmid-sequence-from-.fasta-file-and-annotate-with-prodigal" title="Link to this heading"></a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plast</span> <span class="o">=</span> <span class="n">plast</span><span class="o">.</span><span class="n">load_nt_fasta</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;examples/NZ_AP018444.1.fasta&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plast</span> <span class="o">=</span> <span class="n">plast</span><span class="o">.</span><span class="n">load_nt_fasta</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;examples/NC_005000.1.fasta&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Plasmid of langth&quot;</span><span class="p">,</span> <span class="n">plast</span><span class="o">.</span><span class="n">length</span><span class="p">,</span> <span class="s2">&quot;has the following annotation:&quot;</span><span class="p">)</span>
 <span class="n">display</span><span class="p">(</span><span class="n">plast</span><span class="o">.</span><span class="n">parsed</span><span class="p">)</span>
 </pre></div>
@@ -203,7 +191,7 @@ Loading pLAST data...
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Plasmid of langth 181607 has the following annotation:
+Plasmid of langth 24873 has the following annotation:
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -241,135 +229,388 @@ Plasmid of langth 181607 has the following annotation:
   <tbody>
     <tr>
       <th>0</th>
-      <td>NZ_AP018444.1_1</td>
-      <td>3</td>
-      <td>410</td>
+      <td>NC_005000.1_1</td>
       <td>1</td>
+      <td>291</td>
+      <td>-1</td>
       <td>CDS</td>
       <td></td>
       <td></td>
-      <td>FLIGTLLLFGLAACDSIKSVASDVTVGKVIEEFKAAGLEAEQPSDL...</td>
+      <td>MSINTFVYSHPINVYIIKNLGITVEQFCELYAYPQGTVASWITRQR...</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>NZ_AP018444.1_2</td>
-      <td>561</td>
-      <td>776</td>
+      <td>NC_005000.1_2</td>
+      <td>427</td>
+      <td>606</td>
       <td>-1</td>
       <td>CDS</td>
       <td></td>
       <td></td>
-      <td>MKNKRDRLAILPAIDSFINFISITLTINARNNGINSTMASLIAMSF...</td>
+      <td>MNIIQQYELKYITFDQLSEEIWGYGQRLINEVGVERFSFYVEAAAG...</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>NZ_AP018444.1_3</td>
-      <td>848</td>
-      <td>937</td>
+      <td>NC_005000.1_3</td>
+      <td>603</td>
+      <td>980</td>
       <td>-1</td>
       <td>CDS</td>
       <td></td>
       <td></td>
-      <td>MLQKEEKVMGKTLFIAEKLKVANEIIKSL*</td>
+      <td>MRAEMGELKMIDYNDRGRLKWAGFYLSDHTEEIDADNEQRTSQNLA...</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>NZ_AP018444.1_4</td>
-      <td>1127</td>
-      <td>1765</td>
+      <td>NC_005000.1_4</td>
+      <td>946</td>
+      <td>2271</td>
       <td>-1</td>
       <td>CDS</td>
       <td></td>
       <td></td>
-      <td>MEVLIFELILIAVLIPLNSVVKKHVPKWKGKAGEKLVKRMLSKLDP...</td>
+      <td>MMDYSKEPVNDYFLIDMKSFYASVECIERNLDPLTTELVVMSRADN...</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>NZ_AP018444.1_5</td>
-      <td>1782</td>
-      <td>2015</td>
-      <td>-1</td>
-      <td>CDS</td>
-      <td></td>
-      <td></td>
-      <td>MGTVKNVEKRLPTWANFGVIEKPVNRRVTRPFQFRGGLLVSLALGF...</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>187</th>
-      <td>NZ_AP018444.1_188</td>
-      <td>175616</td>
-      <td>176212</td>
-      <td>-1</td>
-      <td>CDS</td>
-      <td></td>
-      <td></td>
-      <td>MSACSSSAQTKNDSRPAQAVQNGIQQHVEGKDIVDIPEAYKRKLKG...</td>
-    </tr>
-    <tr>
-      <th>188</th>
-      <td>NZ_AP018444.1_189</td>
-      <td>176689</td>
-      <td>179352</td>
-      <td>-1</td>
-      <td>CDS</td>
-      <td></td>
-      <td></td>
-      <td>MGKTLFIAEKPKVANEIMKSPRFRHSQKYIGSKPYYGYYENDHYIV...</td>
-    </tr>
-    <tr>
-      <th>189</th>
-      <td>NZ_AP018444.1_190</td>
-      <td>179919</td>
-      <td>180323</td>
-      <td>-1</td>
-      <td>CDS</td>
-      <td></td>
-      <td></td>
-      <td>MQQCLKYNCGTIQLEDLQGISKEQAFLKNWTYFDLQEKIKNQANQY...</td>
-    </tr>
-    <tr>
-      <th>190</th>
-      <td>NZ_AP018444.1_191</td>
-      <td>180464</td>
-      <td>181204</td>
-      <td>-1</td>
-      <td>CDS</td>
-      <td></td>
-      <td></td>
-      <td>MKYIYVHFHYHFRTIGNRTIQKLWEYDNQSLKHFKDTGQYPSAQQL...</td>
-    </tr>
-    <tr>
-      <th>191</th>
-      <td>NZ_AP018444.1_192</td>
-      <td>181546</td>
-      <td>181605</td>
+      <td>NC_005000.1_5</td>
+      <td>2721</td>
+      <td>3335</td>
       <td>1</td>
       <td>CDS</td>
       <td></td>
       <td></td>
-      <td>MISKDLSTVGGTHKYVKKII</td>
+      <td>MRVAYIRVSSIDQNEQRQIEEMKKFGAERIFIEKQSGATITHRPVF...</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>NC_005000.1_6</td>
+      <td>3500</td>
+      <td>4504</td>
+      <td>-1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MEYKFNLNLKEVLPTQGTININGQDNDDDIVIKKIEFIDSDINVFF...</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>NC_005000.1_7</td>
+      <td>4963</td>
+      <td>5220</td>
+      <td>-1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MIKAWSDDAWDDYLYWHEQGNKSNIKKINKLIKDIDRSPFAGLGKP...</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>NC_005000.1_8</td>
+      <td>5213</td>
+      <td>5482</td>
+      <td>-1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MEAVAYSNFRQNLRSYMKQVNEDAETLIVTSKDVEDTVVVLSKRDY...</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>NC_005000.1_9</td>
+      <td>5620</td>
+      <td>6126</td>
+      <td>1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MSAGTSNPAFSWAINKSNAIHIILDSLLPYFCFSCCNSFCLFSSNV...</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>NC_005000.1_10</td>
+      <td>6173</td>
+      <td>6868</td>
+      <td>-1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MQQNPTEDVSHFLTNKEHLNEVIRRIQKDFSCMEEMKYFIQRVEEQ...</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>NC_005000.1_11</td>
+      <td>6924</td>
+      <td>7571</td>
+      <td>1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MTMNHFKGKQFQQDVIIVAVGYYLRYNLSYREVQEILYDRGINVSH...</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>NC_005000.1_12</td>
+      <td>7524</td>
+      <td>7763</td>
+      <td>-1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MDTETDQLQNQVLLDNFVDIMKEDSINTFVPENVLNLIKTFSSTYE...</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>NC_005000.1_13</td>
+      <td>7789</td>
+      <td>8130</td>
+      <td>-1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MRISPELKKLIEKYRCVKDTEGMSPAKVYKLVGENENLYLKMTDSR...</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>NC_005000.1_14</td>
+      <td>8232</td>
+      <td>8774</td>
+      <td>-1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MITEMKAGHLKDIDKPSEPFEVIGKIIPRYENENWTFTELLYEAPY...</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>NC_005000.1_15</td>
+      <td>8771</td>
+      <td>9679</td>
+      <td>-1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MRSEKEMMDLVLSLAEQDERIRIVTLEGSRANINIPKDEFQDYDIT...</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>NC_005000.1_16</td>
+      <td>9712</td>
+      <td>10446</td>
+      <td>-1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MKENKYDDNIFFQKYSQMSRSQKGLAGAGEWETLKKMLPDFKGKRV...</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>NC_005000.1_17</td>
+      <td>10427</td>
+      <td>11344</td>
+      <td>-1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MAWNFYSSESIKGACLMVDNIIKSVAEKLSSLSYIEGIVLGGSRAR...</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>NC_005000.1_18</td>
+      <td>11399</td>
+      <td>11644</td>
+      <td>-1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MIDVNELLEEAIRETENLNDGEVFLVKDLFKGYVGNRIPRKDRLLL...</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>NC_005000.1_19</td>
+      <td>11671</td>
+      <td>12345</td>
+      <td>-1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MYQNYTINQLCLPIDLEIKLEENDFAHAIVQFVDSIPDEVFLPYYQ...</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>NC_005000.1_20</td>
+      <td>12802</td>
+      <td>12993</td>
+      <td>-1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MSKYCLFLIVIYYLTGGNNSMSRFFKFGKLHVTKGNGDKLLDILLT...</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>NC_005000.1_21</td>
+      <td>12938</td>
+      <td>13675</td>
+      <td>-1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MNKNIKYSQNFLTSEKVLNQIIKQLNLKETDTVYEIGTGKGHLTTK...</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>NC_005000.1_22</td>
+      <td>13904</td>
+      <td>14167</td>
+      <td>-1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MGNLGAQKEKRNDTPISAKKDIMGDKTVRVRADLHHIIKIETAKNG...</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>NC_005000.1_23</td>
+      <td>14564</td>
+      <td>15250</td>
+      <td>1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MTMNHFKGKQFQQDVIIVAVGYYLRYNLSYREVQEILYDRGINVSH...</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>NC_005000.1_24</td>
+      <td>15306</td>
+      <td>15854</td>
+      <td>1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MEDDGFTRLDLAFDFEDDLSDYYALSEKALKRTVFFGTTGKAETKY...</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>NC_005000.1_25</td>
+      <td>15987</td>
+      <td>17174</td>
+      <td>1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MTQVHFTFESEEIQAIINESGANDTAKTLMTIMFNQLMEEQRNQYI...</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>NC_005000.1_26</td>
+      <td>17464</td>
+      <td>18111</td>
+      <td>1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MTFNIINLETWDRKEYFNHYFNQQTTYSVTKELDITLLKSMIKDKG...</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>NC_005000.1_27</td>
+      <td>18098</td>
+      <td>18253</td>
+      <td>1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MNGFKSKINFINLSNHDIYKFIATTFLVAFVLILNLVLNYEWLAFC...</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>NC_005000.1_28</td>
+      <td>18426</td>
+      <td>18824</td>
+      <td>1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MSEHDNNLASDLSVGGNRKPNRKEPKQISFRVNEGEYEKLRSSAET...</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>NC_005000.1_29</td>
+      <td>18806</td>
+      <td>19192</td>
+      <td>1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MATTKISSTKSTSRAINYAEKRAEEKSALNCDIDYAKSSFKATREM...</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>NC_005000.1_30</td>
+      <td>19240</td>
+      <td>19926</td>
+      <td>1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MTMNHFKGKQFQQDVIIVAVGYYLRYNLSYREVQEILYDRGINVSH...</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <td>NC_005000.1_31</td>
+      <td>20542</td>
+      <td>21582</td>
+      <td>-1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MNDFNYYKSKEIYREKYYQMPKVFFTNEKYMDLSNDAKIAYMLLKD...</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>NC_005000.1_32</td>
+      <td>21931</td>
+      <td>22257</td>
+      <td>-1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MAEDNRSQAAVSRLLGNKNKKNFKSKEVEEIELTKKNISKVIKDQG...</td>
+    </tr>
+    <tr>
+      <th>32</th>
+      <td>NC_005000.1_33</td>
+      <td>22244</td>
+      <td>23047</td>
+      <td>-1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MGDILMARILSVANQKGGVSKTTTSVNLAACLKFVYGKNVLLVDID...</td>
+    </tr>
+    <tr>
+      <th>33</th>
+      <td>NC_005000.1_34</td>
+      <td>23471</td>
+      <td>24658</td>
+      <td>-1</td>
+      <td>CDS</td>
+      <td></td>
+      <td></td>
+      <td>MTQVHFTFESEEIQAIINESGANDTAKTLMTIMFNQLMEEQRNQYI...</td>
     </tr>
   </tbody>
 </table>
-<p>192 rows × 8 columns</p>
 </div></div>
 </div>
 </section>
 <section id="Assign-cluster-identifiers-to-the-plasmid-proteins">
 <h3>Assign cluster identifiers to the plasmid proteins<a class="headerlink" href="#Assign-cluster-identifiers-to-the-plasmid-proteins" title="Link to this heading"></a></h3>
+<p>GPU usage is recommended</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plast</span> <span class="o">=</span> <span class="n">plast</span><span class="o">.</span><span class="n">assign_mmseqs_clusters</span><span class="p">(</span><span class="n">use_gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">threads</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
@@ -384,16 +625,16 @@ Plasmid of langth 181607 has the following annotation:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Number of assigned clusters: 192
+Number of assigned clusters: 34
 Assigned clusters:
-[&#39;1726383&#39;, &#39;148937&#39;, None, &#39;1728687&#39;, &#39;1448965&#39;, &#39;965893&#39;, &#39;1352966&#39;, &#39;274635&#39;, &#39;1329213&#39;, &#39;937429&#39;, &#39;58827&#39;, &#39;1125732&#39;, &#39;125058&#39;, &#39;397664&#39;, &#39;1309585&#39;, &#39;849139&#39;, &#39;1608308&#39;, &#39;1774255&#39;, &#39;1305808&#39;, &#39;823963&#39;, &#39;914165&#39;, &#39;424635&#39;, &#39;1962137&#39;, &#39;1604810&#39;, &#39;1180630&#39;, &#39;95863&#39;, &#39;693312&#39;, &#39;32114&#39;, &#39;1023247&#39;, &#39;162059&#39;, &#39;1592724&#39;, &#39;117164&#39;, &#39;1125732&#39;, &#39;1817959&#39;, &#39;242486&#39;, &#39;980376&#39;, &#39;292496&#39;, &#39;1116255&#39;, &#39;292496&#39;, &#39;593498&#39;, &#39;88330&#39;, &#39;348526&#39;, &#39;1162655&#39;, &#39;1758823&#39;, &#39;380840&#39;, &#39;418057&#39;, &#39;38255&#39;, &#39;272555&#39;, &#39;1407794&#39;, &#39;1323801&#39;, &#39;1845834&#39;, &#39;418057&#39;, &#39;418057&#39;, &#39;65429&#39;, &#39;713699&#39;, &#39;1581456&#39;, &#39;1492243&#39;, &#39;755590&#39;, &#39;1927622&#39;, &#39;744391&#39;, &#39;181159&#39;, &#39;443359&#39;, &#39;1035554&#39;, &#39;726077&#39;, &#39;778536&#39;, &#39;252085&#39;, &#39;1465232&#39;, &#39;526994&#39;, &#39;680046&#39;, &#39;1080639&#39;, &#39;760499&#39;, &#39;1095998&#39;, &#39;173906&#39;, &#39;1525104&#39;, &#39;501114&#39;, &#39;1121675&#39;, &#39;1307378&#39;, &#39;1587438&#39;, &#39;1590278&#39;, &#39;1590278&#39;, &#39;284942&#39;, &#39;1026005&#39;, &#39;561496&#39;, &#39;1332624&#39;, &#39;641459&#39;, &#39;22307&#39;, &#39;1289793&#39;, &#39;1414715&#39;, &#39;220900&#39;, &#39;556593&#39;, &#39;861431&#39;, &#39;776119&#39;, &#39;1482033&#39;, &#39;41154&#39;, &#39;483741&#39;, &#39;517033&#39;, &#39;1348503&#39;, &#39;1408017&#39;, &#39;1231094&#39;, &#39;1477873&#39;, &#39;418422&#39;, &#39;686309&#39;, &#39;15465&#39;, &#39;438928&#39;, &#39;871872&#39;, &#39;722568&#39;, &#39;139193&#39;, &#39;1677282&#39;, &#39;1725518&#39;, &#39;1084212&#39;, &#39;1715426&#39;, &#39;272556&#39;, &#39;330209&#39;, &#39;1018788&#39;, &#39;495705&#39;, &#39;353724&#39;, &#39;1517740&#39;, &#39;1242764&#39;, &#39;1054904&#39;, &#39;1005010&#39;, &#39;1080454&#39;, &#39;1080454&#39;, &#39;1222282&#39;, &#39;1587200&#39;, &#39;1145217&#39;, &#39;1934657&#39;, &#39;1722622&#39;, &#39;564115&#39;, &#39;1411678&#39;, &#39;1005296&#39;, &#39;1059403&#39;, &#39;1578105&#39;, &#39;631709&#39;, &#39;886150&#39;, &#39;655315&#39;, &#39;858156&#39;, &#39;1975252&#39;, &#39;569631&#39;, &#39;126985&#39;, &#39;1375233&#39;, &#39;1785719&#39;, &#39;978057&#39;, &#39;694260&#39;, &#39;1092372&#39;, &#39;1817518&#39;, &#39;421882&#39;, &#39;968129&#39;, &#39;1548607&#39;, &#39;1489993&#39;, &#39;288264&#39;, &#39;126476&#39;, &#39;980684&#39;, &#39;1910602&#39;, &#39;954653&#39;, &#39;186797&#39;, &#39;714481&#39;, &#39;424239&#39;, &#39;1371363&#39;, &#39;548390&#39;, &#39;1857899&#39;, &#39;345043&#39;, &#39;969528&#39;, &#39;481490&#39;, &#39;1289102&#39;, None, &#39;693232&#39;, &#39;724871&#39;, &#39;16603&#39;, &#39;645079&#39;, &#39;1080454&#39;, &#39;1080454&#39;, &#39;1145984&#39;, &#39;1145984&#39;, &#39;1080454&#39;, &#39;1529217&#39;, &#39;434562&#39;, &#39;1829014&#39;, &#39;1926563&#39;, &#39;1493192&#39;, &#39;908054&#39;, &#39;567172&#39;, &#39;1011689&#39;, &#39;914407&#39;, &#39;56100&#39;, &#39;288264&#39;, &#39;1331321&#39;, &#39;1147133&#39;, &#39;593027&#39;, &#39;205985&#39;, &#39;664352&#39;, &#39;564116&#39;, None]
+[&#39;503696&#39;, &#39;766345&#39;, &#39;869197&#39;, &#39;1937138&#39;, &#39;978057&#39;, &#39;383425&#39;, &#39;945760&#39;, &#39;589250&#39;, &#39;690891&#39;, &#39;1551360&#39;, &#39;1281006&#39;, None, &#39;1324730&#39;, &#39;503880&#39;, &#39;1456404&#39;, &#39;465833&#39;, &#39;1342390&#39;, &#39;643142&#39;, &#39;840054&#39;, &#39;126491&#39;, &#39;1148733&#39;, &#39;112363&#39;, &#39;1281006&#39;, &#39;23491&#39;, &#39;464026&#39;, &#39;1559939&#39;, None, &#39;645043&#39;, &#39;1967057&#39;, &#39;1281006&#39;, &#39;1058438&#39;, &#39;1180625&#39;, &#39;1377695&#39;, &#39;464026&#39;]
 </pre></div></div>
 </div>
 </section>
 <section id="Pass-data-through-pLAST-model-and-receive-embeddings">
 <h3>Pass data through pLAST model and receive embeddings<a class="headerlink" href="#Pass-data-through-pLAST-model-and-receive-embeddings" title="Link to this heading"></a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plast</span> <span class="o">=</span> <span class="n">plast</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
@@ -408,17 +649,17 @@ Assigned clusters:
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Plasmid embedding:
-[ 0.16471866 -0.08894535  0.11579394 -0.01732706 -0.11079773 -0.01380745
- -0.04653129 -0.12210099 -0.12558307  0.18801463 -0.07162381  0.04096976
- -0.01991154 -0.04585328 -0.15146436  0.14647095  0.03018236  0.28174242
- -0.0978851   0.14704888  0.00766877 -0.07863601 -0.01845692 -0.01584697
-  0.17130908 -0.3024303   0.07048776  0.04974978 -0.09092903  0.10596259
-  0.09919997  0.00148555 -0.02341652  0.06497296  0.00272284  0.07149697
-  0.25530246  0.05554739 -0.01458314  0.1768556  -0.07046866 -0.09388541
-  0.02164434 -0.02105708  0.13358366  0.3737567   0.09823149 -0.00990677
- -0.0734854  -0.11207584  0.01302719  0.24148823 -0.01188859 -0.13840665
- -0.18913814 -0.07030325  0.19642639 -0.06978988 -0.03530707 -0.0896187
-  0.13096678  0.07975508 -0.01628163  0.19070303]
+[ 0.1384209  -0.04938016  0.08050069 -0.28110254 -0.15616207 -0.07490253
+  0.16827418 -0.13507421 -0.23134972  0.17394237  0.03949427  0.14928077
+  0.0778301  -0.12385113  0.08690757 -0.0044575   0.12068866 -0.17245157
+ -0.05543656 -0.12488046 -0.06651291 -0.0363512   0.0564674  -0.05215054
+  0.13757774 -0.15772095 -0.08525286  0.01317535  0.01092703 -0.11166314
+  0.15189844  0.05494929 -0.0992474   0.1242907  -0.05032507 -0.02236419
+  0.05827509  0.08067824 -0.19969554 -0.24305034  0.1439417  -0.06540675
+  0.16099109  0.11031093 -0.12261283 -0.0014736   0.09187076  0.15333791
+ -0.11933523 -0.24098885  0.0586763   0.3031614  -0.01348991 -0.13698538
+ -0.02973128 -0.02080188  0.14846162 -0.08702841 -0.10383306  0.01379118
+  0.10749927  0.16289651  0.00122075  0.03645242]
 </pre></div></div>
 </div>
 </section>
@@ -426,15 +667,15 @@ Plasmid embedding:
 <h3>Whole-plasmid comparison (global search)<a class="headerlink" href="#Whole-plasmid-comparison-(global-search)" title="Link to this heading"></a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">get_most_similar()</span></code> compares the embedding of the complete query plasmid against complete plasmid embeddings stored in the selected pLAST model.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results</span> <span class="o">=</span> <span class="n">plast</span><span class="o">.</span><span class="n">get_most_similar</span><span class="p">(</span><span class="n">maxret</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results</span> <span class="o">=</span> <span class="n">plast</span><span class="o">.</span><span class="n">get_most_similar</span><span class="p">(</span><span class="n">maxret</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">)</span>
@@ -508,304 +749,204 @@ Plasmid embedding:
   </thead>
   <tbody>
     <tr>
-      <th>IMGPR_plasmid_3300008282_000245</th>
-      <td>1.0</td>
-      <td>11117</td>
-      <td>0.234776</td>
-      <td>NaN</td>
+      <th>COMPASS_NC_005000.1</th>
+      <td>0.984177</td>
+      <td>24873</td>
+      <td>0.340329</td>
+      <td>1352.0</td>
+      <td>-,Enterococcus faecium</td>
+      <td>Enterococcus faecium plasmid pRUM, complete se...</td>
+      <td>Bacteria;Bacillota;Bacilli;Lactobacillales;Ent...</td>
+      <td>rc1118,rc889</td>
       <td>-</td>
-      <td>NaN</td>
-      <td>NaN</td>
+      <td>MOBP</td>
       <td>-</td>
-      <td>ACR,CIP,ERY,FOS,MIN,NOR,OTC,TEC,TET,VAN</td>
+      <td>MOBP</td>
+      <td>mobilizable</td>
+      <td>COMPASS_NC_005000.1,GenBank_AF507977.1,IMGPR_p...</td>
+      <td>COMPASS,GenBank,IMG-PR,RefSeq</td>
+      <td>circular</td>
+      <td>AD100</td>
+    </tr>
+    <tr>
+      <th>GenBank_GG692536.1</th>
+      <td>0.978578</td>
+      <td>22101</td>
+      <td>0.344378</td>
+      <td>565660.0</td>
+      <td>Enterococcus faecium</td>
+      <td>Enterococcus faecium 1,231,410 map unlocalized...</td>
+      <td>Bacteria;Bacillota;Bacilli;Lactobacillales;Ent...</td>
+      <td>rc1968,rc889</td>
+      <td>-</td>
       <td>-</td>
       <td>-</td>
       <td>-</td>
       <td>non-mobilizable</td>
-      <td>IMGPR_plasmid_3300008282_000245</td>
+      <td>GenBank_GG692536.1,IMGPR_plasmid_647533149_000...</td>
+      <td>GenBank,IMG-PR,RefSeq</td>
+      <td>linear</td>
+      <td>AD100</td>
+    </tr>
+    <tr>
+      <th>COMPASS_NZ_CP018131.1</th>
+      <td>0.975886</td>
+      <td>23736</td>
+      <td>0.348290</td>
+      <td>1352.0</td>
+      <td>Enterococcus faecium</td>
+      <td>Enterococcus faecium strain A_020709_82 plasmi...</td>
+      <td>Bacteria;Bacillota;Bacilli;Lactobacillales;Ent...</td>
+      <td>rc1968,rc889</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>non-mobilizable</td>
+      <td>COMPASS_NZ_CP018131.1,IMGPR_plasmid_2872254902...</td>
+      <td>COMPASS,IMG-PR,PLDSB,RefSeq</td>
+      <td>circular</td>
+      <td>AD100</td>
+    </tr>
+    <tr>
+      <th>COMPASS_KP842560.1</th>
+      <td>0.974289</td>
+      <td>23269</td>
+      <td>0.341957</td>
+      <td>1352.0</td>
+      <td>Enterococcus faecium</td>
+      <td>Enterococcus faecium strain 17i48 ST17 plasmid...</td>
+      <td>Bacteria;Bacillota;Bacilli;Lactobacillales;Ent...</td>
+      <td>rc889</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>mobilizable</td>
+      <td>COMPASS_KP842560.1,GenBank_KP842560.1,RefSeq_N...</td>
+      <td>COMPASS,GenBank,RefSeq</td>
+      <td>circular</td>
+      <td>AD100</td>
+    </tr>
+    <tr>
+      <th>PLSDB_NZ_LR135437.1</th>
+      <td>0.974187</td>
+      <td>19194</td>
+      <td>0.341252</td>
+      <td>1352.0</td>
+      <td>Enterococcus faecium</td>
+      <td>Enterococcus faecium isolate E8691 plasmid 3</td>
+      <td>Bacteria;Bacillota;Bacilli;Lactobacillales;Ent...</td>
+      <td>rc889</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>non-mobilizable</td>
+      <td>PLSDB_NZ_LR135437.1,RefSeq_NZ_LR135437.1</td>
+      <td>PLDSB,RefSeq</td>
+      <td>linear</td>
+      <td>AD100</td>
+    </tr>
+    <tr>
+      <th>EMBL_LN999989.1</th>
+      <td>0.973734</td>
+      <td>32402</td>
+      <td>0.345102</td>
+      <td>1352.0</td>
+      <td>Enterococcus faecium</td>
+      <td>Enterococcus faecium isolate EFE11651 plasmid ...</td>
+      <td>Bacteria;Bacillota;Bacilli;Lactobacillales;Ent...</td>
+      <td>rc185,rc889</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>mobilizable</td>
+      <td>EMBL_LN999989.1,IMGPR_plasmid_2875025650_00000...</td>
+      <td>ENA,IMG-PR,PLDSB,RefSeq</td>
+      <td>circular</td>
+      <td>AD100</td>
+    </tr>
+    <tr>
+      <th>IMGPR_plasmid_647533152_000004</th>
+      <td>0.968064</td>
+      <td>25520</td>
+      <td>0.344262</td>
+      <td>NaN</td>
+      <td>Enterococcus faecium</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>rc889</td>
+      <td>AMK,AZM,BUT,CBM,CHL,CLI,CLR,CST,DAL,DIR,ERY,EV...</td>
+      <td>MOBV</td>
+      <td>-</td>
+      <td>-</td>
+      <td>mobilizable</td>
+      <td>IMGPR_plasmid_647533152_000004</td>
       <td>IMG-PR</td>
       <td>linear</td>
-      <td>AG673</td>
+      <td>AD100</td>
     </tr>
     <tr>
-      <th>COMPASS_NC_013208.1</th>
-      <td>1.0</td>
-      <td>7907</td>
-      <td>0.543443</td>
-      <td>521098.0</td>
-      <td>Alicyclobacillus acidocaldarius</td>
-      <td>Alicyclobacillus acidocaldarius subsp. acidoca...</td>
-      <td>Bacteria;Bacillota;Bacilli;Caryophanales;Alicy...</td>
+      <th>GenBank_CP097025.1</th>
+      <td>0.965033</td>
+      <td>23514</td>
+      <td>0.341371</td>
+      <td>1352.0</td>
+      <td>Enterococcus faecium</td>
+      <td>Enterococcus faecium strain AT45b plasmid pAT4...</td>
+      <td>Bacteria;Bacillota;Bacilli;Lactobacillales;Ent...</td>
+      <td>rc889</td>
       <td>-</td>
+      <td>MOBP</td>
       <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>non-mobilizable</td>
-      <td>COMPASS_NC_013208.1,GenBank_CP001730.1,PLSDB_N...</td>
-      <td>COMPASS,GenBank,PLDSB,RefSeq</td>
-      <td>circular</td>
-      <td>AB250</td>
-    </tr>
-    <tr>
-      <th>GenBank_CP065945.1</th>
-      <td>1.0</td>
-      <td>27165</td>
-      <td>0.551224</td>
-      <td>1402.0</td>
-      <td>Bacillus licheniformis</td>
-      <td>Bacillus licheniformis strain H2 plasmid unnam...</td>
-      <td>Bacteria;Bacillota;Bacilli;Caryophanales;Bacil...</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>non-mobilizable</td>
-      <td>GenBank_CP065945.1,PLSDB_NZ_CP065945.1,RefSeq_...</td>
+      <td>MOBP</td>
+      <td>mobilizable</td>
+      <td>GenBank_CP097025.1,PLSDB_NZ_CP097025.1,RefSeq_...</td>
       <td>GenBank,PLDSB,RefSeq</td>
       <td>circular</td>
-      <td>AA379</td>
+      <td>AD100</td>
     </tr>
     <tr>
-      <th>IMGPR_plasmid_3300053491_097066</th>
-      <td>1.0</td>
-      <td>3991</td>
-      <td>0.324981</td>
+      <th>GenBank_LPUE01000006.1</th>
+      <td>0.955718</td>
+      <td>45034</td>
+      <td>0.349336</td>
       <td>NaN</td>
-      <td>-</td>
+      <td>Enterococcus faecium</td>
+      <td>Enterococcus faecium C68 map unlocalized plasm...</td>
       <td>NaN</td>
-      <td>NaN</td>
+      <td>rc889</td>
       <td>-</td>
-      <td>AMK,AZM,CLI,CLR,CST,DAL,DIR,ERY,GEN,GSV,ISP,KA...</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>non-mobilizable</td>
-      <td>IMGPR_plasmid_3300053491_097066</td>
-      <td>IMG-PR</td>
-      <td>direct terminal repeat</td>
-      <td>AA379</td>
-    </tr>
-    <tr>
-      <th>IMGPR_plasmid_3300022690_000377</th>
-      <td>1.0</td>
-      <td>5177</td>
-      <td>0.378018</td>
-      <td>NaN</td>
-      <td>-</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>-</td>
-      <td>AMX,CEF,CRO,FOX,RFB,RFX,RIF,RPT,SPT,STR,TIC,TMO</td>
+      <td>MOBV</td>
       <td>-</td>
       <td>-</td>
-      <td>-</td>
-      <td>non-mobilizable</td>
-      <td>IMGPR_plasmid_3300022690_000377</td>
-      <td>IMG-PR</td>
-      <td>direct terminal repeat</td>
-      <td>AA379</td>
-    </tr>
-    <tr>
-      <th>IMGPR_plasmid_2836988040_000027</th>
-      <td>1.0</td>
-      <td>10449</td>
-      <td>0.615178</td>
-      <td>NaN</td>
-      <td>Paracraurococcus ruber</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>-</td>
-      <td>SPT,TET,THA,TIA</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>non-mobilizable</td>
-      <td>IMGPR_plasmid_2836988040_000027</td>
-      <td>IMG-PR</td>
-      <td>direct terminal repeat</td>
-      <td>AA379</td>
-    </tr>
-    <tr>
-      <th>IMGPR_plasmid_3300031708_000567</th>
-      <td>1.0</td>
-      <td>7984</td>
-      <td>0.587675</td>
-      <td>NaN</td>
-      <td>-</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>-</td>
-      <td>ABK,AMK,CIP,CST,ERY,GEN,MEM,NOR,OFX,PMB,TET,TG...</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>non-mobilizable</td>
-      <td>IMGPR_plasmid_3300031708_000567</td>
-      <td>IMG-PR</td>
+      <td>mobilizable</td>
+      <td>GenBank_LPUE01000006.1,RefSeq_NZ_LPUE01000006.1</td>
+      <td>GenBank,RefSeq</td>
       <td>linear</td>
-      <td>AA379</td>
+      <td>AD100</td>
     </tr>
     <tr>
-      <th>GenBank_CP110135.1</th>
-      <td>1.0</td>
-      <td>11389</td>
-      <td>0.328563</td>
-      <td>450367.0</td>
-      <td>Peribacillus frigoritolerans</td>
-      <td>Peribacillus frigoritolerans strain Q2H1 plasm...</td>
-      <td>Bacteria;Bacillota;Bacilli;Caryophanales;Bacil...</td>
-      <td>-</td>
+      <th>PLSDB_NZ_LR135446.1</th>
+      <td>0.955302</td>
+      <td>44438</td>
+      <td>0.353436</td>
+      <td>1352.0</td>
+      <td>Enterococcus faecium</td>
+      <td>Enterococcus faecium isolate E7114 plasmid 4</td>
+      <td>Bacteria;Bacillota;Bacilli;Lactobacillales;Ent...</td>
+      <td>rc1763,rc889,rc943</td>
       <td>-</td>
       <td>-</td>
       <td>-</td>
       <td>-</td>
       <td>non-mobilizable</td>
-      <td>GenBank_CP110135.1,PLSDB_NZ_CP110135.1,RefSeq_...</td>
-      <td>GenBank,PLDSB,RefSeq</td>
-      <td>circular</td>
-      <td>AA379</td>
-    </tr>
-    <tr>
-      <th>IMGPR_plasmid_3300005933_000174</th>
-      <td>1.0</td>
-      <td>7700</td>
-      <td>0.534935</td>
-      <td>NaN</td>
-      <td>-</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>-</td>
-      <td>AMK,CHL,CIP,DAL,DBK,ERY,GAT,GEN,GSV,LVX,MDM,MX...</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>non-mobilizable</td>
-      <td>IMGPR_plasmid_3300005933_000174</td>
-      <td>IMG-PR</td>
-      <td>direct terminal repeat</td>
-      <td>AA379</td>
-    </tr>
-    <tr>
-      <th>mMGEs_k141_157016_r14~1324711</th>
-      <td>1.0</td>
-      <td>1636</td>
-      <td>0.579462</td>
-      <td>NaN</td>
-      <td>-</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>-</td>
-      <td>AMP,CAZ,SPT</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>non-mobilizable</td>
-      <td>mMGEs_k141_157016_r14~1324711</td>
-      <td>mMGE</td>
+      <td>PLSDB_NZ_LR135446.1,RefSeq_NZ_LR135446.1</td>
+      <td>PLDSB,RefSeq</td>
       <td>linear</td>
-      <td>AA379</td>
-    </tr>
-    <tr>
-      <th>mMGEs_k141_406140_r14~378905</th>
-      <td>1.0</td>
-      <td>1535</td>
-      <td>0.568078</td>
-      <td>NaN</td>
-      <td>-</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>-</td>
-      <td>ATM,ERY,KIT,LVX,NAL,NOV,ROK,TET</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>non-mobilizable</td>
-      <td>mMGEs_k141_406140_r14~378905</td>
-      <td>mMGE</td>
-      <td>linear</td>
-      <td>AA379</td>
-    </tr>
-    <tr>
-      <th>IMGPR_plasmid_3300007766_000506</th>
-      <td>1.0</td>
-      <td>6447</td>
-      <td>0.273476</td>
-      <td>NaN</td>
-      <td>-</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>-</td>
-      <td>AMP,CFZ,CLI,CST,FOX,LIN,RET,TIA,TMP,VGM</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>non-mobilizable</td>
-      <td>IMGPR_plasmid_3300007766_000506</td>
-      <td>IMG-PR</td>
-      <td>direct terminal repeat</td>
-      <td>AG435</td>
-    </tr>
-    <tr>
-      <th>mMGEs_k141_269674_r14~2763926</th>
-      <td>1.0</td>
-      <td>1732</td>
-      <td>0.538106</td>
-      <td>NaN</td>
-      <td>-</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>-</td>
-      <td>ACR,AMK,CHL,CIP,CLX,CST,ERY,GEN,IPM,MEM,NOR,OF...</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>non-mobilizable</td>
-      <td>mMGEs_k141_269674_r14~2763926</td>
-      <td>mMGE</td>
-      <td>linear</td>
-      <td>AA379</td>
-    </tr>
-    <tr>
-      <th>mMGEs_k141_1568014_r14~1295310</th>
-      <td>1.0</td>
-      <td>1876</td>
-      <td>0.386994</td>
-      <td>NaN</td>
-      <td>-</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>-</td>
-      <td>CLI,HYG,IBX,RET,TET</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>non-mobilizable</td>
-      <td>mMGEs_k141_1568014_r14~1295310</td>
-      <td>mMGE</td>
-      <td>linear</td>
-      <td>AA379</td>
-    </tr>
-    <tr>
-      <th>IMGPR_plasmid_3300010965_000027</th>
-      <td>1.0</td>
-      <td>4348</td>
-      <td>0.487810</td>
-      <td>NaN</td>
-      <td>-</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>-</td>
-      <td>AZM,CLR,DIR,ERY,OLD,ROX,SPI,TEL,TYL,VAN</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>non-mobilizable</td>
-      <td>IMGPR_plasmid_3300010965_000027</td>
-      <td>IMG-PR</td>
-      <td>linear</td>
-      <td>AA379</td>
+      <td>AB173</td>
     </tr>
   </tbody>
 </table>
@@ -816,10 +957,10 @@ Plasmid embedding:
 <h3>Local cassette/module search<a class="headerlink" href="#Local-cassette/module-search" title="Link to this heading"></a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">module_search()</span></code> looks for the query architecture as a sliding window inside database plasmids. The example below uses <code class="docutils literal notranslate"><span class="pre">Tn1548_armA_pCTX_M3.fasta</span></code>, a Tn1548/armA multidrug-resistance module from plasmid pCTX-M3. pLAST is well suited for finding such functional modules because it compares ordered protein-cluster architectures, not only complete plasmid-to-complete plasmid similarity.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cassette</span> <span class="o">=</span> <span class="n">PLAST</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">pl_data</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;mmseqs2_model&quot;</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cassette</span> <span class="o">=</span> <span class="n">PLAST</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">pl_data</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;mmseqs2_model&quot;</span><span class="p">)</span>
 <span class="n">cassette</span> <span class="o">=</span> <span class="n">cassette</span><span class="o">.</span><span class="n">load_nt_fasta</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;examples/Tn1548_armA_pCTX_M3.fasta&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">())</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Resistance module length:&quot;</span><span class="p">,</span> <span class="n">cassette</span><span class="o">.</span><span class="n">length</span><span class="p">,</span> <span class="s2">&quot;bp&quot;</span><span class="p">)</span>
@@ -1027,7 +1168,7 @@ Resistance module length: 13362 bp
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cassette</span> <span class="o">=</span> <span class="n">cassette</span><span class="o">.</span><span class="n">assign_mmseqs_clusters</span><span class="p">(</span><span class="n">use_gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">threads</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
@@ -1048,7 +1189,7 @@ Assigned cassette clusters:
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cassette</span> <span class="o">=</span> <span class="n">cassette</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
@@ -1066,21 +1207,21 @@ Assigned cassette clusters:
 <div class="highlight"><pre>
 Cassette size: 14 protein clusters
 Cassette embedding:
-[ 0.1647186  -0.08894517  0.11579407 -0.01732701 -0.11079746 -0.01380743
- -0.0465313  -0.12210111 -0.12558283  0.18801425 -0.07162375  0.04096967
- -0.01991155 -0.04585331 -0.15146409  0.14647077  0.03018233  0.28174305
- -0.09788493  0.14704868  0.00766878 -0.07863592 -0.01845689 -0.01584694
-  0.17130946 -0.30243087  0.07048763  0.0497498  -0.09092891  0.10596228
-  0.09919997  0.00148555 -0.02341649  0.06497304  0.00272284  0.07149696
-  0.25530222  0.05554735 -0.01458317  0.17685558 -0.07046853 -0.0938853
-  0.0216443  -0.02105702  0.13358389  0.37375715  0.09823133 -0.00990677
- -0.07348545 -0.11207592  0.01302719  0.24148794 -0.01188857 -0.13840638
- -0.18913803 -0.0703034   0.19642618 -0.06978977 -0.03530712 -0.08961868
-  0.13096692  0.07975519 -0.01628166  0.19070293]
+[ 0.31502214  0.01017629 -0.2995464  -0.2074935   0.19848059 -0.02487027
+  0.14860755 -0.09596689  0.0591081  -0.00915496 -0.04902752 -0.04312475
+  0.10233568 -0.102058    0.07681113  0.09836045  0.09629957 -0.14701653
+ -0.09711459 -0.10175263 -0.03978896 -0.01350529  0.06437908 -0.10153474
+ -0.15441005 -0.08279423 -0.00678984  0.00929052 -0.19468668 -0.09421448
+  0.09613787 -0.00748611  0.22859618  0.1055662  -0.29159564  0.04676434
+  0.17769937  0.07126724 -0.08586723  0.12043469 -0.12860203 -0.15519026
+  0.09250353  0.1306932  -0.04544971 -0.01354803 -0.04920986  0.00072894
+ -0.21197118 -0.11548286 -0.02085261  0.09450696 -0.07827361 -0.06611867
+ -0.22803688  0.04948623 -0.04389391 -0.02406676  0.00620364  0.13520016
+  0.09837677  0.2118936  -0.06386898  0.07951403]
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">cassette</span><span class="p">,</span> <span class="s2">&quot;module_search&quot;</span><span class="p">):</span>
@@ -1092,15 +1233,16 @@ Cassette embedding:
     <span class="p">)</span>
     <span class="n">cassette_results</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="n">cassette_results</span> <span class="o">=</span> <span class="n">cassette</span><span class="o">.</span><span class="n">module_search</span><span class="p">(</span>
-        <span class="n">maxret</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
-        <span class="n">window_size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">cassette</span><span class="o">.</span><span class="n">vector</span><span class="p">),</span>
-    <span class="p">)</span>
+    <span class="k">with</span> <span class="n">threadpool_limits</span><span class="p">(</span><span class="n">limits</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">cassette_results</span> <span class="o">=</span> <span class="n">cassette</span><span class="o">.</span><span class="n">module_search</span><span class="p">(</span>
+            <span class="n">maxret</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+            <span class="n">window_size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">cassette</span><span class="o">.</span><span class="n">vector</span><span class="p">),</span>
+        <span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">cassette_results</span><span class="p">:</span>
@@ -1185,364 +1327,364 @@ Cassette embedding:
   </thead>
   <tbody>
     <tr>
-      <th>DDBJ_AP024100.1</th>
-      <td>1.0</td>
-      <td>1562</td>
-      <td>1575</td>
+      <th>COMPASS_AF550415.2</th>
+      <td>1.000000</td>
+      <td>84</td>
+      <td>97</td>
       <td>14</td>
       <td>False</td>
-      <td>1737</td>
-      <td>1737</td>
-      <td>2131108</td>
-      <td>0.668237</td>
-      <td>NaN</td>
+      <td>111</td>
+      <td>0</td>
+      <td>89468</td>
+      <td>0.510305</td>
+      <td>546.0</td>
       <td>...</td>
-      <td>-</td>
+      <td>IncL/M,rc1254</td>
       <td>-</td>
       <td>MOBP</td>
+      <td>MPF_I</td>
       <td>-</td>
-      <td>-</td>
-      <td>mobilizable</td>
-      <td>DDBJ_AP024100.1,PLSDB_AP024100.1</td>
-      <td>DDBJ,PLDSB</td>
+      <td>conjugative</td>
+      <td>COMPASS_AF550415.2,GenBank_AF550415.2,IMGPR_pl...</td>
+      <td>COMPASS,GenBank,IMG-PR,RefSeq</td>
       <td>circular</td>
-      <td>AG445</td>
+      <td>AA002</td>
     </tr>
     <tr>
-      <th>DDBJ_AP024102.1</th>
-      <td>1.0</td>
-      <td>1559</td>
-      <td>1572</td>
+      <th>PLSDB_CP082393.1</th>
+      <td>0.991495</td>
+      <td>67</td>
+      <td>80</td>
       <td>14</td>
       <td>False</td>
-      <td>1687</td>
-      <td>1687</td>
-      <td>2094349</td>
-      <td>0.668026</td>
+      <td>111</td>
+      <td>3</td>
+      <td>89721</td>
+      <td>0.504709</td>
       <td>NaN</td>
       <td>...</td>
+      <td>IncA,rc1254</td>
+      <td>ABK,ACR,AMK,AMX,APR,ATM,AZD,AZM,BUT,CEF,CHL,CI...</td>
+      <td>MOBH</td>
+      <td>MPF_F</td>
       <td>-</td>
-      <td>-</td>
-      <td>MOBP</td>
-      <td>-</td>
-      <td>-</td>
-      <td>mobilizable</td>
-      <td>DDBJ_AP024102.1,PLSDB_AP024102.1</td>
-      <td>DDBJ,PLDSB</td>
+      <td>conjugative</td>
+      <td>PLSDB_CP082393.1</td>
+      <td>PLDSB</td>
       <td>circular</td>
-      <td>AG445</td>
+      <td>AA622</td>
     </tr>
     <tr>
-      <th>DDBJ_AP026896.1</th>
-      <td>1.0</td>
-      <td>3689</td>
-      <td>3702</td>
+      <th>DDBJ_LC744448.1</th>
+      <td>0.983330</td>
+      <td>158</td>
+      <td>171</td>
       <td>14</td>
       <td>False</td>
-      <td>4529</td>
-      <td>4529</td>
-      <td>4944632</td>
-      <td>0.608921</td>
-      <td>648.0</td>
-      <td>...</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>non-mobilizable</td>
-      <td>DDBJ_AP026896.1,PLSDB_NZ_AP026896.1,RefSeq_NZ_...</td>
-      <td>DDBJ,PLDSB,RefSeq</td>
-      <td>circular</td>
-      <td>AC542</td>
-    </tr>
-    <tr>
-      <th>DDBJ_AP029011.1</th>
-      <td>1.0</td>
-      <td>1558</td>
-      <td>1571</td>
-      <td>14</td>
-      <td>False</td>
-      <td>1641</td>
-      <td>1641</td>
-      <td>2060108</td>
-      <td>0.669470</td>
+      <td>280</td>
+      <td>0</td>
+      <td>257396</td>
+      <td>0.463916</td>
       <td>NaN</td>
       <td>...</td>
+      <td>IncFIB,IncHI1B</td>
+      <td>A201A,ABK,ACR,AMK,AMP,AMX,APR,AST,ATM,AZD,AZM,...</td>
+      <td>MOBH</td>
+      <td>MPF_F</td>
       <td>-</td>
-      <td>ABK,ACR,AMK,AMP,AMX,APR,AST,ATM,AZD,AZM,BCT,BU...</td>
-      <td>MOBP</td>
-      <td>-</td>
-      <td>-</td>
-      <td>mobilizable</td>
-      <td>DDBJ_AP029011.1</td>
+      <td>conjugative</td>
+      <td>DDBJ_LC744448.1</td>
       <td>DDBJ</td>
       <td>circular</td>
-      <td>AG445</td>
+      <td>AA405</td>
     </tr>
     <tr>
-      <th>DDBJ_AP029015.1</th>
-      <td>1.0</td>
-      <td>1557</td>
-      <td>11</td>
+      <th>DDBJ_AP018143.1</th>
+      <td>0.983330</td>
+      <td>142</td>
+      <td>155</td>
       <td>14</td>
-      <td>True</td>
-      <td>1559</td>
-      <td>1559</td>
-      <td>1988610</td>
-      <td>0.664401</td>
+      <td>False</td>
+      <td>210</td>
+      <td>0</td>
+      <td>176026</td>
+      <td>0.506641</td>
+      <td>562.0</td>
+      <td>...</td>
+      <td>IncC,rc1254</td>
+      <td>-</td>
+      <td>MOBH</td>
+      <td>MPF_F</td>
+      <td>MOBH</td>
+      <td>conjugative</td>
+      <td>DDBJ_AP018143.1,RefSeq_NZ_AP018143.1</td>
+      <td>DDBJ,RefSeq</td>
+      <td>circular</td>
+      <td>AA860</td>
+    </tr>
+    <tr>
+      <th>DDBJ_LC744445.1</th>
+      <td>0.983330</td>
+      <td>135</td>
+      <td>148</td>
+      <td>14</td>
+      <td>False</td>
+      <td>215</td>
+      <td>0</td>
+      <td>187175</td>
+      <td>0.508791</td>
       <td>NaN</td>
       <td>...</td>
-      <td>-</td>
-      <td>A201A,ABK,ACR,AMK,AMP,AMX,APR,AST,ATM,AZD,AZM,...</td>
-      <td>-</td>
-      <td>-</td>
-      <td>-</td>
-      <td>non-mobilizable</td>
-      <td>DDBJ_AP029015.1</td>
+      <td>IncC,rc1254</td>
+      <td>A201A,ABK,ACR,AMK,AMP,AMX,ATM,AZD,AZM,BCM,BCT,...</td>
+      <td>MOBH</td>
+      <td>MPF_F</td>
+      <td>MOBH</td>
+      <td>conjugative</td>
+      <td>DDBJ_LC744445.1</td>
       <td>DDBJ</td>
       <td>circular</td>
-      <td>AG445</td>
+      <td>AA860</td>
     </tr>
     <tr>
-      <th>GenBank_CP015960.1</th>
-      <td>1.0</td>
-      <td>1558</td>
-      <td>1571</td>
+      <th>DDBJ_LC508263.1</th>
+      <td>0.983330</td>
+      <td>80</td>
+      <td>93</td>
       <td>14</td>
       <td>False</td>
-      <td>1641</td>
-      <td>1641</td>
-      <td>1913088</td>
-      <td>0.624831</td>
-      <td>75105.0</td>
+      <td>103</td>
+      <td>0</td>
+      <td>86197</td>
+      <td>0.507547</td>
+      <td>573.0</td>
       <td>...</td>
+      <td>IncL/M,rc1254</td>
       <td>-</td>
+      <td>MOBP</td>
+      <td>MPF_I</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>DDBJ_LC508263.1,RefSeq_NZ_LC508263.1</td>
+      <td>DDBJ,RefSeq</td>
+      <td>circular</td>
+      <td>AA002</td>
+    </tr>
+    <tr>
+      <th>DDBJ_LC508722.1</th>
+      <td>0.983330</td>
+      <td>80</td>
+      <td>93</td>
+      <td>14</td>
+      <td>False</td>
+      <td>103</td>
+      <td>0</td>
+      <td>86197</td>
+      <td>0.507500</td>
+      <td>573.0</td>
+      <td>...</td>
+      <td>IncL/M,rc1254</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>MPF_I</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>DDBJ_LC508722.1,RefSeq_NZ_LC508722.1</td>
+      <td>DDBJ,RefSeq</td>
+      <td>circular</td>
+      <td>AA002</td>
+    </tr>
+    <tr>
+      <th>DDBJ_AP025166.1</th>
+      <td>0.983330</td>
+      <td>179</td>
+      <td>192</td>
+      <td>14</td>
+      <td>False</td>
+      <td>419</td>
+      <td>2</td>
+      <td>388397</td>
+      <td>0.480689</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>IncU,rc1254</td>
+      <td>A201A,ABK,ACR,AMK,AMP,AMX,APR,AST,ATM,AZD,AZM,...</td>
+      <td>MOBH</td>
+      <td>MPF_F</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>DDBJ_AP025166.1</td>
+      <td>DDBJ</td>
+      <td>circular</td>
+      <td>AC212</td>
+    </tr>
+    <tr>
+      <th>DDBJ_LC744454.1</th>
+      <td>0.983330</td>
+      <td>143</td>
+      <td>156</td>
+      <td>14</td>
+      <td>False</td>
+      <td>227</td>
+      <td>0</td>
+      <td>198096</td>
+      <td>0.507431</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>IncC,rc1254</td>
+      <td>A201A,ABK,ACR,AMK,AMP,AMX,ATM,AZD,AZM,BCM,BCT,...</td>
+      <td>MOBH</td>
+      <td>MPF_F</td>
+      <td>MOBH</td>
+      <td>conjugative</td>
+      <td>DDBJ_LC744454.1</td>
+      <td>DDBJ</td>
+      <td>circular</td>
+      <td>AA860</td>
+    </tr>
+    <tr>
+      <th>DDBJ_AP025165.1</th>
+      <td>0.983330</td>
+      <td>181</td>
+      <td>194</td>
+      <td>14</td>
+      <td>False</td>
+      <td>421</td>
+      <td>0</td>
+      <td>390753</td>
+      <td>0.480593</td>
+      <td>1463165.0</td>
+      <td>...</td>
+      <td>IncU,rc1254</td>
+      <td>-</td>
+      <td>MOBH</td>
+      <td>MPF_F</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>DDBJ_AP025165.1,RefSeq_NZ_AP025165.1</td>
+      <td>DDBJ,RefSeq</td>
+      <td>circular</td>
+      <td>AC212</td>
+    </tr>
+    <tr>
+      <th>DDBJ_LC505604.1</th>
+      <td>0.983330</td>
+      <td>81</td>
+      <td>94</td>
+      <td>14</td>
+      <td>False</td>
+      <td>104</td>
+      <td>0</td>
+      <td>86197</td>
+      <td>0.507547</td>
+      <td>573.0</td>
+      <td>...</td>
+      <td>IncL/M,rc1254</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>MPF_I</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>DDBJ_LC505604.1,RefSeq_NZ_LC505604.1</td>
+      <td>DDBJ,RefSeq</td>
+      <td>circular</td>
+      <td>AA002</td>
+    </tr>
+    <tr>
+      <th>DDBJ_AP025164.1</th>
+      <td>0.983330</td>
+      <td>178</td>
+      <td>191</td>
+      <td>14</td>
+      <td>False</td>
+      <td>415</td>
+      <td>0</td>
+      <td>386364</td>
+      <td>0.480084</td>
+      <td>573.0</td>
+      <td>...</td>
+      <td>IncU,rc1254</td>
+      <td>-</td>
+      <td>MOBH</td>
+      <td>MPF_F</td>
+      <td>-</td>
+      <td>conjugative</td>
+      <td>DDBJ_AP025164.1,RefSeq_NZ_AP025164.1</td>
+      <td>DDBJ,RefSeq</td>
+      <td>circular</td>
+      <td>AC212</td>
+    </tr>
+    <tr>
+      <th>GenBank_NPII01000030.1</th>
+      <td>0.983120</td>
+      <td>13</td>
+      <td>26</td>
+      <td>14</td>
+      <td>False</td>
+      <td>31</td>
+      <td>0</td>
+      <td>31892</td>
+      <td>0.482629</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>IncHI1B,rc1254</td>
       <td>-</td>
       <td>-</td>
       <td>-</td>
       <td>-</td>
       <td>non-mobilizable</td>
-      <td>GenBank_CP015960.1,PLSDB_NZ_CP015960.1,RefSeq_...</td>
-      <td>GenBank,PLDSB,RefSeq</td>
-      <td>circular</td>
-      <td>AA400</td>
+      <td>GenBank_NPII01000030.1,RefSeq_NZ_NPII01000030.1</td>
+      <td>GenBank,RefSeq</td>
+      <td>linear</td>
+      <td>AC237</td>
     </tr>
     <tr>
-      <th>COMPASS_CP021765.1</th>
-      <td>1.0</td>
-      <td>1556</td>
-      <td>1569</td>
+      <th>GenBank_NPJW01000035.1</th>
+      <td>0.983120</td>
+      <td>13</td>
+      <td>26</td>
       <td>14</td>
       <td>False</td>
-      <td>1827</td>
-      <td>1827</td>
-      <td>2094523</td>
-      <td>0.666784</td>
+      <td>27</td>
+      <td>0</td>
+      <td>27570</td>
+      <td>0.488103</td>
       <td>NaN</td>
       <td>...</td>
-      <td>-</td>
-      <td>A201A,ABK,ACR,AMK,AMP,AMX,APR,AST,ATM,AZD,AZM,...</td>
-      <td>MOBP</td>
+      <td>IncHI1B</td>
       <td>-</td>
       <td>-</td>
-      <td>mobilizable</td>
-      <td>COMPASS_CP021765.1</td>
-      <td>COMPASS</td>
-      <td>circular</td>
-      <td>AG445</td>
+      <td>-</td>
+      <td>-</td>
+      <td>non-mobilizable</td>
+      <td>GenBank_NPJW01000035.1,RefSeq_NZ_NPJW01000035.1</td>
+      <td>GenBank,RefSeq</td>
+      <td>linear</td>
+      <td>AC237</td>
     </tr>
     <tr>
-      <th>GenBank_CP022781.1</th>
-      <td>1.0</td>
-      <td>1555</td>
-      <td>1568</td>
+      <th>COMPASS_CP012902.1</th>
+      <td>0.982351</td>
+      <td>56</td>
+      <td>69</td>
       <td>14</td>
       <td>False</td>
-      <td>1597</td>
-      <td>1597</td>
-      <td>2134808</td>
-      <td>0.668189</td>
-      <td>305.0</td>
+      <td>209</td>
+      <td>0</td>
+      <td>176048</td>
+      <td>0.513991</td>
+      <td>562.0</td>
       <td>...</td>
+      <td>IncC,rc1254</td>
       <td>-</td>
-      <td>-</td>
-      <td>MOBP</td>
-      <td>-</td>
-      <td>-</td>
-      <td>mobilizable</td>
-      <td>GenBank_CP022781.1,PLSDB_CP022781.1</td>
-      <td>GenBank,PLDSB</td>
+      <td>MOBH</td>
+      <td>MPF_F</td>
+      <td>MOBH</td>
+      <td>conjugative</td>
+      <td>COMPASS_CP012902.1,GenBank_CP012902.1,RefSeq_N...</td>
+      <td>COMPASS,GenBank,RefSeq</td>
       <td>circular</td>
-      <td>AG445</td>
-    </tr>
-    <tr>
-      <th>GenBank_CP049317.1</th>
-      <td>1.0</td>
-      <td>1561</td>
-      <td>1574</td>
-      <td>14</td>
-      <td>False</td>
-      <td>1832</td>
-      <td>1832</td>
-      <td>1990521</td>
-      <td>0.596952</td>
-      <td>2705547.0</td>
-      <td>...</td>
-      <td>-</td>
-      <td>-</td>
-      <td>MOBP</td>
-      <td>-</td>
-      <td>-</td>
-      <td>mobilizable</td>
-      <td>GenBank_CP049317.1,PLSDB_NZ_CP049317.1,RefSeq_...</td>
-      <td>GenBank,PLDSB,RefSeq</td>
-      <td>circular</td>
-      <td>AD868</td>
-    </tr>
-    <tr>
-      <th>GenBank_CP049318.1</th>
-      <td>1.0</td>
-      <td>1558</td>
-      <td>1571</td>
-      <td>14</td>
-      <td>False</td>
-      <td>1641</td>
-      <td>1641</td>
-      <td>1831039</td>
-      <td>0.599465</td>
-      <td>2705547.0</td>
-      <td>...</td>
-      <td>-</td>
-      <td>-</td>
-      <td>MOBP</td>
-      <td>-</td>
-      <td>-</td>
-      <td>mobilizable</td>
-      <td>GenBank_CP049318.1,PLSDB_NZ_CP049318.1,RefSeq_...</td>
-      <td>GenBank,PLDSB,RefSeq</td>
-      <td>circular</td>
-      <td>AC301</td>
-    </tr>
-    <tr>
-      <th>PLSDB_CP052071.1</th>
-      <td>1.0</td>
-      <td>1560</td>
-      <td>1573</td>
-      <td>14</td>
-      <td>False</td>
-      <td>1735</td>
-      <td>1735</td>
-      <td>2074832</td>
-      <td>0.669338</td>
-      <td>NaN</td>
-      <td>...</td>
-      <td>-</td>
-      <td>ABK,ACR,AMK,AMP,AMX,APR,AST,ATM,AZD,AZM,BCT,BU...</td>
-      <td>MOBP</td>
-      <td>-</td>
-      <td>-</td>
-      <td>mobilizable</td>
-      <td>PLSDB_CP052071.1</td>
-      <td>PLDSB</td>
-      <td>circular</td>
-      <td>AG445</td>
-    </tr>
-    <tr>
-      <th>PLSDB_CP052075.1</th>
-      <td>1.0</td>
-      <td>1560</td>
-      <td>1573</td>
-      <td>14</td>
-      <td>False</td>
-      <td>1735</td>
-      <td>1735</td>
-      <td>2074757</td>
-      <td>0.669341</td>
-      <td>NaN</td>
-      <td>...</td>
-      <td>-</td>
-      <td>ABK,ACR,AMK,AMP,AMX,APR,AST,ATM,AZD,AZM,BCT,BU...</td>
-      <td>MOBP</td>
-      <td>-</td>
-      <td>-</td>
-      <td>mobilizable</td>
-      <td>PLSDB_CP052075.1</td>
-      <td>PLDSB</td>
-      <td>circular</td>
-      <td>AG445</td>
-    </tr>
-    <tr>
-      <th>PLSDB_CP052077.1</th>
-      <td>1.0</td>
-      <td>1559</td>
-      <td>1572</td>
-      <td>14</td>
-      <td>False</td>
-      <td>1687</td>
-      <td>1687</td>
-      <td>1981426</td>
-      <td>0.671087</td>
-      <td>NaN</td>
-      <td>...</td>
-      <td>-</td>
-      <td>ABK,ACR,AMK,AMP,AMX,APR,AST,ATM,AZD,AZM,BCT,BU...</td>
-      <td>MOBP</td>
-      <td>-</td>
-      <td>-</td>
-      <td>mobilizable</td>
-      <td>PLSDB_CP052077.1</td>
-      <td>PLDSB</td>
-      <td>circular</td>
-      <td>AG445</td>
-    </tr>
-    <tr>
-      <th>PLSDB_CP052079.1</th>
-      <td>1.0</td>
-      <td>1557</td>
-      <td>1570</td>
-      <td>14</td>
-      <td>False</td>
-      <td>1685</td>
-      <td>1685</td>
-      <td>1982075</td>
-      <td>0.671096</td>
-      <td>NaN</td>
-      <td>...</td>
-      <td>-</td>
-      <td>ABK,ACR,AMK,AMP,AMX,APR,AST,ATM,AZD,AZM,BCT,BU...</td>
-      <td>MOBP</td>
-      <td>-</td>
-      <td>-</td>
-      <td>mobilizable</td>
-      <td>PLSDB_CP052079.1</td>
-      <td>PLDSB</td>
-      <td>circular</td>
-      <td>AG445</td>
-    </tr>
-    <tr>
-      <th>PLSDB_CP052081.1</th>
-      <td>1.0</td>
-      <td>1557</td>
-      <td>1570</td>
-      <td>14</td>
-      <td>False</td>
-      <td>1685</td>
-      <td>1685</td>
-      <td>1981451</td>
-      <td>0.671083</td>
-      <td>NaN</td>
-      <td>...</td>
-      <td>-</td>
-      <td>ABK,ACR,AMK,AMP,AMX,APR,AST,ATM,AZD,AZM,BCT,BU...</td>
-      <td>MOBP</td>
-      <td>-</td>
-      <td>-</td>
-      <td>mobilizable</td>
-      <td>PLSDB_CP052081.1</td>
-      <td>PLDSB</td>
-      <td>circular</td>
-      <td>AG445</td>
+      <td>AA860</td>
     </tr>
   </tbody>
 </table>
@@ -1556,10 +1698,10 @@ Cassette embedding:
 <section id="id1">
 <h3>Initialize PLAST object - load config, choose model and add logger<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plast</span> <span class="o">=</span> <span class="n">PLAST</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">pl_data</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;eggnog_model&quot;</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plast</span> <span class="o">=</span> <span class="n">PLAST</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">pl_data</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;eggnog_model&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1567,10 +1709,10 @@ Cassette embedding:
 <section id="Load-example-plasmid-sequence-and-GenBank-annotation-from-.gb-file">
 <h3>Load example plasmid sequence and GenBank annotation from .gb file<a class="headerlink" href="#Load-example-plasmid-sequence-and-GenBank-annotation-from-.gb-file" title="Link to this heading"></a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plast</span> <span class="o">=</span> <span class="n">plast</span><span class="o">.</span><span class="n">load_gbff</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;examples/NZ_AP018444.1.gb&quot;</span><span class="p">))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plast</span> <span class="o">=</span> <span class="n">plast</span><span class="o">.</span><span class="n">load_gbff</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;examples/NC_005000.1.gb&quot;</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Plasmid of langth&quot;</span><span class="p">,</span> <span class="n">plast</span><span class="o">.</span><span class="n">length</span><span class="p">,</span> <span class="s2">&quot;has the following annotation:&quot;</span><span class="p">)</span>
 <span class="n">display</span><span class="p">(</span><span class="n">plast</span><span class="o">.</span><span class="n">parsed</span><span class="p">)</span>
 </pre></div>
@@ -1581,7 +1723,7 @@ Cassette embedding:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Plasmid of langth 181607 has the following annotation:
+Plasmid of langth 24873 has the following annotation:
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1617,36 +1759,60 @@ Plasmid of langth 181607 has the following annotation:
       <th>inference</th>
       <th>note</th>
       <th>...</th>
+      <th>transl_table</th>
       <th>product</th>
       <th>protein_id</th>
       <th>translation</th>
-      <th>GO_function</th>
-      <th>pseudo</th>
-      <th>gene</th>
       <th>EC_number</th>
+      <th>GO_function</th>
       <th>GO_process</th>
       <th>GO_component</th>
-      <th>gene_synonym</th>
+      <th>pseudo</th>
+      <th>gene</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>1</th>
-      <td>598</td>
-      <td>807</td>
+      <th>0</th>
       <td>1</td>
+      <td>291</td>
+      <td>-1</td>
       <td>0</td>
       <td>CDS</td>
-      <td>598..807</td>
-      <td>BAZ_RS27670</td>
+      <td>complement(1..291)</td>
+      <td>HKK39_RS00005</td>
+      <td>pRUM_p01</td>
+      <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
+      <td>Derived by automated computational analysis us...</td>
+      <td>...</td>
+      <td>11</td>
+      <td>hypothetical protein</td>
+      <td>WP_000026576.1</td>
+      <td>MSINTFVYSHPINVYIIKNLGITVEQFCELYAYPQGTVASWITRQR...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>427</td>
+      <td>606</td>
+      <td>-1</td>
+      <td>0</td>
+      <td>CDS</td>
+      <td>complement(427..606)</td>
+      <td>HKK39_RS00010</td>
       <td>NaN</td>
       <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
       <td>Derived by automated computational analysis us...</td>
       <td>...</td>
+      <td>11</td>
       <td>hypothetical protein</td>
-      <td>WP_003171438.1</td>
-      <td>MYIIINFEPLSPVMNDIAIKLAMVLFIPLFLALIVKVILMKFMKES...</td>
-      <td>NaN</td>
+      <td>WP_001021554.1</td>
+      <td>MNIIQQYELKYITFDQLSEEIWGYGQRLINEVGVERFSFYVEAAAG...</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
@@ -1656,21 +1822,21 @@ Plasmid of langth 181607 has the following annotation:
     </tr>
     <tr>
       <th>2</th>
-      <td>1127</td>
-      <td>1765</td>
+      <td>603</td>
+      <td>953</td>
       <td>-1</td>
       <td>0</td>
       <td>CDS</td>
-      <td>complement(1127..1765)</td>
-      <td>BAZ_RS27675</td>
-      <td>BAZ_pXO1_00003</td>
+      <td>complement(603..953)</td>
+      <td>HKK39_RS00015</td>
+      <td>pRUM_p02</td>
       <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
       <td>Derived by automated computational analysis us...</td>
       <td>...</td>
-      <td>nuclease-related domain-containing protein</td>
-      <td>WP_000453400.1</td>
-      <td>MEVLIFELILIAVLIPLNSVVKKHVPKWKGKAGEKLVKRMLSKLDP...</td>
-      <td>GO:0003677 - DNA binding [Evidence IEA];GO:000...</td>
+      <td>11</td>
+      <td>hypothetical protein</td>
+      <td>WP_000568378.1</td>
+      <td>MIDYNDRGRLKWAGFYLSDHTEEIDADNEQRTSQNLAKEQMTTEEI...</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
@@ -1680,69 +1846,165 @@ Plasmid of langth 181607 has the following annotation:
     </tr>
     <tr>
       <th>3</th>
-      <td>1782</td>
-      <td>2165</td>
+      <td>946</td>
+      <td>2271</td>
       <td>-1</td>
       <td>0</td>
       <td>CDS</td>
-      <td>complement(1782..2165)</td>
-      <td>BAZ_RS27680</td>
-      <td>BAZ_pXO1_00004</td>
+      <td>complement(946..2271)</td>
+      <td>HKK39_RS00020</td>
+      <td>pRUM_p03</td>
       <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
       <td>Derived by automated computational analysis us...</td>
       <td>...</td>
-      <td>hypothetical protein</td>
-      <td>WP_003159741.1</td>
-      <td>MNRNREYIALRNSISIGWLLTCIVIGLSIYFSSVVYLLIGCFILSL...</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
+      <td>11</td>
+      <td>Y-family DNA polymerase</td>
+      <td>WP_000969590.1</td>
+      <td>MMDYSKEPVNDYFLIDMKSFYASVECIERNLDPLTTELVVMSRADN...</td>
+      <td>2.7.7.7</td>
+      <td>GO:0003684 - damaged DNA binding [EvidenceIEA]...</td>
+      <td>GO:0006281 - DNA repair [Evidence IEA];GO:0006...</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>2291</td>
-      <td>2875</td>
+      <td>2721</td>
+      <td>3335</td>
       <td>1</td>
       <td>0</td>
       <td>CDS</td>
-      <td>2291..2875</td>
-      <td>BAZ_RS27685</td>
-      <td>BAZ_pXO1_00005</td>
+      <td>2721..3335</td>
+      <td>HKK39_RS00025</td>
+      <td>pRUM_p04</td>
       <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
       <td>Derived by automated computational analysis us...</td>
       <td>...</td>
-      <td>hypothetical protein</td>
-      <td>WP_000916417.1</td>
-      <td>MLKLVVNNTGTEPEGDSAFSNYFTCKDCVYYLSKSDSCSLQLAADS...</td>
+      <td>11</td>
+      <td>recombinase family protein</td>
+      <td>WP_001261742.1</td>
+      <td>MRVAYIRVSSIDQNEQRQIEEMKKFGAERIFIEKQSGATITHRPVF...</td>
       <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
+      <td>GO:0003677 - DNA binding [Evidence IEA];GO:000...</td>
+      <td>GO:0015074 - DNA integration [Evidence IEA];GO...</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
     </tr>
     <tr>
       <th>5</th>
-      <td>2895</td>
-      <td>3473</td>
+      <td>3500</td>
+      <td>4504</td>
+      <td>-1</td>
+      <td>0</td>
+      <td>CDS</td>
+      <td>complement(3500..4504)</td>
+      <td>HKK39_RS00030</td>
+      <td>pRUM_p05</td>
+      <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
+      <td>Derived by automated computational analysis us...</td>
+      <td>...</td>
+      <td>11</td>
+      <td>hypothetical protein</td>
+      <td>WP_000455809.1</td>
+      <td>MEYKFNLNLKEVLPTQGTININGQDNDDDIVIKKIEFIDSDINVFF...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>4963</td>
+      <td>5220</td>
+      <td>-1</td>
+      <td>0</td>
+      <td>CDS</td>
+      <td>complement(4963..5220)</td>
+      <td>HKK39_RS00035</td>
+      <td>pRUM_p06</td>
+      <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
+      <td>Derived by automated computational analysis us...</td>
+      <td>...</td>
+      <td>11</td>
+      <td>Txe/YoeB family addiction module toxin</td>
+      <td>WP_000588503.1</td>
+      <td>MIKAWSDDAWDDYLYWHEQGNKSNIKKINKLIKDIDRSPFAGLGKP...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>GO:0008219 - cell death [Evidence IEA]</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>5213</td>
+      <td>5482</td>
+      <td>-1</td>
+      <td>0</td>
+      <td>CDS</td>
+      <td>complement(5213..5482)</td>
+      <td>HKK39_RS00040</td>
+      <td>pRUM_p07</td>
+      <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
+      <td>Derived by automated computational analysis us...</td>
+      <td>...</td>
+      <td>11</td>
+      <td>type II toxin-antitoxin system Phd/YefM family...</td>
+      <td>WP_000388479.1</td>
+      <td>MEAVAYSNFRQNLRSYMKQVNEDAETLIVTSKDVEDTVVVLSKRDY...</td>
+      <td>NaN</td>
+      <td>GO:0003677 - DNA binding [Evidence IEA];GO:009...</td>
+      <td>GO:0045927 - positive regulation of growth[Evi...</td>
+      <td>GO:0110001 - toxin-antitoxin complex[Evidence ...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>5613</td>
+      <td>5792</td>
+      <td>-1</td>
+      <td>0</td>
+      <td>CDS</td>
+      <td>complement(5613..5792)</td>
+      <td>HKK39_RS00045</td>
+      <td>NaN</td>
+      <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
+      <td>Derived by automated computational analysis us...</td>
+      <td>...</td>
+      <td>11</td>
+      <td>hypothetical protein</td>
+      <td>WP_001120991.1</td>
+      <td>MPIAIGNKRLPVTLDEKRQKELQQLKQKYGKSESRIMCIALDLLIA...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>5890</td>
+      <td>6126</td>
       <td>1</td>
       <td>0</td>
       <td>CDS</td>
-      <td>2895..3473</td>
-      <td>BAZ_RS27690</td>
-      <td>BAZ_pXO1_00006</td>
+      <td>5890..6126</td>
+      <td>HKK39_RS00185</td>
+      <td>NaN</td>
       <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
       <td>Derived by automated computational analysis us...</td>
       <td>...</td>
+      <td>11</td>
       <td>hypothetical protein</td>
-      <td>WP_002194483.1</td>
-      <td>MLEHTILFSLVQLVPLIVSTGIIYILLELTDTEWKTWFSYEGIFAI...</td>
-      <td>NaN</td>
+      <td>WP_306297428.1</td>
+      <td>MKQNTSIAKNTTKFKCTAAAWRISISPTNRTNNRGMILFIWISFFL...</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
@@ -1751,46 +2013,22 @@ Plasmid of langth 181607 has the following annotation:
       <td>NaN</td>
     </tr>
     <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>161</th>
-      <td>175000</td>
-      <td>175287</td>
+      <th>10</th>
+      <td>6173</td>
+      <td>6868</td>
       <td>-1</td>
       <td>0</td>
       <td>CDS</td>
-      <td>complement(175000..175287)</td>
-      <td>BAZ_RS28520</td>
-      <td>BAZ_pXO1_00191</td>
+      <td>complement(6173..6868)</td>
+      <td>HKK39_RS00050</td>
+      <td>pRUM_p10</td>
       <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
       <td>Derived by automated computational analysis us...</td>
       <td>...</td>
+      <td>11</td>
       <td>hypothetical protein</td>
-      <td>WP_000084556.1</td>
-      <td>MSQVPGFLKFVLAKERRYVYLAVAEKKNKRILTHIVYRFGPLEKAL...</td>
-      <td>NaN</td>
+      <td>WP_002326819.1</td>
+      <td>MQQNPTEDVSHFLTNKEHLNEVIRRIQKDFSCMEEMKYFIQRVEEQ...</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
@@ -1799,46 +2037,46 @@ Plasmid of langth 181607 has the following annotation:
       <td>NaN</td>
     </tr>
     <tr>
-      <th>162</th>
-      <td>175364</td>
-      <td>175564</td>
+      <th>14</th>
+      <td>8232</td>
+      <td>8774</td>
       <td>-1</td>
       <td>0</td>
       <td>CDS</td>
-      <td>complement(175364..175564)</td>
-      <td>BAZ_RS28525</td>
-      <td>BAZ_pXO1_00192</td>
+      <td>complement(8232..8774)</td>
+      <td>HKK39_RS00070</td>
+      <td>pRUM_p14</td>
       <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
       <td>Derived by automated computational analysis us...</td>
       <td>...</td>
-      <td>hypothetical protein</td>
-      <td>WP_000344165.1</td>
-      <td>MDENKRNMLLSFIISILFIFTSLLPFSNNEYVYVISKIGAAAGVIN...</td>
+      <td>11</td>
+      <td>streptothricin N-acetyltransferase Sat4</td>
+      <td>WP_000627290.1</td>
+      <td>MITEMKAGHLKDIDKPSEPFEVIGKIIPRYENENWTFTELLYEAPY...</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>NaN</td>
-      <td>NaN</td>
+      <td>sat4</td>
     </tr>
     <tr>
-      <th>163</th>
-      <td>175616</td>
-      <td>176260</td>
+      <th>15</th>
+      <td>8771</td>
+      <td>9679</td>
       <td>-1</td>
       <td>0</td>
       <td>CDS</td>
-      <td>complement(175616..176260)</td>
-      <td>BAZ_RS28530</td>
-      <td>BAZ_pXO1_00193</td>
+      <td>complement(8771..9679)</td>
+      <td>HKK39_RS00075</td>
+      <td>pRUM_p16</td>
       <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
       <td>Derived by automated computational analysis us...</td>
       <td>...</td>
-      <td>thermonuclease family protein</td>
-      <td>WP_000708136.1</td>
-      <td>MKIWIKAICITSFVIQMSACSSSAQTKNDSRPAQAVQNGIQQHVEG...</td>
-      <td>NaN</td>
+      <td>11</td>
+      <td>aminoglycoside nucleotidyltransferase ANT(6)-Ia</td>
+      <td>WP_001255866.1</td>
+      <td>MRSEKEMMDLVLSLAEQDERIRIVTLEGSRANINIPKDEFQDYDIT...</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
@@ -1847,63 +2085,375 @@ Plasmid of langth 181607 has the following annotation:
       <td>NaN</td>
     </tr>
     <tr>
-      <th>164</th>
-      <td>176689</td>
-      <td>179352</td>
+      <th>16</th>
+      <td>9712</td>
+      <td>10446</td>
       <td>-1</td>
       <td>0</td>
       <td>CDS</td>
-      <td>complement(176689..179352)</td>
-      <td>BAZ_RS28540</td>
-      <td>BAZ_pXO1_00195</td>
+      <td>complement(9712..10446)</td>
+      <td>HKK39_RS00080</td>
+      <td>pRUM_p17</td>
       <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
       <td>Derived by automated computational analysis us...</td>
       <td>...</td>
-      <td>type IA DNA topoisomerase</td>
-      <td>WP_000520727.1</td>
-      <td>MGKTLFIAEKPKVANEIMKSPRFRHSQKYIGSKPYYGYYENDHYIV...</td>
-      <td>GO:0003677 - DNA binding [Evidence IEA];GO:000...</td>
+      <td>11</td>
+      <td>class I SAM-dependent methyltransferase</td>
+      <td>WP_000662263.1</td>
+      <td>MKENKYDDNIFFQKYSQMSRSQKGLAGAGEWETLKKMLPDFKGKRV...</td>
+      <td>2.1.1.-</td>
+      <td>GO:0008168 - methyltransferase activity[Eviden...</td>
+      <td>GO:0032259 - methylation [Evidence IEA]</td>
       <td>NaN</td>
-      <td>NaN</td>
-      <td>5.6.2.1</td>
-      <td>GO:0006265 - DNA topological change [EvidenceIEA]</td>
       <td>NaN</td>
       <td>NaN</td>
     </tr>
     <tr>
-      <th>0</th>
-      <td>181589</td>
-      <td>181607</td>
+      <th>17</th>
+      <td>10427</td>
+      <td>11296</td>
+      <td>-1</td>
+      <td>0</td>
+      <td>CDS</td>
+      <td>complement(10427..11296)</td>
+      <td>HKK39_RS00085</td>
+      <td>pRUM_p18</td>
+      <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
+      <td>Derived by automated computational analysis us...</td>
+      <td>...</td>
+      <td>11</td>
+      <td>nucleotidyltransferase domain-containingprotein</td>
+      <td>WP_000228166.1</td>
+      <td>MVDNIIKSVAEKLSSLSYIEGIVLGGSRARGTHTEDSDIDIGIYYN...</td>
+      <td>NaN</td>
+      <td>GO:0016779 - nucleotidyltransferase activity[E...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>11399</td>
+      <td>11644</td>
+      <td>-1</td>
+      <td>0</td>
+      <td>CDS</td>
+      <td>complement(11399..11644)</td>
+      <td>HKK39_RS00090</td>
+      <td>pRUM_p19</td>
+      <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
+      <td>Derived by automated computational analysis us...</td>
+      <td>...</td>
+      <td>11</td>
+      <td>single-stranded DNA-binding protein</td>
+      <td>WP_000567888.1</td>
+      <td>MIDVNELLEEAIRETENLNDGEVFLVKDLFKGYVGNRIPRKDRLLL...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>12938</td>
+      <td>13675</td>
+      <td>-1</td>
+      <td>0</td>
+      <td>CDS</td>
+      <td>complement(12938..13675)</td>
+      <td>HKK39_RS00105</td>
+      <td>pRUM_p21</td>
+      <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
+      <td>Derived by automated computational analysis us...</td>
+      <td>...</td>
+      <td>11</td>
+      <td>23S rRNA (adenine(2058)-N(6))-methyltransferas...</td>
+      <td>WP_001038792.1</td>
+      <td>MNKNIKYSQNFLTSEKVLNQIIKQLNLKETDTVYEIGTGKGHLTTK...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>erm(B)</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>13800</td>
+      <td>13883</td>
+      <td>-1</td>
+      <td>0</td>
+      <td>CDS</td>
+      <td>complement(13800..13883)</td>
+      <td>HKK39_RS00110</td>
+      <td>NaN</td>
+      <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
+      <td>Derived by automated computational analysis us...</td>
+      <td>...</td>
+      <td>11</td>
+      <td>23S rRNA methyltransferase attenuation leaderp...</td>
+      <td>WP_001814874.1</td>
+      <td>MLVFQMRNVDKTSTVLKQTKNSDYADK</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>GO:0046677 - response to antibiotic [EvidenceI...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>13904</td>
+      <td>14167</td>
+      <td>-1</td>
+      <td>0</td>
+      <td>CDS</td>
+      <td>complement(13904..14167)</td>
+      <td>HKK39_RS00115</td>
+      <td>NaN</td>
+      <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
+      <td>Derived by automated computational analysis us...</td>
+      <td>...</td>
+      <td>11</td>
+      <td>peptide-binding protein</td>
+      <td>WP_002311901.1</td>
+      <td>MGNLGAQKEKRNDTPISAKKDIMGDKTVRVRADLHHIIKIETAKNG...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>14570</td>
+      <td>15250</td>
       <td>1</td>
       <td>0</td>
       <td>CDS</td>
-      <td>join(181589..181607,1..410)</td>
-      <td>BAZ_RS27665</td>
-      <td>BAZ_pXO1_00001</td>
+      <td>14570..15250</td>
+      <td>HKK39_RS00125</td>
+      <td>pRUM_p22</td>
       <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
       <td>Derived by automated computational analysis us...</td>
       <td>...</td>
+      <td>11</td>
+      <td>IS6-like element IS1216 family transposase</td>
+      <td>WP_001015311.1</td>
+      <td>MNHFKGKQFQQDVIIVAVGYYLRYNLSYREVQEILYDRGINVSHTT...</td>
+      <td>NaN</td>
+      <td>GO:0004803 - transposase activity [EvidenceIEA]</td>
+      <td>GO:0006313 - DNA transposition [EvidenceIEA]</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>15987</td>
+      <td>17174</td>
+      <td>1</td>
+      <td>0</td>
+      <td>CDS</td>
+      <td>15987..17174</td>
+      <td>HKK39_RS00135</td>
+      <td>pRUM_p24</td>
+      <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
+      <td>Derived by automated computational analysis us...</td>
+      <td>...</td>
+      <td>11</td>
+      <td>IS256-like element IS16 family transposase</td>
+      <td>WP_002296840.1</td>
+      <td>MTQVHFTFESEEIQAIINESGANDTAKTLMTIMFNQLMEEQRNQYI...</td>
+      <td>NaN</td>
+      <td>GO:0004803 - transposase activity [EvidenceIEA]</td>
+      <td>GO:0006313 - DNA transposition [EvidenceIEA]</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>17464</td>
+      <td>18111</td>
+      <td>1</td>
+      <td>0</td>
+      <td>CDS</td>
+      <td>17464..18111</td>
+      <td>HKK39_RS00140</td>
+      <td>pRUM_p25</td>
+      <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
+      <td>Derived by automated computational analysis us...</td>
+      <td>...</td>
+      <td>11</td>
+      <td>type A-8 chloramphenicol O-acetyltransferase</td>
+      <td>WP_000143686.1</td>
+      <td>MTFNIINLETWDRKEYFNHYFNQQTTYSVTKELDITLLKSMIKDKG...</td>
+      <td>2.3.1.28</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>18426</td>
+      <td>18824</td>
+      <td>1</td>
+      <td>0</td>
+      <td>CDS</td>
+      <td>18426..18824</td>
+      <td>HKK39_RS00145</td>
+      <td>pRUM_p26</td>
+      <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
+      <td>Derived by automated computational analysis us...</td>
+      <td>...</td>
+      <td>11</td>
+      <td>plasmid mobilization protein</td>
+      <td>WP_002340414.1</td>
+      <td>MSEHDNNLASDLSVGGNRKPNRKEPKQISFRVNEGEYEKLRSSAET...</td>
+      <td>NaN</td>
+      <td>GO:0003677 - DNA binding [Evidence IEA]</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>19246</td>
+      <td>19926</td>
+      <td>1</td>
+      <td>0</td>
+      <td>CDS</td>
+      <td>19246..19926</td>
+      <td>HKK39_RS00155</td>
+      <td>pRUM_p28</td>
+      <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
+      <td>Derived by automated computational analysis us...</td>
+      <td>...</td>
+      <td>11</td>
+      <td>IS6-like element IS1216 family transposase</td>
+      <td>WP_002343844.1</td>
+      <td>MNHFKGKQFQQDVIIVAVGYYLRYNLSYREVQEILYDRGINVSHTT...</td>
+      <td>NaN</td>
+      <td>GO:0004803 - transposase activity [EvidenceIEA]</td>
+      <td>GO:0006313 - DNA transposition [EvidenceIEA]</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>32</th>
+      <td>20542</td>
+      <td>21582</td>
+      <td>-1</td>
+      <td>0</td>
+      <td>CDS</td>
+      <td>complement(20542..21582)</td>
+      <td>HKK39_RS00160</td>
+      <td>pRUM_p29</td>
+      <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
+      <td>Derived by automated computational analysis us...</td>
+      <td>...</td>
+      <td>11</td>
+      <td>replication initiator protein A</td>
+      <td>WP_000997689.1</td>
+      <td>MNDFNYYKSKEIYREKYYQMPKVFFTNEKYMDLSNDAKIAYMLLKD...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>33</th>
+      <td>21931</td>
+      <td>22257</td>
+      <td>-1</td>
+      <td>0</td>
+      <td>CDS</td>
+      <td>complement(21931..22257)</td>
+      <td>HKK39_RS00165</td>
+      <td>pRUM_p30</td>
+      <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
+      <td>Derived by automated computational analysis us...</td>
+      <td>...</td>
+      <td>11</td>
       <td>hypothetical protein</td>
-      <td>WP_000914414.1</td>
-      <td>MLKKLSVFLIGTLLLFGLAACDSIKSVASDVTVGKVIEEFKAAGLE...</td>
+      <td>WP_000796719.1</td>
+      <td>MAEDNRSQAAVSRLLGNKNKKNFKSKEVEEIELTKKNISKVIKDQG...</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>34</th>
+      <td>22244</td>
+      <td>23047</td>
+      <td>-1</td>
+      <td>0</td>
+      <td>CDS</td>
+      <td>complement(22244..23047)</td>
+      <td>HKK39_RS00170</td>
+      <td>pRUM_p31</td>
+      <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
+      <td>Derived by automated computational analysis us...</td>
+      <td>...</td>
+      <td>11</td>
+      <td>ParA family protein</td>
+      <td>WP_002311905.1</td>
+      <td>MGDILMARILSVANQKGGVSKTTTSVNLAACLKFVYGKNVLLVDID...</td>
+      <td>NaN</td>
+      <td>GO:0005524 - ATP binding [Evidence IEA];GO:001...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>35</th>
+      <td>23471</td>
+      <td>24658</td>
+      <td>-1</td>
+      <td>0</td>
+      <td>CDS</td>
+      <td>complement(23471..24658)</td>
+      <td>HKK39_RS00175</td>
+      <td>pRUM_p32</td>
+      <td>COORDINATES: similar to AAsequence:RefSeq:WP_0...</td>
+      <td>Derived by automated computational analysis us...</td>
+      <td>...</td>
+      <td>11</td>
+      <td>IS256-like element IS16 family transposase</td>
+      <td>WP_002296840.1</td>
+      <td>MTQVHFTFESEEIQAIINESGANDTAKTLMTIMFNQLMEEQRNQYI...</td>
+      <td>NaN</td>
+      <td>GO:0004803 - transposase activity [EvidenceIEA]</td>
+      <td>GO:0006313 - DNA transposition [EvidenceIEA]</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
     </tr>
   </tbody>
 </table>
-<p>136 rows × 22 columns</p>
+<p>28 rows × 21 columns</p>
 </div></div>
 </div>
 </section>
 <section id="id2">
 <h3>Assign cluster identifiers to the plasmid proteins<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plast</span> <span class="o">=</span> <span class="n">plast</span><span class="o">.</span><span class="n">assign_eggnog_annot</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
@@ -1918,16 +2468,16 @@ Plasmid of langth 181607 has the following annotation:
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Number of assigned clusters: 136
+Number of assigned clusters: 28
 Assigned clusters:
-[nan, &#39;31K0D&#39;, nan, &#39;30DG3&#39;, nan, &#39;32907&#39;, nan, nan, &#39;COG3344&#39;, &#39;COG0553&#39;, nan, &#39;COG0827&#39;, nan, &#39;2ZFG1&#39;, nan, &#39;2Z9QM&#39;, &#39;2Z9QM&#39;, &#39;30AUC&#39;, &#39;32EU5&#39;, &#39;33QRF&#39;, &#39;COG4973&#39;, &#39;COG0675&#39;, &#39;COG2250&#39;, &#39;COG3344&#39;, &#39;COG1708&#39;, nan, nan, nan, &#39;COG3950&#39;, &#39;COG2865&#39;, &#39;2ZWMK&#39;, &#39;COG0539&#39;, &#39;30VTJ&#39;, &#39;COG1309.used_alg.fa&#39;, nan, &#39;COG4823&#39;, &#39;COG0454&#39;, &#39;COG3385&#39;, &#39;COG3385&#39;, nan, &#39;COG1476&#39;, &#39;33G6F&#39;, &#39;308XQ&#39;, &#39;COG3505&#39;, nan, &#39;30DRN&#39;, &#39;349HH&#39;, &#39;2ZM2H&#39;, &#39;30JG6&#39;, nan, &#39;33PUD&#39;, &#39;32AWE&#39;, &#39;COG4963&#39;, nan, nan, &#39;COG2866&#39;, nan, nan, nan, &#39;COG3745&#39;, &#39;COG4963&#39;, &#39;COG4962&#39;, &#39;COG4965&#39;, &#39;3294H&#39;, &#39;3294H&#39;, &#39;30JM3&#39;, &#39;COG4072&#39;, &#39;COG4960&#39;, nan, &#39;COG5464&#39;, &#39;30EMT&#39;, nan, &#39;30D9P&#39;, &#39;30EJP&#39;, &#39;336S4&#39;, &#39;COG3451&#39;, nan, nan, &#39;33KVR&#39;, &#39;33F95&#39;, &#39;COG1266&#39;, &#39;COG2311&#39;, &#39;307WB&#39;, &#39;COG5386&#39;, nan, &#39;345N2&#39;, &#39;COG2866&#39;, &#39;COG0671&#39;, nan, &#39;COG1210&#39;, &#39;2Z8KQ&#39;, &#39;33354&#39;, nan, nan, nan, &#39;2ZJNR&#39;, &#39;COG3711&#39;, nan, nan, nan, &#39;COG4644&#39;, &#39;COG1961&#39;, &#39;2ZAZ1&#39;, nan, &#39;2ZA3G&#39;, nan, nan, &#39;32ZBI&#39;, &#39;COG0640&#39;, &#39;30AH4&#39;, nan, nan, &#39;COG4973&#39;, nan, &#39;33Y12&#39;, nan, nan, &#39;33ZVC&#39;, &#39;32U5N&#39;, &#39;332Y6&#39;, &#39;COG3443&#39;, &#39;COG2357&#39;, &#39;COG4973&#39;, &#39;COG3410&#39;, nan, &#39;319NK&#39;, &#39;33JGE&#39;, nan, nan, &#39;COG1923&#39;, &#39;COG0640&#39;, &#39;30EJD&#39;, nan, &#39;COG1525&#39;, &#39;COG0550&#39;, &#39;331IF&#39;]
+[&#39;348UX&#39;, &#39;306TJ&#39;, &#39;33CM8&#39;, &#39;COG0389&#39;, &#39;COG1961&#39;, &#39;306WU&#39;, &#39;COG4115&#39;, &#39;30A2H&#39;, &#39;3072V&#39;, nan, &#39;3072Z&#39;, &#39;COG1246&#39;, &#39;2Z7S1&#39;, &#39;COG4976&#39;, &#39;30URY&#39;, &#39;33359&#39;, &#39;COG0030&#39;, &#39;2ZU0Q&#39;, &#39;32NBG&#39;, &#39;COG3316&#39;, &#39;COG3328&#39;, &#39;COG4845&#39;, &#39;32ZHN&#39;, &#39;COG3316&#39;, &#39;3304N&#39;, &#39;30894&#39;, &#39;COG1192&#39;, &#39;COG3328&#39;]
 </pre></div></div>
 </div>
 </section>
 <section id="id3">
 <h3>Pass data through pLAST model and receive embeddings<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plast</span> <span class="o">=</span> <span class="n">plast</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
@@ -1942,24 +2492,24 @@ Assigned clusters:
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Plasmid embedding:
-[-0.01628306 -0.01295302 -0.2643657   0.12566526  0.0786413   0.07343284
- -0.10592642  0.05117363 -0.15185057 -0.0917705  -0.1749777  -0.04378572
-  0.04284062 -0.01780606  0.10390937 -0.03507463  0.12917799  0.22014977
- -0.09011716 -0.26449004  0.1578369   0.23005912 -0.12079659 -0.16868664
-  0.08776087  0.14757568  0.08944128  0.03609036  0.02073304  0.06742117
- -0.03507506  0.04188536 -0.14262943 -0.0101757   0.07670277 -0.05125343
-  0.135285   -0.28171447 -0.05007815  0.02647007 -0.03667818  0.26045159
- -0.25092968 -0.12784135  0.02631533  0.0357714   0.06894967  0.01984254
- -0.10920736 -0.14962453 -0.1685642   0.05777118 -0.0179081   0.03834559
- -0.03849267  0.1128887   0.17922303 -0.08803956 -0.075794    0.10746881
- -0.01048282  0.11445606  0.12085333  0.21659563]
+[ 0.06329472 -0.04143739  0.06984315  0.21632679 -0.00855456  0.18253054
+  0.02088546  0.21080938 -0.00928008  0.01683181  0.02661998  0.02138225
+ -0.06070902 -0.18135379  0.19305757  0.11264715  0.00702482 -0.21246433
+ -0.12247914  0.00352493  0.154391    0.01665206 -0.00688221 -0.15605277
+  0.08608653  0.15692472  0.16208734  0.2544252   0.07329971  0.0497661
+ -0.00368475 -0.02327945 -0.04490764  0.12295408  0.19381781 -0.12716755
+ -0.00991008 -0.25971994 -0.09920156  0.14554374 -0.10447495  0.05955252
+ -0.0202443  -0.02432648 -0.01230781 -0.06949621  0.01995271 -0.07274803
+  0.05103639  0.01892512 -0.28953275 -0.13400112 -0.08602309 -0.10764287
+  0.29167795 -0.04042183 -0.01173846  0.15272175  0.00202008  0.09931558
+ -0.1024653   0.08236861 -0.22468589  0.17022073]
 </pre></div></div>
 </div>
 </section>
 <section id="Find-similar-plasmids-in-the-database">
 <h3>Find similar plasmids in the database<a class="headerlink" href="#Find-similar-plasmids-in-the-database" title="Link to this heading"></a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results</span> <span class="o">=</span> <span class="n">plast</span><span class="o">.</span><span class="n">get_most_similar</span><span class="p">(</span><span class="n">maxret</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
@@ -1967,7 +2517,7 @@ Plasmid embedding:
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">)</span>
@@ -2041,308 +2591,316 @@ Plasmid embedding:
   </thead>
   <tbody>
     <tr>
-      <th>RefSeq_NZ_CP096828.1</th>
-      <td>0.972781</td>
-      <td>181633</td>
-      <td>0.325293</td>
-      <td>1392.0</td>
-      <td>Bacillus anthracis</td>
-      <td>Bacillus anthracis strain CVCC40205 plasmid un...</td>
-      <td>Bacteria;Bacillota;Bacilli;Caryophanales;Bacil...</td>
-      <td>rc125</td>
+      <th>RefSeq_NZ_CP097025.1</th>
+      <td>0.992807</td>
+      <td>23514</td>
+      <td>0.341371</td>
+      <td>1352.0</td>
+      <td>Enterococcus faecium</td>
+      <td>Enterococcus faecium strain AT45b plasmid pAT4...</td>
+      <td>Bacteria;Bacillota;Bacilli;Lactobacillales;Ent...</td>
+      <td>rc889</td>
       <td>-</td>
       <td>MOBP</td>
-      <td>MPF_T</td>
       <td>-</td>
-      <td>conjugative</td>
-      <td>GenBank_CP096828.1,PLSDB_NZ_CP096828.1,RefSeq_...</td>
+      <td>MOBP</td>
+      <td>mobilizable</td>
+      <td>GenBank_CP097025.1,PLSDB_NZ_CP097025.1,RefSeq_...</td>
       <td>GenBank,PLDSB,RefSeq</td>
       <td>circular</td>
-      <td>AA800</td>
+      <td>AD100</td>
     </tr>
     <tr>
-      <th>RefSeq_NZ_CP096825.1</th>
-      <td>0.972509</td>
-      <td>181710</td>
-      <td>0.325277</td>
-      <td>1392.0</td>
-      <td>Bacillus anthracis</td>
-      <td>Bacillus anthracis strain CVCC40202 plasmid un...</td>
-      <td>Bacteria;Bacillota;Bacilli;Caryophanales;Bacil...</td>
-      <td>rc125</td>
+      <th>RefSeq_NC_005000.1</th>
+      <td>0.988632</td>
+      <td>24873</td>
+      <td>0.340329</td>
+      <td>1352.0</td>
+      <td>-,Enterococcus faecium</td>
+      <td>Enterococcus faecium plasmid pRUM, complete se...</td>
+      <td>Bacteria;Bacillota;Bacilli;Lactobacillales;Ent...</td>
+      <td>rc1118,rc889</td>
       <td>-</td>
       <td>MOBP</td>
-      <td>MPF_T</td>
       <td>-</td>
-      <td>conjugative</td>
-      <td>GenBank_CP096825.1,PLSDB_NZ_CP096825.1,RefSeq_...</td>
+      <td>MOBP</td>
+      <td>mobilizable</td>
+      <td>COMPASS_NC_005000.1,GenBank_AF507977.1,IMGPR_p...</td>
+      <td>COMPASS,GenBank,IMG-PR,RefSeq</td>
+      <td>circular</td>
+      <td>AD100</td>
+    </tr>
+    <tr>
+      <th>RefSeq_NZ_KP842560.1</th>
+      <td>0.987638</td>
+      <td>23269</td>
+      <td>0.341957</td>
+      <td>1352.0</td>
+      <td>Enterococcus faecium</td>
+      <td>Enterococcus faecium strain 17i48 ST17 plasmid...</td>
+      <td>Bacteria;Bacillota;Bacilli;Lactobacillales;Ent...</td>
+      <td>rc889</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>mobilizable</td>
+      <td>COMPASS_KP842560.1,GenBank_KP842560.1,RefSeq_N...</td>
+      <td>COMPASS,GenBank,RefSeq</td>
+      <td>circular</td>
+      <td>AD100</td>
+    </tr>
+    <tr>
+      <th>RefSeq_NZ_CP018131.1</th>
+      <td>0.986287</td>
+      <td>23736</td>
+      <td>0.348290</td>
+      <td>1352.0</td>
+      <td>Enterococcus faecium</td>
+      <td>Enterococcus faecium strain A_020709_82 plasmi...</td>
+      <td>Bacteria;Bacillota;Bacilli;Lactobacillales;Ent...</td>
+      <td>rc1968,rc889</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>non-mobilizable</td>
+      <td>COMPASS_NZ_CP018131.1,IMGPR_plasmid_2872254902...</td>
+      <td>COMPASS,IMG-PR,PLDSB,RefSeq</td>
+      <td>circular</td>
+      <td>AD100</td>
+    </tr>
+    <tr>
+      <th>RefSeq_NZ_LN999989.1</th>
+      <td>0.976933</td>
+      <td>32402</td>
+      <td>0.345102</td>
+      <td>1352.0</td>
+      <td>Enterococcus faecium</td>
+      <td>Enterococcus faecium isolate EFE11651 plasmid ...</td>
+      <td>Bacteria;Bacillota;Bacilli;Lactobacillales;Ent...</td>
+      <td>rc185,rc889</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>-</td>
+      <td>MOBP</td>
+      <td>mobilizable</td>
+      <td>EMBL_LN999989.1,IMGPR_plasmid_2875025650_00000...</td>
+      <td>ENA,IMG-PR,PLDSB,RefSeq</td>
+      <td>circular</td>
+      <td>AD100</td>
+    </tr>
+    <tr>
+      <th>RefSeq_NZ_CP066675.1</th>
+      <td>0.976408</td>
+      <td>25974</td>
+      <td>0.347617</td>
+      <td>1352.0</td>
+      <td>Enterococcus faecium</td>
+      <td>Enterococcus faecium strain Dallas 163_1 plasm...</td>
+      <td>Bacteria;Bacillota;Bacilli;Lactobacillales;Ent...</td>
+      <td>rc889</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>non-mobilizable</td>
+      <td>GenBank_CP066675.1,PLSDB_NZ_CP066675.1,RefSeq_...</td>
       <td>GenBank,PLDSB,RefSeq</td>
       <td>circular</td>
-      <td>AA800</td>
+      <td>AD100</td>
     </tr>
     <tr>
-      <th>RefSeq_NZ_CP029324.1</th>
-      <td>0.972365</td>
-      <td>181932</td>
-      <td>0.325391</td>
-      <td>1392.0</td>
-      <td>Bacillus anthracis</td>
-      <td>Bacillus anthracis strain 17OD930 plasmid pXO1...</td>
-      <td>Bacteria;Bacillota;Bacilli;Caryophanales;Bacil...</td>
-      <td>rc125</td>
+      <th>RefSeq_NZ_LR135290.1</th>
+      <td>0.965348</td>
+      <td>26053</td>
+      <td>0.345066</td>
+      <td>1352.0</td>
+      <td>Enterococcus faecium</td>
+      <td>Enterococcus faecium isolate E7199 plasmid 4</td>
+      <td>Bacteria;Bacillota;Bacilli;Lactobacillales;Ent...</td>
+      <td>rc889</td>
       <td>-</td>
-      <td>MOBP</td>
-      <td>MPF_T</td>
       <td>-</td>
-      <td>conjugative</td>
-      <td>GenBank_CP029324.1,PLSDB_NZ_CP029324.1,RefSeq_...</td>
-      <td>GenBank,PLDSB,RefSeq</td>
-      <td>circular</td>
-      <td>AA800</td>
+      <td>-</td>
+      <td>-</td>
+      <td>non-mobilizable</td>
+      <td>IMGPR_plasmid_2912394829_000004,PLSDB_NZ_LR135...</td>
+      <td>IMG-PR,PLDSB,RefSeq</td>
+      <td>linear</td>
+      <td>AD100</td>
     </tr>
     <tr>
-      <th>RefSeq_NZ_CP076223.1</th>
-      <td>0.972279</td>
-      <td>181467</td>
-      <td>0.325359</td>
-      <td>1392.0</td>
-      <td>Bacillus anthracis</td>
-      <td>Bacillus anthracis strain A159 plasmid pXO1, c...</td>
-      <td>Bacteria;Bacillota;Bacilli;Caryophanales;Bacil...</td>
-      <td>rc125</td>
+      <th>RefSeq_NZ_OP378686.1</th>
+      <td>0.961236</td>
+      <td>32622</td>
+      <td>0.344062</td>
+      <td>1352.0</td>
+      <td>Enterococcus faecium</td>
+      <td>Enterococcus faecium strain VRE33536 plasmid p...</td>
+      <td>Bacteria;Bacillota;Bacilli;Lactobacillales;Ent...</td>
+      <td>rc889</td>
+      <td>AMK,AZM,CBM,CLI,CLR,CST,DAL,DBK,DIR,ERY,EVN,FF...</td>
       <td>-</td>
-      <td>MOBP</td>
-      <td>MPF_T</td>
       <td>-</td>
-      <td>conjugative</td>
-      <td>GenBank_CP076223.1,PLSDB_NZ_CP076223.1,RefSeq_...</td>
-      <td>GenBank,PLDSB,RefSeq</td>
+      <td>-</td>
+      <td>non-mobilizable</td>
+      <td>RefSeq_NZ_OP378686.1</td>
+      <td>RefSeq</td>
       <td>circular</td>
-      <td>AA800</td>
+      <td>AD100</td>
     </tr>
     <tr>
-      <th>RefSeq_NZ_CP076171.1</th>
-      <td>0.972061</td>
-      <td>181758</td>
-      <td>0.325312</td>
-      <td>1392.0</td>
-      <td>Bacillus anthracis</td>
-      <td>Bacillus anthracis strain A168 plasmid pXO1, c...</td>
-      <td>Bacteria;Bacillota;Bacilli;Caryophanales;Bacil...</td>
-      <td>rc125</td>
+      <th>RefSeq_NZ_AP026603.1</th>
+      <td>0.957876</td>
+      <td>31114</td>
+      <td>0.347496</td>
+      <td>1352.0</td>
+      <td>Enterococcus faecium</td>
+      <td>Enterococcus faecium strain JHP80 plasmid pJHP...</td>
+      <td>Bacteria;Bacillota;Bacilli;Lactobacillales;Ent...</td>
+      <td>rc185,rc889</td>
       <td>-</td>
-      <td>MOBP</td>
-      <td>MPF_T</td>
       <td>-</td>
-      <td>conjugative</td>
-      <td>GenBank_CP076165.1,GenBank_CP076171.1,PLSDB_NZ...</td>
-      <td>GenBank,GenBank,PLDSB,RefSeq,RefSeq</td>
+      <td>-</td>
+      <td>-</td>
+      <td>non-mobilizable</td>
+      <td>DDBJ_AP026603.1,PLSDB_NZ_AP026603.1,RefSeq_NZ_...</td>
+      <td>DDBJ,PLDSB,RefSeq</td>
       <td>circular</td>
-      <td>AA800</td>
+      <td>AD100</td>
     </tr>
     <tr>
-      <th>RefSeq_NZ_CP076165.1</th>
-      <td>0.972061</td>
-      <td>181758</td>
-      <td>0.325312</td>
-      <td>1392.0</td>
-      <td>Bacillus anthracis</td>
-      <td>Bacillus anthracis strain A168 plasmid pXO1, c...</td>
-      <td>Bacteria;Bacillota;Bacilli;Caryophanales;Bacil...</td>
-      <td>rc125</td>
+      <th>RefSeq_NC_021170.1</th>
+      <td>0.947730</td>
+      <td>31136</td>
+      <td>0.348953</td>
+      <td>1352.0</td>
+      <td>Enterococcus faecium</td>
+      <td>Enterococcus faecium plasmid pF856, complete s...</td>
+      <td>Bacteria;Bacillota;Bacilli;Lactobacillales;Ent...</td>
+      <td>rc889</td>
       <td>-</td>
-      <td>MOBP</td>
-      <td>MPF_T</td>
       <td>-</td>
-      <td>conjugative</td>
-      <td>GenBank_CP076165.1,GenBank_CP076171.1,PLSDB_NZ...</td>
-      <td>GenBank,GenBank,PLDSB,RefSeq,RefSeq</td>
+      <td>-</td>
+      <td>-</td>
+      <td>non-mobilizable</td>
+      <td>COMPASS_JQ663598.1,GenBank_JQ663598.1,RefSeq_N...</td>
+      <td>COMPASS,GenBank,RefSeq</td>
       <td>circular</td>
-      <td>AA800</td>
+      <td>AB173</td>
     </tr>
     <tr>
-      <th>RefSeq_NZ_CP009340.1</th>
-      <td>0.972014</td>
-      <td>181369</td>
-      <td>0.325149</td>
-      <td>1392.0</td>
-      <td>Bacillus anthracis</td>
-      <td>Bacillus anthracis strain Ohio ACB plasmid 1, ...</td>
-      <td>Bacteria;Bacillota;Bacilli;Caryophanales;Bacil...</td>
-      <td>rc125</td>
+      <th>RefSeq_NZ_CP012431.1</th>
+      <td>0.944787</td>
+      <td>44226</td>
+      <td>0.354520</td>
+      <td>1352.0</td>
+      <td>Enterococcus faecium</td>
+      <td>Enterococcus faecium strain ISMMS_VRE_1 plasmi...</td>
+      <td>Bacteria;Bacillota;Bacilli;Lactobacillales;Ent...</td>
+      <td>rc1763,rc2146,rc889</td>
       <td>-</td>
-      <td>MOBP</td>
-      <td>MPF_T</td>
+      <td>MOBV</td>
       <td>-</td>
-      <td>conjugative</td>
-      <td>COMPASS_NZ_CP009340.1,GenBank_CP009340.1,PLSDB...</td>
-      <td>COMPASS,GenBank,PLDSB,RefSeq</td>
+      <td>-</td>
+      <td>mobilizable</td>
+      <td>COMPASS_NZ_CP012431.1,GenBank_CP012431.1,IMGPR...</td>
+      <td>COMPASS,GenBank,IMG-PR,PLDSB,RefSeq</td>
       <td>circular</td>
-      <td>AA800</td>
+      <td>AB173</td>
     </tr>
     <tr>
-      <th>RefSeq_NZ_CP009324.1</th>
-      <td>0.971804</td>
-      <td>181754</td>
-      <td>0.325319</td>
-      <td>1392.0</td>
-      <td>Bacillus anthracis</td>
-      <td>Bacillus anthracis strain PAK-1 plasmid 1, com...</td>
-      <td>Bacteria;Bacillota;Bacilli;Caryophanales;Bacil...</td>
-      <td>rc125</td>
+      <th>RefSeq_NZ_CP027516.1</th>
+      <td>0.944101</td>
+      <td>37152</td>
+      <td>0.355243</td>
+      <td>1352.0</td>
+      <td>Enterococcus faecium</td>
+      <td>Enterococcus faecium strain AUSMDU00004028 pla...</td>
+      <td>Bacteria;Bacillota;Bacilli;Lactobacillales;Ent...</td>
+      <td>rc1763,rc889</td>
       <td>-</td>
-      <td>MOBP</td>
-      <td>MPF_T</td>
       <td>-</td>
-      <td>conjugative</td>
-      <td>COMPASS_NZ_CP009324.1,GenBank_CP009324.1,PLSDB...</td>
-      <td>COMPASS,GenBank,PLDSB,RefSeq</td>
+      <td>-</td>
+      <td>-</td>
+      <td>non-mobilizable</td>
+      <td>COMPASS_NZ_CP027516.1,PLSDB_NZ_CP027516.1,RefS...</td>
+      <td>COMPASS,PLDSB,RefSeq</td>
       <td>circular</td>
-      <td>AA800</td>
+      <td>AB173</td>
     </tr>
     <tr>
-      <th>RefSeq_NZ_CP010814.1</th>
-      <td>0.971517</td>
-      <td>181682</td>
-      <td>0.325325</td>
-      <td>1392.0</td>
-      <td>Bacillus anthracis</td>
-      <td>Bacillus anthracis strain Pollino plasmid pXO1</td>
-      <td>Bacteria;Bacillota;Bacilli;Caryophanales;Bacil...</td>
-      <td>rc125</td>
+      <th>RefSeq_NZ_CP027510.1</th>
+      <td>0.943327</td>
+      <td>33328</td>
+      <td>0.355797</td>
+      <td>1352.0</td>
+      <td>Enterococcus faecium</td>
+      <td>Enterococcus faecium strain AUSMDU00004055 pla...</td>
+      <td>Bacteria;Bacillota;Bacilli;Lactobacillales;Ent...</td>
+      <td>rc889</td>
       <td>-</td>
-      <td>MOBP</td>
-      <td>MPF_T</td>
       <td>-</td>
-      <td>conjugative</td>
-      <td>GenBank_CP010814.1,RefSeq_NZ_CP010814.1</td>
-      <td>GenBank,RefSeq</td>
+      <td>-</td>
+      <td>-</td>
+      <td>non-mobilizable</td>
+      <td>COMPASS_NZ_CP027510.1,PLSDB_NZ_CP027510.1,RefS...</td>
+      <td>COMPASS,PLDSB,RefSeq</td>
       <td>circular</td>
-      <td>AA800</td>
+      <td>AB173</td>
     </tr>
     <tr>
-      <th>RefSeq_NZ_CP081176.1</th>
-      <td>0.971426</td>
-      <td>181677</td>
-      <td>0.325303</td>
-      <td>1392.0</td>
-      <td>Bacillus anthracis</td>
-      <td>Bacillus anthracis strain P04210076 plasmid pX...</td>
-      <td>Bacteria;Bacillota;Bacilli;Caryophanales;Bacil...</td>
-      <td>rc125</td>
+      <th>RefSeq_NZ_KX574671.1</th>
+      <td>0.941715</td>
+      <td>37372</td>
+      <td>0.354758</td>
+      <td>1352.0</td>
+      <td>Enterococcus faecium</td>
+      <td>Enterococcus faecium strain V24 plasmid pHvH-V...</td>
+      <td>Bacteria;Bacillota;Bacilli;Lactobacillales;Ent...</td>
+      <td>rc889</td>
       <td>-</td>
-      <td>MOBP</td>
-      <td>MPF_T</td>
       <td>-</td>
-      <td>conjugative</td>
-      <td>GenBank_CP081176.1,PLSDB_NZ_CP081176.1,RefSeq_...</td>
-      <td>GenBank,PLDSB,RefSeq</td>
+      <td>-</td>
+      <td>-</td>
+      <td>non-mobilizable</td>
+      <td>COMPASS_KX574671.1,GenBank_KX574671.1,RefSeq_N...</td>
+      <td>COMPASS,GenBank,RefSeq</td>
       <td>circular</td>
-      <td>AA800</td>
+      <td>AB173</td>
     </tr>
     <tr>
-      <th>RefSeq_NZ_CP076211.1</th>
-      <td>0.971414</td>
-      <td>181708</td>
-      <td>0.325176</td>
-      <td>1392.0</td>
-      <td>Bacillus anthracis</td>
-      <td>Bacillus anthracis strain A1074 plasmid pXO1, ...</td>
-      <td>Bacteria;Bacillota;Bacilli;Caryophanales;Bacil...</td>
-      <td>rc125</td>
+      <th>RefSeq_NZ_JACYGV010000007.1</th>
+      <td>0.940226</td>
+      <td>30475</td>
+      <td>0.359737</td>
+      <td>NaN</td>
+      <td>Enterococcus faecium</td>
+      <td>Enterococcus faecium strain VREA4 plasmid pVRE...</td>
+      <td>NaN</td>
+      <td>rc889</td>
+      <td>AMK,AZM,BUT,CBM,CLI,CLR,CST,DAL,DIR,ERY,EVN,FF...</td>
       <td>-</td>
-      <td>MOBP</td>
-      <td>MPF_T</td>
       <td>-</td>
-      <td>conjugative</td>
-      <td>GenBank_CP076211.1,PLSDB_NZ_CP076211.1,RefSeq_...</td>
-      <td>GenBank,PLDSB,RefSeq</td>
+      <td>-</td>
+      <td>non-mobilizable</td>
+      <td>RefSeq_NZ_JACYGV010000007.1</td>
+      <td>RefSeq</td>
       <td>circular</td>
-      <td>AA800</td>
-    </tr>
-    <tr>
-      <th>RefSeq_NZ_CP076214.1</th>
-      <td>0.971295</td>
-      <td>181743</td>
-      <td>0.325350</td>
-      <td>1392.0</td>
-      <td>Bacillus anthracis</td>
-      <td>Bacillus anthracis strain A0777 plasmid pXO1, ...</td>
-      <td>Bacteria;Bacillota;Bacilli;Caryophanales;Bacil...</td>
-      <td>rc125</td>
-      <td>-</td>
-      <td>MOBP</td>
-      <td>MPF_T</td>
-      <td>-</td>
-      <td>conjugative</td>
-      <td>GenBank_CP076214.1,PLSDB_NZ_CP076214.1,RefSeq_...</td>
-      <td>GenBank,PLDSB,RefSeq</td>
-      <td>circular</td>
-      <td>AA800</td>
-    </tr>
-    <tr>
-      <th>RefSeq_NZ_CP047132.1</th>
-      <td>0.971293</td>
-      <td>181933</td>
-      <td>0.325389</td>
-      <td>1213182.0</td>
-      <td>Bacillus anthracis</td>
-      <td>Bacillus anthracis str. BF1 plasmid pXO1, comp...</td>
-      <td>Bacteria;Bacillota;Bacilli;Caryophanales;Bacil...</td>
-      <td>rc125</td>
-      <td>-</td>
-      <td>MOBP</td>
-      <td>MPF_T</td>
-      <td>-</td>
-      <td>conjugative</td>
-      <td>GenBank_CP047132.1,PLSDB_NZ_CP047132.1,RefSeq_...</td>
-      <td>GenBank,PLDSB,RefSeq</td>
-      <td>circular</td>
-      <td>AA800</td>
-    </tr>
-    <tr>
-      <th>RefSeq_NZ_CP116890.1</th>
-      <td>0.971292</td>
-      <td>181782</td>
-      <td>0.325313</td>
-      <td>1392.0</td>
-      <td>Bacillus anthracis</td>
-      <td>Bacillus anthracis strain AN17-384_2 plasmid p...</td>
-      <td>Bacteria;Bacillota;Bacilli;Caryophanales;Bacil...</td>
-      <td>rc125</td>
-      <td>-</td>
-      <td>MOBP</td>
-      <td>MPF_T</td>
-      <td>-</td>
-      <td>conjugative</td>
-      <td>GenBank_CP116890.1,PLSDB_NZ_CP116890.1,RefSeq_...</td>
-      <td>GenBank,PLDSB,RefSeq</td>
-      <td>circular</td>
-      <td>AA800</td>
-    </tr>
-    <tr>
-      <th>RefSeq_NZ_CP110280.1</th>
-      <td>0.971256</td>
-      <td>181633</td>
-      <td>0.325293</td>
-      <td>1392.0</td>
-      <td>Bacillus anthracis</td>
-      <td>Bacillus anthracis strain 7702 plasmid pXO1, c...</td>
-      <td>Bacteria;Bacillota;Bacilli;Caryophanales;Bacil...</td>
-      <td>rc125</td>
-      <td>-</td>
-      <td>MOBP</td>
-      <td>MPF_T</td>
-      <td>-</td>
-      <td>conjugative</td>
-      <td>GenBank_CP110280.1,PLSDB_NZ_CP110280.1,RefSeq_...</td>
-      <td>GenBank,PLDSB,RefSeq</td>
-      <td>circular</td>
-      <td>AA800</td>
+      <td>AB173</td>
     </tr>
   </tbody>
 </table>
 </div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
 </div>
 </section>
 </section>

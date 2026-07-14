@@ -168,7 +168,7 @@
     }
    ],
    "source": [
-    "wget -O data/59837579.tar.gz https://figshare.com/ndownloader/files/59837579 --user-agent=\"Mozilla/5.0\""
+    "wget -O data/66111080.tar.gz https://figshare.com/ndownloader/files/66111080 --user-agent=\"Mozilla/5.0\""
    ]
   },
   {
@@ -181,7 +181,7 @@
    },
    "outputs": [],
    "source": [
-    "tar -xzf data/59837579.tar.gz  && rm data/59837579.tar.gz"
+    "tar -xzf data/66111080.tar.gz  && rm data/66111080.tar.gz"
    ]
   },
   {

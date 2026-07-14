@@ -13,7 +13,13 @@ import numpy as np
 import pandas as pd
 from plast.exceptions import NotFoundError
 from plast.data import PLASTData
-from plast.parsers import read_gbff, read_m8, read_hmmscan_output, read_fasta
+from plast.parsers import (
+    GBFF_SKIPPED_TRANSLATION_ATTR,
+    read_gbff,
+    read_m8,
+    read_hmmscan_output,
+    read_fasta,
+)
 from plast.utils import (
     is_gpu_available,
     warm_page_cache,
@@ -58,6 +64,7 @@ class PLAST:
         self.logger = logger
         self.disable_logs = logger is None
         self.query_context = {}
+        self.skipped_cds_without_translation = 0
         self.debug(f"Initialized PLAST(name='{self.name}', model='{self.model}')")
 
     def copy(self) -> "PLAST":
@@ -83,6 +90,9 @@ class PLAST:
         new_plast.file = self.file
         new_plast.disable_logs = self.disable_logs
         new_plast.query_context = self.query_context.copy()
+        new_plast.skipped_cds_without_translation = (
+            self.skipped_cds_without_translation
+        )
         return new_plast
 
     def to_dict(self) -> dict:
@@ -108,6 +118,9 @@ class PLAST:
             "results": self.results,
             "search_cache": self.search_cache,
             "query_context": self.query_context,
+            "skipped_cds_without_translation": (
+                self.skipped_cds_without_translation
+            ),
         }
 
     @staticmethod
@@ -134,6 +147,9 @@ class PLAST:
         plast.results = data.get("results", None)
         plast.search_cache = data.get("search_cache") or {}
         plast.query_context = data.get("query_context") or {}
+        plast.skipped_cds_without_translation = int(
+            data.get("skipped_cds_without_translation") or 0
+        )
         return plast
 
     def to_json(self, filename: Union[str, None] = None) -> Union[str, None]:
@@ -163,6 +179,9 @@ class PLAST:
             "results": self.results,
             "search_cache": self.search_cache,
             "query_context": self.query_context,
+            "skipped_cds_without_translation": (
+                self.skipped_cds_without_translation
+            ),
         }
         if filename:
             try:
@@ -211,6 +230,9 @@ class PLAST:
         plast.results = json_data.get("results", None)
         plast.search_cache = json_data.get("search_cache") or {}
         plast.query_context = json_data.get("query_context") or {}
+        plast.skipped_cds_without_translation = int(
+            json_data.get("skipped_cds_without_translation") or 0
+        )
         plast.debug(
             f"Deserialized PLAST from JSON (name='{plast.name}', model='{plast.model}', "
             f"length={plast.length})"
@@ -249,6 +271,18 @@ class PLAST:
         :type message: str
         """
         self.log(message, level="error")
+
+    def log_skipped_cds_without_translation(self) -> None:
+        """Log a warning when GBFF CDS features lacked protein translations."""
+        count = self.skipped_cds_without_translation
+        if count <= 0:
+            return
+        feature_label = "CDS feature" if count == 1 else "CDS features"
+        self.log(
+            f"Skipped {count} {feature_label} because the /translation "
+            "qualifier was missing or empty.",
+            level="warning",
+        )
 
     def debug(self, message: str) -> None:
         """
@@ -627,6 +661,10 @@ class PLAST:
             except (ValueError, TypeError) as e:
                 self.error(f"Failed to read GBFF from stream: {e}")
                 raise
+        self.skipped_cds_without_translation = int(
+            self.parsed.attrs.get(GBFF_SKIPPED_TRANSLATION_ATTR, 0)
+        )
+        self.log_skipped_cds_without_translation()
         if "locus_tag" not in self.parsed.columns:
             self.debug("No locus_tag column found, creating synthetic locus tags")
             self.parsed["locus_tag"] = [

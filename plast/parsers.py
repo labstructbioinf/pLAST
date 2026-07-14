@@ -9,6 +9,9 @@ from typing import Union, Dict, Any, Tuple
 import pandas as pd
 
 
+GBFF_SKIPPED_TRANSLATION_ATTR = "skipped_cds_without_translation"
+
+
 def read_fasta(fasta: Union[str, io.BufferedReader]) -> Dict[str, str]:
     """
     Parse a FASTA file handler or string into a dictionary.
@@ -87,46 +90,66 @@ def read_gbff(stream: io.BufferedReader) -> Tuple[pd.DataFrame, str, int]:
     line = stream.readline().decode()
     accession = ""
     length = -1
-    while not line.startswith("FEATURES"):
+    while line and not line.startswith("FEATURES"):
         if line.startswith("LOCUS"):
             accession = line.split()[1]
             length = int(line.split()[2])
-        line = stream.readline().decode().strip()
+        line = stream.readline().decode()
 
-    for line in stream:
-        line = line.decode()
-        element: Dict[str, Any] = {}
-        if line.startswith("     CDS"):
-            typ, coords = line.strip().split()
-            element["type"] = typ
-            element["coordinates"] = coords
+    if not line:
+        raise ValueError("GenBank record does not contain a FEATURES section")
+
+    # Keep the current line between iterations. The qualifier loop reads one line
+    # ahead, which may already be the next CDS feature and must not be discarded.
+    line = stream.readline().decode()
+    while line:
+        if line.startswith("ORIGIN") or line.startswith("//"):
+            break
+        if not line.startswith("     CDS"):
             line = stream.readline().decode()
-            current_attr: Union[str, None] = None
-            current_val: Union[str, None] = None
-            while line.startswith("                     "):
-                line = line.strip()
-                if line.startswith("/"):
-                    if current_attr is not None:
-                        element[current_attr] = current_val.strip('"')
-                    attrtype = line[1:].split("=")
-                    if len(attrtype) == 1:
-                        current_attr = attrtype[0]
-                        current_val = "1"
-                    elif len(attrtype) == 2:
-                        current_attr, current_val = attrtype
-                else:
-                    current_val += line
-                line = stream.readline().decode()
-            element[current_attr] = current_val.strip('"')
-            all_elements.append(element)
+            continue
 
-    to_dataframe = {attr: [] for attr in {k for d in all_elements for k in d.keys()}}
-    for element in all_elements:
-        for attr in to_dataframe:
-            if attr in element:
-                to_dataframe[attr].append(element[attr])
-            else:
-                to_dataframe[attr].append(None)
+        element: Dict[str, Any] = {}
+        typ, coords = line.strip().split(maxsplit=1)
+        element["type"] = typ
+        element["coordinates"] = coords
+        line = stream.readline().decode()
+        current_attr: Union[str, None] = None
+        current_val: Union[str, None] = None
+
+        while line.startswith("                     "):
+            content = line.strip()
+            if content.startswith("/"):
+                if current_attr is not None and current_val is not None:
+                    element[current_attr] = current_val.strip('"')
+                current_attr, separator, current_val = content[1:].partition("=")
+                if not separator:
+                    current_val = "1"
+            elif current_attr is None:
+                # Long feature locations may continue on the following line.
+                element["coordinates"] += content
+            elif current_val is not None:
+                current_val += content
+            line = stream.readline().decode()
+
+        if current_attr is not None and current_val is not None:
+            element[current_attr] = current_val.strip('"')
+        all_elements.append(element)
+
+    if not all_elements:
+        dataframe = pd.DataFrame(
+            columns=[
+                "start",
+                "end",
+                "strand",
+                "partial",
+                "type",
+                "coordinates",
+                "translation",
+            ]
+        )
+        dataframe.attrs[GBFF_SKIPPED_TRANSLATION_ATTR] = 0
+        return dataframe, accession, length
 
     dataframe = pd.DataFrame(all_elements)
     tidy_cord = {"start": [], "end": [], "strand": [], "partial": []}
@@ -159,8 +182,15 @@ def read_gbff(stream: io.BufferedReader) -> Tuple[pd.DataFrame, str, int]:
     dataframe = pd.concat(
         [pd.DataFrame(tidy_cord), dataframe.reset_index(drop=True)], axis=1
     ).set_index(dataframe.index)
-    dataframe.dropna(subset=["translation"], inplace=True)
-    return dataframe.sort_values("start"), accession, length
+    if "translation" not in dataframe.columns:
+        dataframe["translation"] = None
+    missing_translation = dataframe["translation"].isna() | (
+        dataframe["translation"].astype(str).str.strip() == ""
+    )
+    skipped_without_translation = int(missing_translation.sum())
+    dataframe = dataframe.loc[~missing_translation].sort_values("start")
+    dataframe.attrs[GBFF_SKIPPED_TRANSLATION_ATTR] = skipped_without_translation
+    return dataframe, accession, length
 
 
 def read_emapper_hits(emapper_hits_file: str, res_per_query: int = 1) -> pd.DataFrame:
