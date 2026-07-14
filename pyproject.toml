@@ -28,7 +28,9 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://plast.lbs.cent.uw.edu.pl/"
+Webserver = "https://plast.lbs.cent.uw.edu.pl"
+Repository = "https://github.com/labstructbioinf/pLAST"
+Documentation = "https://labstructbioinf.github.io/pLAST"
 
 [tool.setuptools.packages]
 find = {}
