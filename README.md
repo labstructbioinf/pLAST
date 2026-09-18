@@ -22,7 +22,7 @@ It supports:
 # 🌐 pLAST Web Interface
 
 The online pLAST server is available here:
-👉 [https://plast.lbs.cent.uw.edu.pl/](https://plast.lbs.cent.uw.edu.pl/)
+👉 [https://plast.lbs.biol.uw.edu.pl/](https://plast.lbs.biol.uw.edu.pl/)
 
 It provides a convenient graphical interface for running searches and visualizing results without installing the software locally.
 
@@ -77,4 +77,4 @@ If you use **pLAST** in your research, please cite:
 
 **pLAST - a tool for rapid comparison and classification of bacterial plasmid sequences**
 *Kamil Krakowski, Malgorzata Orlowska, Kamil Kaminski, Dariusz Bartosik, Stanislaw Dunin-Horkawicz*
-*bioRxiv 2025.11.27.689987; doi: https://doi.org/10.1101/2025.11.27.689987*
+*Bioinformatics, Volume 42, Issue 8, August 2026, btag574; doi: https://doi.org/10.1093/bioinformatics/btag574*
