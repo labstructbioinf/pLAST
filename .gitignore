@@ -15,3 +15,7 @@ pLAST/web_interface/queries/
 .vscode/
 .ipynb_checkpoints/
 docs/.doctrees/
+notebooks/README.md
+notebooks/test_models.py
+!tests/
+!tests/test_module_occurrences.py

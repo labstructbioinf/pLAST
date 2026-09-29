@@ -471,7 +471,7 @@ class PLAST:
         )
 
     @staticmethod
-    def _best_sliding_window_score(
+    def _sliding_window_scores(
         query_embedding: np.ndarray,
         target_vecs_w: np.ndarray,
         target_weights: np.ndarray,
@@ -519,6 +519,36 @@ class PLAST:
                 scores = scores.copy()
                 scores[zero_norm] = 1.0
 
+        return {
+            "scores": np.asarray(scores, dtype=np.float32),
+            "starts": starts,
+            "window_size": int(window_size),
+            "target_orf_count": n_tokens,
+            "circular": bool(circular),
+        }
+
+    @staticmethod
+    def _best_sliding_window_score(
+        query_embedding: np.ndarray,
+        target_vecs_w: np.ndarray,
+        target_weights: np.ndarray,
+        window_size: int,
+        circular: bool = True,
+    ) -> Union[dict[str, Any], None]:
+        scan = PLAST._sliding_window_scores(
+            query_embedding,
+            target_vecs_w,
+            target_weights,
+            window_size,
+            circular=circular,
+        )
+        if scan is None:
+            return None
+
+        scores = scan["scores"]
+        starts = scan["starts"]
+        n_tokens = scan["target_orf_count"]
+        window_size = scan["window_size"]
         best_idx = int(np.argmax(scores))
         best_start = int(starts[best_idx])
         best_end = best_start + window_size - 1
@@ -534,6 +564,125 @@ class PLAST:
             "target_orf_count": n_tokens,
             "window_wraps": wraps,
         }
+
+    @staticmethod
+    def _module_window_hits(
+        scan: dict[str, Any],
+        query_vecs_w: np.ndarray,
+        target_vecs_w: np.ndarray,
+        score_delta: float = 0.05,
+        max_occurrences: int = 32,
+    ) -> list[dict[str, Any]]:
+        """Return coherent, non-overlapping occurrences from a window scan.
+
+        Plasmids remain ranked by their best window, while this method preserves
+        alternative local occurrences for alignment and visualisation. Explicit
+        query/target pairs are positional within each selected window, so repeated
+        cluster identifiers cannot be combined across different copies.
+        """
+        scores = np.asarray(scan["scores"], dtype=np.float32)
+        starts = np.asarray(scan["starts"], dtype=np.int64)
+        window_size = int(scan["window_size"])
+        n_tokens = int(scan["target_orf_count"])
+        circular = bool(scan["circular"])
+        if scores.size == 0 or n_tokens == 0:
+            return []
+
+        best_score = float(np.max(scores))
+        minimum_score = best_score - max(0.0, float(score_delta))
+        ranked = np.argsort(-scores, kind="stable")
+        occupied: set[int] = set()
+        selected: list[tuple[int, list[int]]] = []
+
+        for score_index in ranked:
+            if len(selected) >= max(1, int(max_occurrences)):
+                break
+            if float(scores[score_index]) < minimum_score:
+                break
+            start = int(starts[score_index])
+            target_indices = [
+                (start + offset) % n_tokens if circular else start + offset
+                for offset in range(window_size)
+            ]
+            if any(index in occupied for index in target_indices):
+                continue
+            selected.append((int(score_index), target_indices))
+            occupied.update(target_indices)
+
+        query_count = min(int(query_vecs_w.shape[0]), window_size)
+        hits = []
+        for occurrence_number, (score_index, target_indices) in enumerate(selected, 1):
+            start = int(starts[score_index])
+            forward_indices = target_indices[:query_count]
+            reverse_indices = list(reversed(target_indices))[:query_count]
+
+            def positional_similarities(indices: list[int]) -> np.ndarray:
+                if query_count == 0:
+                    return np.empty((0,), dtype=np.float32)
+                query_rows = query_vecs_w[:query_count]
+                target_rows = target_vecs_w[np.asarray(indices, dtype=np.int64)]
+                query_norms = np.linalg.norm(query_rows, axis=1)
+                target_norms = np.linalg.norm(target_rows, axis=1)
+                denominators = query_norms * target_norms
+                numerators = np.einsum("ij,ij->i", query_rows, target_rows)
+                return np.divide(
+                    numerators,
+                    denominators,
+                    out=np.zeros_like(numerators, dtype=np.float32),
+                    where=denominators != 0,
+                )
+
+            forward_similarities = positional_similarities(forward_indices)
+            reverse_similarities = positional_similarities(reverse_indices)
+            forward_score = (
+                float(np.mean(forward_similarities))
+                if forward_similarities.size
+                else 0.0
+            )
+            reverse_score = (
+                float(np.mean(reverse_similarities))
+                if reverse_similarities.size
+                else 0.0
+            )
+            if reverse_score > forward_score:
+                orientation = -1
+                paired_indices = reverse_indices
+                pair_similarities = reverse_similarities
+                positional_score = reverse_score
+            else:
+                orientation = 1
+                paired_indices = forward_indices
+                pair_similarities = forward_similarities
+                positional_score = forward_score
+
+            end = start + window_size - 1
+            wraps = bool(circular and start + window_size > n_tokens)
+            if circular:
+                end %= n_tokens
+            pairs = [
+                {
+                    "query_orf": int(query_index),
+                    "target_orf": int(target_index),
+                    "similarity": float(
+                        np.clip(pair_similarities[query_index], -1.0, 1.0)
+                    ),
+                }
+                for query_index, target_index in enumerate(paired_indices)
+            ]
+            hits.append(
+                {
+                    "occurrence_id": f"occurrence_{occurrence_number}",
+                    "score": float(np.clip(scores[score_index], -1.0, 1.0)),
+                    "positional_score": float(np.clip(positional_score, -1.0, 1.0)),
+                    "window_start": start,
+                    "window_end": int(end),
+                    "window_size": window_size,
+                    "window_wraps": wraps,
+                    "orientation": orientation,
+                    "pairs": pairs,
+                }
+            )
+        return hits
 
     @staticmethod
     def get_by_accession(
@@ -1259,8 +1408,10 @@ class PLAST:
         maxret: int = 10,
         metric: str = "cosine",
         window_size: Union[int, None] = None,
-        circular: bool = True,
+        circular: Union[bool, None] = None,
         transform: bool = True,
+        occurrence_score_delta: float = 0.05,
+        max_occurrences: int = 32,
         progress_callback: Union[Callable[[int, int], None], None] = None,
     ) -> dict:
         """
@@ -1293,9 +1444,21 @@ class PLAST:
         else:
             query_embedding = np.asarray(self.embedding, dtype=np.float32)
         query_embedding = self._normalise_one(query_embedding)
+        query_vecs_w, _, _ = self._encoded_token_matrix(
+            self.vector,
+            transform=transform,
+        )
 
         search_index = self.data.get_search_index(self.model)
         candidate_ids = search_index["ids"]
+        candidate_topologies = {}
+        if circular is None and candidate_ids:
+            topology_rows = self.data.get_metadata_for_ids(candidate_ids, self.model)
+            if "topology" in topology_rows.columns:
+                candidate_topologies = {
+                    str(plasmid_id): str(topology).strip().lower()
+                    for plasmid_id, topology in topology_rows["topology"].items()
+                }
         self.debug(
             f"Module search candidates for model '{self.model}': "
             f"{len(candidate_ids)}"
@@ -1323,14 +1486,20 @@ class PLAST:
                 target_vector,
                 transform=transform,
             )
-            best = self._best_sliding_window_score(
+            if circular is None:
+                topology = candidate_topologies.get(str(plasmid_id), "")
+                candidate_circular = topology != "linear"
+            else:
+                candidate_circular = bool(circular)
+
+            scan = self._sliding_window_scores(
                 query_embedding,
                 target_vecs_w,
                 target_weights,
                 query_window_size,
-                circular=circular,
+                circular=candidate_circular,
             )
-            if best is None:
+            if scan is None:
                 skipped_no_vector += 1
                 if (
                     progress_callback is not None
@@ -1339,10 +1508,29 @@ class PLAST:
                     progress_callback(processed, candidate_total)
                 continue
 
-            score = float(best.pop("score"))
+            module_hits = self._module_window_hits(
+                scan,
+                query_vecs_w,
+                target_vecs_w,
+                score_delta=occurrence_score_delta,
+                max_occurrences=max_occurrences,
+            )
+            if not module_hits:
+                skipped_no_vector += 1
+                continue
+
+            score = float(np.max(scan["scores"]))
             scored.append((plasmid_id, score))
-            best["module_fallback_vectors"] = int(n_fallback)
-            extra_by_id[plasmid_id] = best
+            best = module_hits[0]
+            extra_by_id[plasmid_id] = {
+                "window_start": best["window_start"],
+                "window_end": best["window_end"],
+                "window_size": best["window_size"],
+                "target_orf_count": int(scan["target_orf_count"]),
+                "window_wraps": best["window_wraps"],
+                "module_fallback_vectors": int(n_fallback),
+                "module_hits": module_hits,
+            }
             if (
                 progress_callback is not None
                 and (processed % progress_step == 0 or processed == candidate_total)
