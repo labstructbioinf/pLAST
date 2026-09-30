@@ -570,15 +570,17 @@ class PLAST:
         scan: dict[str, Any],
         query_vecs_w: np.ndarray,
         target_vecs_w: np.ndarray,
+        query_tokens: Union[list, None] = None,
+        target_tokens: Union[list, None] = None,
         score_delta: float = 0.05,
         max_occurrences: int = 32,
     ) -> list[dict[str, Any]]:
         """Return coherent, non-overlapping occurrences from a window scan.
 
         Plasmids remain ranked by their best window, while this method preserves
-        alternative local occurrences for alignment and visualisation. Explicit
-        query/target pairs are positional within each selected window, so repeated
-        cluster identifiers cannot be combined across different copies.
+        alternative local occurrences for alignment and visualisation. Exact
+        cluster pairs are resolved independently inside each selected window, so
+        repeated cluster identifiers cannot be combined across different copies.
         """
         scores = np.asarray(scan["scores"], dtype=np.float32)
         starts = np.asarray(scan["starts"], dtype=np.int64)
@@ -659,16 +661,61 @@ class PLAST:
             wraps = bool(circular and start + window_size > n_tokens)
             if circular:
                 end %= n_tokens
-            pairs = [
-                {
-                    "query_orf": int(query_index),
-                    "target_orf": int(target_index),
-                    "similarity": float(
-                        np.clip(pair_similarities[query_index], -1.0, 1.0)
-                    ),
-                }
-                for query_index, target_index in enumerate(paired_indices)
-            ]
+            query_indices = list(range(query_count))
+            if query_tokens is not None and target_tokens is not None:
+                positions = {}
+                for target_index in paired_indices:
+                    token = target_tokens[target_index]
+                    if token is None or str(token).strip().lower() in {
+                        "",
+                        "nan",
+                        "na",
+                        "none",
+                    }:
+                        continue
+                    positions.setdefault(str(token), []).append(target_index)
+
+                taken = {}
+                pair_indices = []
+                for query_index in query_indices:
+                    token = query_tokens[query_index]
+                    if token is None or str(token).strip().lower() in {
+                        "",
+                        "nan",
+                        "na",
+                        "none",
+                    }:
+                        continue
+                    token = str(token)
+                    matches = positions.get(token, [])
+                    match_number = taken.get(token, 0)
+                    if match_number >= len(matches):
+                        continue
+                    pair_indices.append((query_index, matches[match_number]))
+                    taken[token] = match_number + 1
+            else:
+                # Backward-compatible fallback for direct callers that do not
+                # provide cluster identifiers. Production module searches always
+                # pass tokens and therefore emit exact cluster matches only.
+                pair_indices = list(zip(query_indices, paired_indices))
+
+            pairs = []
+            for query_index, target_index in pair_indices:
+                query_row = query_vecs_w[query_index]
+                target_row = target_vecs_w[target_index]
+                denominator = np.linalg.norm(query_row) * np.linalg.norm(target_row)
+                similarity = (
+                    float(np.dot(query_row, target_row) / denominator)
+                    if denominator != 0
+                    else 0.0
+                )
+                pairs.append(
+                    {
+                        "query_orf": int(query_index),
+                        "target_orf": int(target_index),
+                        "similarity": float(np.clip(similarity, -1.0, 1.0)),
+                    }
+                )
             hits.append(
                 {
                     "occurrence_id": f"occurrence_{occurrence_number}",
@@ -679,6 +726,8 @@ class PLAST:
                     "window_size": window_size,
                     "window_wraps": wraps,
                     "orientation": orientation,
+                    "query_orfs": query_indices,
+                    "target_orfs": [int(index) for index in paired_indices],
                     "pairs": pairs,
                 }
             )
@@ -1512,6 +1561,8 @@ class PLAST:
                 scan,
                 query_vecs_w,
                 target_vecs_w,
+                query_tokens=self.vector,
+                target_tokens=target_vector,
                 score_delta=occurrence_score_delta,
                 max_occurrences=max_occurrences,
             )
