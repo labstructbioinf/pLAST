@@ -1209,11 +1209,11 @@ class PLAST:
             hits = (
                 full_df.set_index("query_name")["hit"]
                 .reindex(analysis_df.index)
-                .replace(np.nan, None)
-                .to_list()
             )
 
-            self.vector = hits
+            # Pandas 3 string columns coerce None back to NaN. Normalize
+            # scalars after leaving the Series so JSON receives nulls.
+            self.vector = [None if pd.isna(hit) else hit for hit in hits]
             n_none = sum(1 for v in self.vector if v is None)
             self.log(
                 f"HMMscan assignment completed: assigned={len(self.vector) - n_none}, "
